@@ -5,4 +5,28 @@
 //  Created by Сергей Кухарев on 31.07.2024.
 //
 
-import Foundation
+import UIKit
+
+enum Schedule {
+    case monday
+    case tuesday
+    case цednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
+}
+
+/// Сущность для хранения информации про трекер (для «Привычки» или «Нерегулярного события»)
+public struct Tracker {
+    /// Идентификатор трекера
+    let id: UUID
+    /// Наименование трекера
+    let name: String
+    /// Цвет трекера
+    let color: UIColor
+    /// Эмоджи трекера
+    let emoji: String
+    /// Расписание трекера
+    let schedule: Set<Schedule>
+}

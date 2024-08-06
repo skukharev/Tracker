@@ -82,7 +82,7 @@ final class SplashViewController: UIViewController {
         statisticsViewController.configure(statisticsViewPresenter)
         // Создание вью контроллера для таб-бара
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [trackersViewController, statisticsViewController]
+        tabBarController.viewControllers = [UINavigationController(rootViewController: trackersViewController), statisticsViewController]
         // Настройка цвета фона таб-бара
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = .appWhite

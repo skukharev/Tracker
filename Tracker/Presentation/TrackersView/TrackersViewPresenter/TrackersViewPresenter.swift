@@ -19,6 +19,8 @@ final class TrackersViewPresenter: TrackersViewPresenterProtocol {
     // MARK: - IBOutlet
 
     // MARK: - Private Properties
+    var categories: [TrackerCategory] = []
+    var completedTrackers: [TrackerRecord] = []
 
     // MARK: - Initializers
 

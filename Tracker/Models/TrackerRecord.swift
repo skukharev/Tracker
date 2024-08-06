@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+/// Сущность для хранения записи о том, что некий трекер был выполнен на некоторую дату
+public struct TrackerRecord {
+    /// Идентификатор трекера
+    let trackerId: UUID
+    /// Дата, в которую был выполнен трекер
+    let recordDate: Date
+}
