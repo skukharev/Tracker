@@ -22,6 +22,7 @@
 		079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432D82C561F6200DDCE10 /* StatisticsViewPresenter.swift */; };
 		079432DB2C561F7C00DDCE10 /* StatisticsViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */; };
 		079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */; };
+		07D1B2102C627B5F003BCD19 /* Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D1B20F2C627B5F003BCD19 /* Schedule.swift */; };
 		07DAD3FF2C5A9398001F4150 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAD3FE2C5A9398001F4150 /* Tracker.swift */; };
 		07DAD4012C5A93A3001F4150 /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAD4002C5A93A3001F4150 /* TrackerCategory.swift */; };
 		07DAD4032C5A93B2001F4150 /* TrackerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DAD4022C5A93B2001F4150 /* TrackerRecord.swift */; };
@@ -46,6 +47,7 @@
 		079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewProtocol.swift; sourceTree = "<group>"; };
 		079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenterDelegate.swift; sourceTree = "<group>"; };
 		07D1B1ED2C612331003BCD19 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		07D1B20F2C627B5F003BCD19 /* Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schedule.swift; sourceTree = "<group>"; };
 		07DAD3FE2C5A9398001F4150 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		07DAD4002C5A93A3001F4150 /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		07DAD4022C5A93B2001F4150 /* TrackerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecord.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				079432C82C560F5300DDCE10 /* Constants.swift */,
+				07D1B20F2C627B5F003BCD19 /* Schedule.swift */,
 				07DAD3FE2C5A9398001F4150 /* Tracker.swift */,
 				07DAD4002C5A93A3001F4150 /* TrackerCategory.swift */,
 				07DAD4022C5A93B2001F4150 /* TrackerRecord.swift */,
@@ -116,6 +119,7 @@
 			children = (
 				079432C32C55715400DDCE10 /* SplashView */,
 				079432CA2C56148400DDCE10 /* TrackersView */,
+				07D1B20E2C620A32003BCD19 /* ChooseTrackersTypeView */,
 				079432CB2C5614A200DDCE10 /* StatisticsView */,
 			);
 			path = Presentation;
@@ -182,6 +186,13 @@
 				079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */,
 			);
 			path = StatisticsViewPresenter;
+			sourceTree = "<group>";
+		};
+		07D1B20E2C620A32003BCD19 /* ChooseTrackersTypeView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ChooseTrackersTypeView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,6 +291,7 @@
 			files = (
 				079432D62C56184300DDCE10 /* TrackersViewPresenterProtocol.swift in Sources */,
 				079432D12C5617DD00DDCE10 /* TrackersViewPresenter.swift in Sources */,
+				07D1B2102C627B5F003BCD19 /* Schedule.swift in Sources */,
 				079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */,
 				079432D42C56183000DDCE10 /* TrackersViewPresenterDelegate.swift in Sources */,
 				079432C92C560F5300DDCE10 /* Constants.swift in Sources */,

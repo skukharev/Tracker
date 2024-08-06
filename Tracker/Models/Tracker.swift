@@ -7,16 +7,6 @@
 
 import UIKit
 
-enum Schedule {
-    case monday
-    case tuesday
-    case цednesday
-    case thursday
-    case friday
-    case saturday
-    case sunday
-}
-
 /// Сущность для хранения информации про трекер (для «Привычки» или «Нерегулярного события»)
 public struct Tracker {
     /// Идентификатор трекера

@@ -11,4 +11,6 @@ import Foundation
 protocol TrackersViewPresenterDelegate: AnyObject {
     /// Используется для отображения заглушки в случае, если список трекеров пуст
     func showTrackersListStub()
+    /// Используется для отображения списка трекеров на заданную дату
+    func showTrackersList()
 }

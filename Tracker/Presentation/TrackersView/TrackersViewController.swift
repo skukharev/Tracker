@@ -20,8 +20,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     // MARK: - Public Properties
 
-    // MARK: - IBOutlet
-
     // MARK: - Private Properties
 
     private var presenter: TrackersViewPresenterProtocol?
@@ -48,6 +46,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let maxDate = calendar.date(byAdding: .year, value: 10, to: currentDate)
         datePicker.minimumDate = minDate
         datePicker.maximumDate = maxDate
+        datePicker.backgroundColor = .appDatePickerBackground
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         return datePicker
     }()
@@ -81,15 +80,29 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         label.text = "Что будем отслеживать?"
         return label
     }()
-
-    // MARK: - Initializers
+    /// Панель поиска  трекеров
+    private lazy var trackersSearchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = "Поиск"
+        searchBar.searchTextField.font = Constants.ypRegular17
+        return searchBar
+    }()
+    /// Коллекция трекеров
+    private lazy var trackersCollection: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
 
     // MARK: - Public Methods
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         createAndLayoutViews()
-        presenter?.loadTrackers()
+        presenter?.currentDate = Date()
     }
 
     /// Используется для связи вью контроллера с презентером
@@ -114,24 +127,34 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                     trackersStubImageLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
                 ]
             )
-        } else {
-            trackersStubImage.isHidden = false
         }
+        trackersCollection.isHidden = true
+        trackersStubImage.isHidden = false
+        trackersStubImageLabel.isHidden = false
     }
-    // MARK: - IBAction
+
+    func showTrackersList() {
+        if view.subviews.contains(trackersStubImage) {
+            trackersStubImage.isHidden = true
+        }
+        if view.subviews.contains(trackersStubImageLabel) {
+            trackersStubImageLabel.isHidden = true
+        }
+        trackersCollection.isHidden = false
+    }
 
     // MARK: - Private Methods
+
     /// Обработчик нажатия кнопки "Добавить трекер"
+    /// - Parameter sender: объект-инициатор события
     @objc private func addTrackerTouchUpInside(_ sender: UIButton) {
         print("Add tracker button pressed")
     }
 
+    ///  Обработчик изменения значения элемента управления датами
+    /// - Parameter sender: объект-инициатор события
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        let selectedDate = sender.date
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy" // Формат даты
-        let formattedDate = dateFormatter.string(from: selectedDate)
-        print("Выбранная дата: \(formattedDate)")
+        presenter?.currentDate = sender.date
     }
 
     /// Создаёт и размещает элементы управления во вью контроллере
@@ -139,18 +162,32 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         view.backgroundColor = .appWhite
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)
-        view.addSubviews([trackersLabel])
+        view.addSubviews([trackersSearchBar, trackersCollection, trackersLabel])
         setupConstraints()
     }
 
     // Создаёт констрейнты для элементов управления
     private func setupConstraints() {
-        guard let targetView = navigationController?.navigationBar else { return }
+        guard
+            let navBar = navigationController?.navigationBar,
+            let tabBar = navigationController?.tabBarController?.tabBar
+        else { return }
+
         NSLayoutConstraint.activate(
             [
-                trackersLabel.topAnchor.constraint(equalTo: targetView.bottomAnchor, constant: 1),
+                /// Заголовок окна
+                trackersLabel.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 1),
                 trackersLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-                trackersLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -105)
+                trackersLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -105),
+                /// Кнопка поиска трекеров
+                trackersSearchBar.topAnchor.constraint(equalTo: trackersLabel.bottomAnchor, constant: 7),
+                trackersSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                trackersSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                /// Коллекция трекеров
+                trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: 10),
+                trackersCollection.leadingAnchor.constraint(equalTo: trackersSearchBar.leadingAnchor),
+                trackersCollection.trailingAnchor.constraint(equalTo: trackersSearchBar.trailingAnchor),
+                trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
             ]
         )
     }

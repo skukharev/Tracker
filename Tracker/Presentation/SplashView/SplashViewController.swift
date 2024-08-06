@@ -83,13 +83,18 @@ final class SplashViewController: UIViewController {
         // Создание вью контроллера для таб-бара
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [UINavigationController(rootViewController: trackersViewController), statisticsViewController]
-        // Настройка цвета фона таб-бара
+        /// Настройка цвета фона таб-бара
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = .appWhite
         appearance.shadowColor = nil
         tabBarController.tabBar.standardAppearance = appearance
         if #available(iOS 15.0, *) {
             tabBarController.tabBar.scrollEdgeAppearance = appearance
+        }
+        /// Настройка цвета окантовки таб-бара
+        if let tabBarBorderColor = UIColor(named: "App Gray") {
+            tabBarController.tabBar.layer.borderWidth = 1
+            tabBarController.tabBar.layer.borderColor = tabBarBorderColor.cgColor
         }
         // Получаем экземпляр `window` приложения
         guard let window = UIApplication.shared.windows.first else {
