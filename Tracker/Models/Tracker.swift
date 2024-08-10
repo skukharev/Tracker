@@ -18,5 +18,5 @@ public struct Tracker {
     /// Эмоджи трекера
     let emoji: String
     /// Расписание трекера
-    let schedule: Set<Schedule>
+    let schedule: Set<Weekday>
 }

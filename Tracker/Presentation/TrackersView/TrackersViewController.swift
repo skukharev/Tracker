@@ -54,7 +54,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var trackersLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Constants.ypBold34
+        label.font = GlobalConstants.ypBold34
         label.textColor = .appBlack
         label.text = "Трекеры"
         return label
@@ -75,7 +75,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var trackersStubImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Constants.ypMedium12
+        label.font = GlobalConstants.ypMedium12
         label.textColor = .appBlack
         label.text = "Что будем отслеживать?"
         return label
@@ -86,7 +86,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "Поиск"
-        searchBar.searchTextField.font = Constants.ypRegular17
+        searchBar.searchTextField.font = GlobalConstants.ypRegular17
         return searchBar
     }()
     /// Коллекция трекеров
@@ -94,6 +94,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .appWhite
         return collectionView
     }()
 
@@ -141,6 +142,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
             trackersStubImageLabel.isHidden = true
         }
         trackersCollection.isHidden = false
+        trackersCollection.reloadData()
     }
 
     // MARK: - Private Methods
@@ -160,13 +162,19 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
+        /// Панель навигации
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)
+        /// Элементы управления
         view.addSubviews([trackersSearchBar, trackersCollection, trackersLabel])
+        trackersCollection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.Constants.identifier)
+        trackersCollection.dataSource = presenter
+        trackersCollection.delegate = presenter
+        /// Разметка элементов управления
         setupConstraints()
     }
 
-    // Создаёт констрейнты для элементов управления
+    /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         guard
             let navBar = navigationController?.navigationBar,
@@ -190,5 +198,24 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
             ]
         )
+    }
+}
+
+// MARK: - TrackersCollectionViewCellDelegate
+
+extension TrackersViewController: TrackersCollectionViewCellDelegate {
+    func trackersCollectionViewCellDidTapRecord(_ cell: TrackersCollectionViewCell, _ completion: @escaping () -> Void) {
+        guard let indexPath = trackersCollection.indexPath(for: cell) else {
+            completion()
+            return
+        }
+        presenter?.recordTracker(for: indexPath) { [weak self] result in
+            switch result {
+            case .success:
+                self?.presenter?.showCell(for: cell, with: indexPath)
+            default: break
+            }
+        }
+        completion()
     }
 }

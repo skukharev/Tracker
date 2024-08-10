@@ -13,4 +13,13 @@ public struct TrackerRecord: Hashable {
     let trackerId: UUID
     /// Дата, в которую был выполнен трекер
     let recordDate: Date
+
+    /// Конструктор структуры
+    /// - Parameters:
+    ///   - trackerId: Идентификатор трекера
+    ///   - recordDate: Дата фиксации выполнения трекера. Дата записывается без отметки времени выполнения
+    init(trackerId: UUID, recordDate: Date) {
+        self.trackerId = trackerId
+        self.recordDate = recordDate.removeTimeStamp
+    }
 }
