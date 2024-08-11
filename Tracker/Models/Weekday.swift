@@ -21,7 +21,7 @@ enum Weekday: Int {
     /// - Parameter date: дата, для которой определяется день недели
     /// - Returns: день недели
     static func dayOfTheWeek(of date: Date) -> Weekday? {
-        let currentWeekDay = Calendar.current.component(.weekday, from: date) - Calendar.current.firstWeekday
+        let currentWeekDay = (Calendar.current.component(.weekday, from: date) - Calendar.current.firstWeekday + 7) % 7
         return Weekday(rawValue: currentWeekDay)
     }
 }

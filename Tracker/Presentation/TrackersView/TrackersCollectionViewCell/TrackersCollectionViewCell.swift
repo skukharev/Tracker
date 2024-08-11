@@ -9,6 +9,7 @@ import UIKit
 
 final class TrackersCollectionViewCell: UICollectionViewCell {
     // MARK: - Types
+
     enum Constants {
         static let identifier = "TrackersCollectionViewCell"
     }

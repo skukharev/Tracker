@@ -15,9 +15,9 @@ protocol TrackersViewPresenterProtocol: AnyObject, UICollectionViewDataSource, U
     /// Текущая дата трекеров
     var currentDate: Date { get set }
 
-    /// Используется для определения количества используемых трекеров в приложении
-    /// - Returns: Возвращает количество трекеров, используемых в приложении
-    func trackersCount() -> Int
+    /// Добавляет трекер
+    /// - Parameter completion: Замыкание, вызываемое после завершения конфигурирования вью контроллера для его отображения на экране
+    func addTracker(_ completion: @escaping (AddTrackerViewPresenterDelegate) -> Void)
 
     /// В случае если трекер на текущую дату не выполнялся, то производит фиксацию выполнения трекера; и удаляет фиксацию выполнения трекера в противном случае
     /// - Parameters:
@@ -30,4 +30,8 @@ protocol TrackersViewPresenterProtocol: AnyObject, UICollectionViewDataSource, U
     ///   - cell: Объект-ячейка
     ///   - indexPath: Индекс ячейки внутри коллекции
     func showCell(for cell: TrackersCollectionViewCell, with indexPath: IndexPath)
+
+    /// Используется для определения количества используемых трекеров в приложении
+    /// - Returns: Возвращает количество трекеров, используемых в приложении
+    func trackersCount() -> Int
 }
