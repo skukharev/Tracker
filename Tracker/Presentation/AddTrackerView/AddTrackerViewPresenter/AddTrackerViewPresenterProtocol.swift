@@ -10,4 +10,8 @@ import Foundation
 protocol AddTrackerViewPresenterProtocol: AnyObject {
     /// Ассоциированный вью контроллер
     var viewController: AddTrackerViewPresenterDelegate? { get set }
+    /// Инициирует процесс добавления привычки
+    func addHabit()
+    /// Инициирует процесс добавления события
+    func addEvent()
 }

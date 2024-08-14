@@ -14,8 +14,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         static let identifier = "TrackersCollectionViewCell"
     }
 
-    // MARK: - Constants
-
     // MARK: - Public Properties
 
     weak var delegate: TrackersCollectionViewCellDelegate?
@@ -91,8 +89,6 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - UICollectionViewCell
 
     // MARK: - Public Methods
 

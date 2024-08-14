@@ -8,13 +8,9 @@
 import UIKit
 
 final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterDelegate {
-    // MARK: - Types
-
-    // MARK: - Constants
-
     // MARK: - Public Properties
 
-    weak var presenter: AddTrackerViewPresenterProtocol?
+    var presenter: AddTrackerViewPresenterProtocol?
 
     // MARK: - Private Properties
 
@@ -27,6 +23,7 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
         view.text = "Создание трекера"
         return view
     }()
+    /// Контейнер для удобного размещения кнопок в соответствии с дизайном
     private lazy var buttonsContainer: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,6 +41,7 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
         view.contentHorizontalAlignment = .center
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
+        view.addTarget(self, action: #selector(addHabitButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
     }()
     /// Кнопка "Добавить нерегулярное событие"
@@ -58,6 +56,7 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
         view.contentHorizontalAlignment = .center
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
+        view.addTarget(self, action: #selector(addEventButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
     }()
 
@@ -68,8 +67,6 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
         createAndLayoutViews()
     }
 
-    // MARK: - UIViewController(\*)
-
     // MARK: - Public Methods
 
     /// Используется для связи вью контроллера с презентером
@@ -79,7 +76,27 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
         presenter.viewController = self
     }
 
+    func hide() {
+        dismiss(animated: true)
+    }
+
     // MARK: - Private Methods
+
+    /// Обработчик нажатия на кнопку "Добавить привычку"
+    /// - Parameter sender: объект-иницатор события
+    @objc private func addHabitButtonTouchUpInside(_ sender: UIButton) {
+        let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
+        impact.impactOccurred()
+        presenter?.addHabit()
+    }
+
+    /// Обработчик нажатия на кнопку "Добавить нерегулярное событие"
+    /// - Parameter sender: объект-инициатор события
+    @objc private func addEventButtonTouchUpInside(_ sender: UIButton) {
+        let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
+        impact.impactOccurred()
+        presenter?.addEvent()
+    }
 
     /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {

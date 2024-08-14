@@ -5,7 +5,9 @@
 //  Created by Сергей Кухарев on 11.08.2024.
 //
 
-import Foundation
+import UIKit
 
 protocol AddTrackerViewPresenterDelegate: AnyObject {
+    /// Закрывает модальное окно вью-контроллера
+    func hide()
 }

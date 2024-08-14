@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		073C8C232C6A2F10006D8E7D /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */; };
+		073C8C252C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */; };
+		073C8C272C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */; };
+		073C8C2A2C6A34DD006D8E7D /* NewTrackerViewPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C292C6A34DD006D8E7D /* NewTrackerViewPresenterDelegate.swift */; };
+		073C8C2C2C6A46B7006D8E7D /* NewTrackerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C2B2C6A46B7006D8E7D /* NewTrackerType.swift */; };
+		073C8C2E2C6B3207006D8E7D /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C2D2C6B3207006D8E7D /* UIViewController+Extensions.swift */; };
+		073C8C302C6CE37C006D8E7D /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C2F2C6CE37C006D8E7D /* UIButton+Extensions.swift */; };
+		073C8C322C6D0C29006D8E7D /* TrackerButtonsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C312C6D0C29006D8E7D /* TrackerButtonsCell.swift */; };
+		073C8C342C6D11F7006D8E7D /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C332C6D11F7006D8E7D /* UITableView+Extensions.swift */; };
+		073C8C362C6D3063006D8E7D /* InsetLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C352C6D3063006D8E7D /* InsetLabel.swift */; };
 		079432A72C54D55900DDCE10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432A62C54D55900DDCE10 /* AppDelegate.swift */; };
 		079432A92C54D55900DDCE10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432A82C54D55900DDCE10 /* SceneDelegate.swift */; };
 		079432B02C54D55B00DDCE10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 079432AF2C54D55B00DDCE10 /* Assets.xcassets */; };
@@ -42,6 +52,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
+		073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenter.swift; sourceTree = "<group>"; };
+		073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenterProtocol.swift; sourceTree = "<group>"; };
+		073C8C292C6A34DD006D8E7D /* NewTrackerViewPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenterDelegate.swift; sourceTree = "<group>"; };
+		073C8C2B2C6A46B7006D8E7D /* NewTrackerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerType.swift; sourceTree = "<group>"; };
+		073C8C2D2C6B3207006D8E7D /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		073C8C2F2C6CE37C006D8E7D /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
+		073C8C312C6D0C29006D8E7D /* TrackerButtonsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerButtonsCell.swift; sourceTree = "<group>"; };
+		073C8C332C6D11F7006D8E7D /* UITableView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extensions.swift"; sourceTree = "<group>"; };
+		073C8C352C6D3063006D8E7D /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		079432A32C54D55900DDCE10 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		079432A62C54D55900DDCE10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		079432A82C54D55900DDCE10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +110,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		073C8C212C6A29D0006D8E7D /* NewTrackerView */ = {
+			isa = PBXGroup;
+			children = (
+				073C8C282C6A2F34006D8E7D /* NewTrackerViewPresenter */,
+				073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */,
+				073C8C312C6D0C29006D8E7D /* TrackerButtonsCell.swift */,
+			);
+			path = NewTrackerView;
+			sourceTree = "<group>";
+		};
+		073C8C282C6A2F34006D8E7D /* NewTrackerViewPresenter */ = {
+			isa = PBXGroup;
+			children = (
+				073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */,
+				073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */,
+				073C8C292C6A34DD006D8E7D /* NewTrackerViewPresenterDelegate.swift */,
+			);
+			path = NewTrackerViewPresenter;
+			sourceTree = "<group>";
+		};
+		073C8C372C6D46D6006D8E7D /* TrackerScheduleVew */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TrackerScheduleVew;
+			sourceTree = "<group>";
+		};
 		0794329A2C54D55900DDCE10 = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +175,10 @@
 				079432C62C56031F00DDCE10 /* UIView+Extensions.swift */,
 				07ADBA872C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift */,
 				07ADBA892C67F822000BC87F /* Date+Extensions.swift */,
+				073C8C2D2C6B3207006D8E7D /* UIViewController+Extensions.swift */,
+				073C8C2F2C6CE37C006D8E7D /* UIButton+Extensions.swift */,
+				073C8C332C6D11F7006D8E7D /* UITableView+Extensions.swift */,
+				073C8C352C6D3063006D8E7D /* InsetLabel.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -142,6 +193,7 @@
 				07DAD4022C5A93B2001F4150 /* TrackerRecord.swift */,
 				07D1B2132C63C544003BCD19 /* TrackersCellGeometricParams.swift */,
 				07D1B2172C63D671003BCD19 /* TrackersCellViewModel.swift */,
+				073C8C2B2C6A46B7006D8E7D /* NewTrackerType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -152,7 +204,9 @@
 				079432C32C55715400DDCE10 /* SplashView */,
 				079432CA2C56148400DDCE10 /* TrackersView */,
 				07D1B20E2C620A32003BCD19 /* AddTrackerView */,
+				073C8C212C6A29D0006D8E7D /* NewTrackerView */,
 				079432CB2C5614A200DDCE10 /* StatisticsView */,
+				073C8C372C6D46D6006D8E7D /* TrackerScheduleVew */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -344,21 +398,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				073C8C2C2C6A46B7006D8E7D /* NewTrackerType.swift in Sources */,
 				07ADBA882C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift in Sources */,
+				073C8C252C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift in Sources */,
 				07D1B2122C63A637003BCD19 /* TrackersCollectionViewCell.swift in Sources */,
+				073C8C2E2C6B3207006D8E7D /* UIViewController+Extensions.swift in Sources */,
 				079432D62C56184300DDCE10 /* TrackersViewPresenterProtocol.swift in Sources */,
+				073C8C232C6A2F10006D8E7D /* NewTrackerViewController.swift in Sources */,
 				07D9897B2C69023900CF9B3E /* AddTrackerViewPresenterDelegate.swift in Sources */,
 				07D989782C69018C00CF9B3E /* AddTrackerViewPresenterProtocol.swift in Sources */,
 				07D989742C68FB6D00CF9B3E /* AddTrackerViewController.swift in Sources */,
 				07D1B2182C63D671003BCD19 /* TrackersCellViewModel.swift in Sources */,
 				07D989722C68764500CF9B3E /* TrackersCollectionHeaderView.swift in Sources */,
 				079432D12C5617DD00DDCE10 /* TrackersViewPresenter.swift in Sources */,
+				073C8C2A2C6A34DD006D8E7D /* NewTrackerViewPresenterDelegate.swift in Sources */,
 				07D1B2102C627B5F003BCD19 /* Weekday.swift in Sources */,
+				073C8C302C6CE37C006D8E7D /* UIButton+Extensions.swift in Sources */,
 				079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */,
 				079432D42C56183000DDCE10 /* TrackersViewPresenterDelegate.swift in Sources */,
 				07EA45A92C661D500074306C /* Int+Extensions.swift in Sources */,
 				079432C92C560F5300DDCE10 /* Constants.swift in Sources */,
 				079432A72C54D55900DDCE10 /* AppDelegate.swift in Sources */,
+				073C8C342C6D11F7006D8E7D /* UITableView+Extensions.swift in Sources */,
 				07DAD3FF2C5A9398001F4150 /* Tracker.swift in Sources */,
 				079432A92C54D55900DDCE10 /* SceneDelegate.swift in Sources */,
 				079432C72C56031F00DDCE10 /* UIView+Extensions.swift in Sources */,
@@ -366,13 +427,16 @@
 				07D1B2142C63C544003BCD19 /* TrackersCellGeometricParams.swift in Sources */,
 				07DAD4032C5A93B2001F4150 /* TrackerRecord.swift in Sources */,
 				07DAD4012C5A93A3001F4150 /* TrackerCategory.swift in Sources */,
+				073C8C272C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift in Sources */,
 				07ADBA8A2C67F823000BC87F /* Date+Extensions.swift in Sources */,
 				079432DB2C561F7C00DDCE10 /* StatisticsViewProtocol.swift in Sources */,
 				079432C52C55716700DDCE10 /* SplashViewController.swift in Sources */,
+				073C8C322C6D0C29006D8E7D /* TrackerButtonsCell.swift in Sources */,
 				079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */,
 				07D989762C68FC6400CF9B3E /* AddTrackerViewPresenter.swift in Sources */,
 				079432CD2C5614D500DDCE10 /* TrackersViewController.swift in Sources */,
 				079432CF2C56159400DDCE10 /* StatisticsViewController.swift in Sources */,
+				073C8C362C6D3063006D8E7D /* InsetLabel.swift in Sources */,
 				07EA45AC2C6677D30074306C /* TrackersCollectionViewCellDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
