@@ -8,7 +8,7 @@
 import UIKit
 
 extension UITableView {
-    /// Вычисляет индекс последней ячейки если это возможно
+    /// Вычисляет индекс последней ячейки, если это возможно
     var lastCellIndexPath: IndexPath? {
         for section in (0..<self.numberOfSections).reversed() {
             let rows = numberOfRows(inSection: section)

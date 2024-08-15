@@ -17,12 +17,13 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     // MARK: - Constants
 
-    let trackersCellParams = TrackersCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, cellHeight: 148, lineSpacing: 10)
+    let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, cellHeight: 148, lineSpacing: 10)
 
     // MARK: - Public Properties
 
     weak var viewController: TrackersViewPresenterDelegate?
 
+    /// Дата, на которую отображается коллекция трекеров
     public var currentDate: Date {
         get {
             return trackersDate
@@ -33,39 +34,16 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         }
     }
 
-    // MARK: - IBOutlet
-
     // MARK: - Private Properties
 
-    /// Перемення для хранения значения currentDate
+    /// Переменная для хранения значения currentDate
     private var trackersDate = Date()
     /// Список категорий и вложенных в них трекеров
-    private var categories: [TrackerCategory] = [
-        TrackerCategory(
-            categoryName: "Домашний уют",
-            trackers: [
-                Tracker(
-                    id: UUID(
-                        uuidString: "c35b5998-ee09-497d-a17e-0da346a199b6"
-                    ) ?? UUID(),
-                    name: "Поливать растения",
-                    color: .appColorSection1,
-                    emoji: "❤️",
-                    schedule: [.friday, .saturday, .sunday]
-                )
-            ]
-        )
-    ]
+    private var categoriesDatabase: [TrackerCategory] = []
+    /// Список категорий и вложенных в них трекеров на текущую дату
+    private var categoriesOnDate: [TrackerCategory] = []
     /// Список выполненных трекеров
-    private var completedTrackers: Set<TrackerRecord> = [
-        TrackerRecord(
-            trackerId: UUID(
-                uuidString: "c35b5998-ee09-497d-a17e-0da346a199b6") ?? UUID(),
-            recordDate: Date().removeTimeStamp - 1
-        )
-    ]
-
-    // MARK: - Initializers
+    private var completedTrackers: Set<TrackerRecord> = []
 
     // MARK: - Public Methods
 
@@ -73,12 +51,13 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         let addTrackerViewController = AddTrackerViewController()
         let addTrackerViewPresenter = AddTrackerViewPresenter()
         addTrackerViewController.configure(addTrackerViewPresenter)
+        addTrackerViewPresenter.delegate = self
         completion(addTrackerViewController)
     }
 
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
         guard
-            let category = categories[safe: indexPath.section],
+            let category = categoriesOnDate[safe: indexPath.section],
             let tracker = category.trackers[safe: indexPath.row]
         else {
             assertionFailure("Критическая ошибка доступа к данным трекеров - искомые категория и/или трекер не найдены")
@@ -107,7 +86,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     ///   - indexPath: Индекс ячейки внутри коллекции
     func showCell(for cell: TrackersCollectionViewCell, with indexPath: IndexPath) {
         guard
-            let category = categories[safe: indexPath.section],
+            let category = categoriesOnDate[safe: indexPath.section],
             let tracker = category.trackers[safe: indexPath.row] else {
             assertionFailure("Критическая ошибка доступа к данным трекера: искомый объект не найден по индексу секции \(indexPath.section) и индексу трекера \(indexPath.row)s")
             return
@@ -127,44 +106,29 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     ///   - header: Объект-заголовок
     ///   - indexPath: ИНдекс заголовка внутри коллекции
     private func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath) {
-        guard let category = categories[safe: indexPath.section] else {
+        guard let category = categoriesOnDate[safe: indexPath.section] else {
             assertionFailure("Критическая ошибка доступа к данным трекера: искомая категория трекеров не найдена по индексу секции \(indexPath.section)")
             return
         }
         header.setSectionHeaderTitle(category.categoryName)
     }
 
-    func trackersCount() -> Int {
-        guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: currentDate) else {
-            assertionFailure("Ошибка определения дня недели на основании текущей даты")
-            return 0
+    func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
+        var tmpCategories = categoriesDatabase
+        if let categoryIndex = tmpCategories.firstIndex(where: {
+            $0.categoryName.lowercased() == trackerCategory.lowercased()
+        }) {
+            var trackers = tmpCategories[categoryIndex].trackers
+            trackers.append(tracker)
+            tmpCategories[categoryIndex] = TrackerCategory(categoryName: tmpCategories[categoryIndex].categoryName, trackers: trackers)
+        } else {
+            tmpCategories.append(TrackerCategory(categoryName: trackerCategory, trackers: [tracker]))
         }
-        return categories.reduce(into: 0) {
-            $0 += $1.trackers.reduce(into: 0) {
-                if $1.schedule.contains(dayOfTheWeek) {
-                    $0 += 1
-                }
-            }
-        }
+        categoriesDatabase = tmpCategories
+        loadTrackers()
     }
 
     // MARK: - Private Methods
-
-    /// Используется для определения количества секций (категорий) коллекции трекеров на текущую дату
-    /// - Returns: Количество секций трекеров на текущую дату
-    private func categoriesCount() -> Int {
-        guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: currentDate) else {
-            assertionFailure("Ошибка определения дня недели на основании текущей даты")
-            return 0
-        }
-        return categories.reduce(into: 0) {
-            if !$1.trackers.filter({
-                $0.schedule.contains(dayOfTheWeek)
-            }).isEmpty {
-                $0 += 1
-            }
-        }
-    }
 
     /// Используется для определения факта выполнения заданного трекера на текущую дату
     /// - Parameter id: Идентификатор трекера
@@ -177,7 +141,42 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     /// Загружает трекеры из базы данных
     private func loadTrackers() {
-        if trackersCount() == 0 {
+        guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: currentDate) else {
+            assertionFailure("Ошибка определения дня недели на основании текущей даты")
+            return
+        }
+
+        categoriesOnDate = []
+        categoriesDatabase.forEach { category in
+            let trackersOnDate = category.trackers.filter { tracker in
+                if tracker.schedule.contains(dayOfTheWeek) {
+                    return true
+                } else {
+                    if tracker.schedule.isEmpty {
+                        if trackersRecordCount(withId: tracker.id) == 0 {
+                            return true
+                        } else {
+                            guard
+                                let trackerRecord = completedTrackers.first(where: { $0.trackerId == tracker.id })
+                            else {
+                                return false
+                            }
+                            if trackerRecord.recordDate == currentDate {
+                                return true
+                            } else {
+                                return false
+                            }
+                        }
+                    } else {
+                        return false
+                    }
+                }
+            }
+            if !trackersOnDate.isEmpty {
+                categoriesOnDate.append(TrackerCategory(categoryName: category.categoryName, trackers: trackersOnDate))
+            }
+        }
+        if categoriesOnDate.isEmpty {
             viewController?.showTrackersListStub()
         } else {
             viewController?.showTrackersList()
@@ -199,7 +198,7 @@ extension TrackersViewPresenter: UICollectionViewDataSource {
     /// - Parameter collectionView: Элемент управления
     /// - Returns: Количество секций (категорий трекеров)
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categoriesCount()
+        return categoriesOnDate.count
     }
 
     /// Возвращает количество ячеек (трекеров) в заданной секции (категории трекеров) на текущую дату
@@ -208,7 +207,7 @@ extension TrackersViewPresenter: UICollectionViewDataSource {
     ///   - section: Индекс секции в коллекции
     /// - Returns: Количество ячеек (трекеров) в заданной секции (категории трекеров)
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let trackersCount = categories[safe: section]?.trackers.count else { return 0 }
+        guard let trackersCount = categoriesOnDate[safe: section]?.trackers.count else { return 0 }
         return trackersCount
     }
 

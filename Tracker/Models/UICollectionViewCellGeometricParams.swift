@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Структура для хранения размеров отступов ячеек в коллекции трекеров
-struct TrackersCellGeometricParams {
+/// Структура для хранения размеров отступов ячеек в коллекциях
+struct UICollectionViewCellGeometricParams {
     let cellCount: Int
     let topInset: CGFloat
     let leftInset: CGFloat

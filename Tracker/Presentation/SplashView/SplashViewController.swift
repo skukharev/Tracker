@@ -17,10 +17,6 @@ final class SplashViewController: UIViewController {
         static let statisticsTabBarImageName = "StatisticsTabBarImage"
     }
 
-    // MARK: - Constants
-
-    // MARK: - Public Properties
-
     // MARK: - Private Properties
 
     /// Логотип приложения
@@ -36,8 +32,6 @@ final class SplashViewController: UIViewController {
         return image
     }()
 
-    // MARK: - Initializers
-
     // MARK: - UIViewController
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,10 +39,6 @@ final class SplashViewController: UIViewController {
         createAndLayoutViews()
         switchToMainScreen()
     }
-
-    // MARK: - Public Methods
-
-    // MARK: - IBAction
 
     // MARK: - Private Methods
 
@@ -92,10 +82,7 @@ final class SplashViewController: UIViewController {
             tabBarController.tabBar.scrollEdgeAppearance = appearance
         }
         /// Настройка цвета окантовки таб-бара
-        if let tabBarBorderColor = UIColor(named: "App Gray") {
-            tabBarController.tabBar.layer.borderWidth = 1
-            tabBarController.tabBar.layer.borderColor = tabBarBorderColor.cgColor
-        }
+        tabBarController.tabBar.addTopBorder(with: .appGray, andWidth: 1)
         // Получаем экземпляр `window` приложения
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid window configuration")

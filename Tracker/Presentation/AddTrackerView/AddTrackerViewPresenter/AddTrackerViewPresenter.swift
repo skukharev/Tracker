@@ -11,6 +11,7 @@ final class AddTrackerViewPresenter: AddTrackerViewPresenterProtocol {
     // MARK: - Public Properties
 
     weak var viewController: (any AddTrackerViewPresenterDelegate)?
+    weak var delegate: TrackersViewPresenterProtocol?
 
     // MARK: - Public Methods
 
@@ -26,9 +27,12 @@ final class AddTrackerViewPresenter: AddTrackerViewPresenterProtocol {
 
     // MARK: - Private Methods
 
-    private func showNewTrackerViewController(withTrackerType trackerType: NewTrackerType) {
+    /// Отображает экран создания трекера
+    /// - Parameter trackerType: тип добавляемого трекера: привычка либо событие
+    private func showNewTrackerViewController(withTrackerType trackerType: TrackerType) {
         let newTrackerViewController = NewTrackerViewController()
         let newTrackerViewPresenter = NewTrackerViewPresenter()
+        newTrackerViewPresenter.delegate = self.delegate
         newTrackerViewController.configure(newTrackerViewPresenter, trackerType: trackerType)
 
         guard let window = UIApplication.shared.windows.first else {

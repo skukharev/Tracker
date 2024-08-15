@@ -8,13 +8,13 @@
 import UIKit
 
 extension UIViewController {
-    /// Call this once to dismiss open keyboards by tapping anywhere in the view controller
+    /// Скрывает открытую клавиатуру при тапе в любом месте вью контроллера
     func setupHideKeyboardOnTap() {
         self.view.addGestureRecognizer(self.endEditingRecognizer())
         self.navigationController?.navigationBar.addGestureRecognizer(self.endEditingRecognizer())
     }
 
-    /// Dismisses the keyboard from self.view
+    /// Скрывает клавиатуру с self.view
     private func endEditingRecognizer() -> UIGestureRecognizer {
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(self.view.endEditing(_:)))
         tap.cancelsTouchesInView = false

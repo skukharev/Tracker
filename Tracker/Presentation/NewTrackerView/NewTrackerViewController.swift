@@ -12,7 +12,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     var presenter: NewTrackerViewPresenterProtocol?
 
-    private(set) var trackerType: NewTrackerType?
+    private(set) var trackerType: TrackerType?
 
     // MARK: - Private Properties
 
@@ -88,9 +88,12 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         return view
     }()
     /// Контейнер для удобного размещения кнопок в соответствии с дизайном
-    private lazy var buttonsContainer: UIView = {
-        let view = UIView()
+    private lazy var buttonsContainer: UIStackView = {
+        let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.axis = .horizontal
+        view.spacing = 8
+        view.distribution = .fillProportionally
         return view
     }()
     /// Кнопка "Отменить"
@@ -127,6 +130,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     }()
 
     // MARK: - Initializers
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupHideKeyboardOnTap()
@@ -137,13 +141,43 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     /// Используется для связи вью контроллера с презентером
     /// - Parameter presenter: презентер вью контроллера
-    func configure(_ presenter: NewTrackerViewPresenterProtocol, trackerType: NewTrackerType) {
+    func configure(_ presenter: NewTrackerViewPresenterProtocol, trackerType: TrackerType) {
         self.presenter = presenter
         presenter.viewController = self
         trackerButtons.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
         trackerButtons.dataSource = presenter
         trackerButtons.delegate = presenter
         setupViewsWithTrackerType(trackerType: trackerType)
+    }
+
+    func showTrackersNameViolation() {
+        trackerNameWarningLabel.isHidden = false
+    }
+
+    func hideTrackersNameViolation() {
+        trackerNameWarningLabel.isHidden = true
+    }
+
+    func showViewController(_ viewController: UIViewController) {
+        present(viewController, animated: true)
+    }
+
+    func setCreateButtonEnable() {
+        createButton.backgroundColor = .appBlack
+    }
+
+    func setCreateButtonDisable() {
+        createButton.backgroundColor = .appGray
+    }
+
+    func updateButtonsPanel() {
+        let categoryButtonPath = IndexPath(row: 0, section: 0)
+        var buttonsPath = [categoryButtonPath]
+        if trackerType == .habit {
+            let scheduleButtonPath = IndexPath(row: 1, section: 0)
+            buttonsPath.append(scheduleButtonPath)
+        }
+        trackerButtons.reloadRows(at: buttonsPath, with: .fade)
     }
 
     // MARK: - Private Methods
@@ -154,7 +188,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         trackerNameContainer.addArrangedSubview(trackerName)
         trackerNameContainer.addArrangedSubview(trackerNameWarningLabel)
         controlsScrollView.addSubviews([trackerNameContainer, trackerButtons])
-        buttonsContainer.addSubviews([cancelButton, createButton])
+        buttonsContainer.addArrangedSubview(cancelButton)
+        buttonsContainer.addArrangedSubview(createButton)
         view.addSubviews([viewTitle, controlsScrollView, buttonsContainer])
         setupConstraints()
     }
@@ -167,16 +202,19 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         dismiss(animated: true)
     }
 
-    /// Используется для проверки заполнения обязательных для создания трекера реквизитов
-    /// - Returns: истина, если обязательные реквизиты заполнены и трекер может быть создан; ложь - в противном случае
-    func checkRequiredFields() -> Bool {
-        return false
-    }
-
     /// Обработчик нажатия кнопки "Создать"
     /// - Parameter sender: объект, инициирующий событие
     @objc private func createButtonTouchUpInside(_ sender: UIButton) {
-        if !checkRequiredFields() { return }
+        let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
+        impact.impactOccurred()
+        presenter?.saveTracker { [weak self] result in
+            switch result {
+            case .success:
+                self?.dismiss(animated: true)
+            case .failure:
+                break
+            }
+        }
     }
 
     /// Создаёт констрейнты для элементов управления
@@ -215,27 +253,12 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ]
         )
-        view.layoutIfNeeded()
         controlsScrollView.contentSize.width = view.bounds.width
-        NSLayoutConstraint.activate(
-            [
-                /// Кнопка "Отменить"
-                cancelButton.topAnchor.constraint(equalTo: buttonsContainer.topAnchor),
-                cancelButton.leadingAnchor.constraint(equalTo: buttonsContainer.leadingAnchor),
-                cancelButton.widthAnchor.constraint(equalToConstant: buttonsContainer.bounds.width / 2 - 4),
-                cancelButton.heightAnchor.constraint(equalTo: buttonsContainer.heightAnchor),
-                /// Кнопка "Создать"
-                createButton.topAnchor.constraint(equalTo: buttonsContainer.topAnchor),
-                createButton.leadingAnchor.constraint(equalTo: cancelButton.trailingAnchor, constant: 8),
-                createButton.trailingAnchor.constraint(equalTo: buttonsContainer.trailingAnchor),
-                createButton.heightAnchor.constraint(equalTo: buttonsContainer.heightAnchor)
-            ]
-        )
     }
 
     /// Конфигурирует представление в зависимости от типа добавляемого трекера
     /// - Parameter trackerType: Тип трекера
-    private func setupViewsWithTrackerType(trackerType: NewTrackerType) {
+    private func setupViewsWithTrackerType(trackerType: TrackerType) {
         self.trackerType = trackerType
 
         switch trackerType {
@@ -251,7 +274,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     /// Обработчик изменения значения текстового поля ввода "Наименование трекера"
     /// - Parameter sender: объект, инициировавший событие
     @objc private func trackerNameEditingDidChange(_ sender: UITextField) {
-        guard let textLength = sender.text?.count else { return }
-        trackerNameWarningLabel.isHidden = textLength > 38 ? false : true
+        presenter?.processTrackersName(sender.text)
     }
 }

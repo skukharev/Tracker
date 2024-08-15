@@ -16,10 +16,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         static let trackersStubImageName = "TrackersStub"
     }
 
-    // MARK: - Constants
-
-    // MARK: - Public Properties
-
     // MARK: - Private Properties
 
     private var presenter: TrackersViewPresenterProtocol?
@@ -48,6 +44,8 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         datePicker.maximumDate = maxDate
         datePicker.backgroundColor = .appDatePickerBackground
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
+        datePicker.layer.cornerRadius = 8
+        datePicker.layer.masksToBounds = true
         return datePicker
     }()
     /// Заглушка списка с трекерами
@@ -93,6 +91,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.setupHideKeyboardOnTap()
         createAndLayoutViews()
         presenter?.currentDate = Date()
     }
@@ -171,6 +170,13 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         trackersCollection.delegate = presenter
         /// Разметка элементов управления
         setupConstraints()
+        /// Обработчики свайпом влево и вправо
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        leftSwipe.direction = .left
+        rightSwipe.direction = .right
+        view.addGestureRecognizer(leftSwipe)
+        view.addGestureRecognizer(rightSwipe)
     }
 
     /// Создаёт констрейнты для элементов управления
@@ -193,6 +199,21 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
             ]
         )
+    }
+
+    /// Обработчик жестов свайп-влево и свайп-впарво
+    /// - Parameter sender: объект-источник события
+    @objc func handleSwipes(_ sender: UISwipeGestureRecognizer) {
+        if sender.direction == .left {
+            let newDate = Calendar.current.date(byAdding: .day, value: 1, to: trackersChooseDatePicker.date) ?? trackersChooseDatePicker.date
+            trackersChooseDatePicker.setDate(newDate, animated: true)
+            datePickerValueChanged(trackersChooseDatePicker)
+        }
+        if sender.direction == .right {
+            let newDate = Calendar.current.date(byAdding: .day, value: -1, to: trackersChooseDatePicker.date) ?? trackersChooseDatePicker.date
+            trackersChooseDatePicker.setDate(newDate, animated: true)
+            datePickerValueChanged(trackersChooseDatePicker)
+        }
     }
 }
 

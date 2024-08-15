@@ -8,7 +8,9 @@
 import Foundation
 
 /// Типы трекеров
-enum NewTrackerType {
-    case habit      /// Привычка
-    case event      /// Разовое событие
+enum TrackerType {
+    /// Привычка
+    case habit
+    /// Разовое событие
+    case event
 }
