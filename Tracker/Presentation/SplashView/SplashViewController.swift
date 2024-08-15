@@ -82,7 +82,7 @@ final class SplashViewController: UIViewController {
             tabBarController.tabBar.scrollEdgeAppearance = appearance
         }
         /// Настройка цвета окантовки таб-бара
-        tabBarController.tabBar.addTopBorder(with: .appGray, andWidth: 1)
+        tabBarController.tabBar.addTopBorder(with: .appTabBarTopBorder, andWidth: 1)
         // Получаем экземпляр `window` приложения
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid window configuration")

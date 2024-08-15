@@ -43,6 +43,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         datePicker.minimumDate = minDate
         datePicker.maximumDate = maxDate
         datePicker.backgroundColor = .appDatePickerBackground
+        datePicker.setValue(UIColor.appDatePickerText, forKey: "textColor")
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
         datePicker.layer.cornerRadius = 8
         datePicker.layer.masksToBounds = true
@@ -156,7 +157,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
         let window = UIApplication.shared.windows.first { $0.isKeyWindow }
-        window?.backgroundColor = .appBlack
+        window?.backgroundColor = .appWhite
         /// Панель навигации
         navigationItem.title = "Трекеры"
         navigationController?.navigationBar.prefersLargeTitles = true

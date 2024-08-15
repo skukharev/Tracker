@@ -34,6 +34,7 @@ final class ScheduleCell: UITableViewCell {
     private lazy var weekDayToggle: UISwitch = {
         let view = UISwitch()
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.onTintColor = .appBlue
         view.addTarget(self, action: #selector(weekDayToggleValueChanged(_ :)), for: .valueChanged)
         return view
     }()

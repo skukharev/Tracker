@@ -47,7 +47,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         let view = UITextField()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.textColor = .appBlack
-        view.backgroundColor = .appLightGray
+        view.backgroundColor = .appBackground
         view.placeholder = "Введите название трекера"
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .leading
@@ -117,10 +117,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     private lazy var createButton: UIButton = {
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setTitleColor(.appWhite, for: .normal)
         view.setTitle("Создать", for: .normal)
         view.titleLabel?.font = GlobalConstants.ypMedium16
-        view.backgroundColor = .appGray
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
         view.layer.cornerRadius = 16
@@ -163,11 +161,13 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     }
 
     func setCreateButtonEnable() {
-        createButton.backgroundColor = .appBlack
+        createButton.backgroundColor = .appEnabledCreateButtonBackground
+        createButton.setTitleColor(.appEnabledCreateButtonText, for: .normal)
     }
 
     func setCreateButtonDisable() {
         createButton.backgroundColor = .appGray
+        createButton.setTitleColor(.white, for: .normal)
     }
 
     func updateButtonsPanel() {
@@ -192,6 +192,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         buttonsContainer.addArrangedSubview(createButton)
         view.addSubviews([viewTitle, controlsScrollView, buttonsContainer])
         setupConstraints()
+        setCreateButtonDisable()
     }
 
     /// Обработчик нажатия кнопки "Отменить"
