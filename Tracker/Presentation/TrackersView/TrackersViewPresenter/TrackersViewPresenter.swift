@@ -15,10 +15,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         case trackerCompletionInTheFutureIsProhibited
     }
 
-    // MARK: - Constants
-
-    let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, cellHeight: 148, lineSpacing: 10)
-
     // MARK: - Public Properties
 
     weak var viewController: TrackersViewPresenterDelegate?
@@ -80,10 +76,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         completion(.success(()))
     }
 
-    /// Конифугрирует ячейку для её отображения в коллекции
-    /// - Parameters:
-    ///   - cell: Объект-ячейка
-    ///   - indexPath: Индекс ячейки внутри коллекции
     func showCell(for cell: TrackersCollectionViewCell, with indexPath: IndexPath) {
         guard
             let category = categoriesOnDate[safe: indexPath.section],
@@ -101,16 +93,21 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         cell.showCellViewModel(cellViewModel)
     }
 
-    /// Конфигурирует заголовок секции для его отображения
-    /// - Parameters:
-    ///   - header: Объект-заголовок
-    ///   - indexPath: ИНдекс заголовка внутри коллекции
-    private func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath) {
+    func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath) {
         guard let category = categoriesOnDate[safe: indexPath.section] else {
             assertionFailure("Критическая ошибка доступа к данным трекера: искомая категория трекеров не найдена по индексу секции \(indexPath.section)")
             return
         }
         header.setSectionHeaderTitle(category.categoryName)
+    }
+
+    func trackerCategoriesCount() -> Int {
+        return categoriesOnDate.count
+    }
+
+    func trackersCount(inSection section: Int) -> Int {
+        guard let trackersCount = categoriesOnDate[safe: section]?.trackers.count else { return 0 }
+        return trackersCount
     }
 
     func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
@@ -188,132 +185,5 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     /// - Returns: Общее количество выполнений заданного трекера
     private func trackersRecordCount(withId id: UUID) -> Int {
         return completedTrackers.filter { $0.trackerId == id }.count
-    }
-}
-
-// MARK: - UICollectionViewDataSource
-
-extension TrackersViewPresenter: UICollectionViewDataSource {
-    /// Возвращает количество секций (категорий теркеров) коллекции трекеров на текущую дату
-    /// - Parameter collectionView: Элемент управления
-    /// - Returns: Количество секций (категорий трекеров)
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categoriesOnDate.count
-    }
-
-    /// Возвращает количество ячеек (трекеров) в заданной секции (категории трекеров) на текущую дату
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - section: Индекс секции в коллекции
-    /// - Returns: Количество ячеек (трекеров) в заданной секции (категории трекеров)
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let trackersCount = categoriesOnDate[safe: section]?.trackers.count else { return 0 }
-        return trackersCount
-    }
-
-    /// Используется для визуального оформления заголовка секции коллекции
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - kind: Тип: заголовок/футер
-    ///   - indexPath: Индекс заголовка секции в коллекции
-    /// - Returns: Сконфигурированная и готовый к отображению заголовок коллекции трекеров
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id: String
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            id = TrackersCollectionHeaderView.Constants.identifier
-        default:
-            id = ""
-        }
-
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? TrackersCollectionHeaderView else {
-            assertionFailure("Элемент управления заголовком секции трекеров не найден")
-            return UICollectionReusableView()
-        }
-        showHeader(for: view, with: indexPath)
-        return view
-    }
-
-    /// Используется для визуального оформления ячейки коллекции
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - indexPath: Индекс ячейки в коллекции трекеров
-    /// - Returns: Сконфигурированная и готовая к отображению ячейка коллекции трекеров
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: TrackersCollectionViewCell.Constants.identifier,
-            for: indexPath) as? TrackersCollectionViewCell
-        else {
-            return UICollectionViewCell()
-        }
-        cell.delegate = viewController as? TrackersCollectionViewCellDelegate
-        showCell(for: cell, with: indexPath)
-        return cell
-    }
-}
-
-// MARK: - UICollectionViewDelegateFlowLayout
-
-extension TrackersViewPresenter: UICollectionViewDelegateFlowLayout {
-    /// Задаёт размеры отображаемой ячейки в коллекции трекеров
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - collectionViewLayout: Объект с типом размещения элементов внутри коллекции
-    ///   - indexPath: Индекс ячейки в коллекции трекеров
-    /// - Returns: Размер ячейки с трекером
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.frame.width - trackersCellParams.paddingWidth
-        let cellWidth = availableWidth / CGFloat(trackersCellParams.cellCount)
-        return CGSize(width: cellWidth, height: trackersCellParams.cellHeight)
-    }
-
-    /// Задаёт размеры отступов ячеек заданной секции (категории трекеров) от границ коллекции
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - collectionViewLayout: Объект с типом размещения элементов внутри коллекции
-    ///   - section: Индекс секции (категории трекеров)
-    /// - Returns: Размеры отступов ячеек секции
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: trackersCellParams.topInset, left: trackersCellParams.leftInset, bottom: trackersCellParams.bottomInset, right: trackersCellParams.rightInset)
-    }
-
-    /// Задаёт размеры отступов между строками ячеек заданной секции (категории трекеров)
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - collectionViewLayout: Объект с типом размещения элементов внутри коллекции
-    ///   - section: Индекс секции (категории трекеров)
-    /// - Returns: Размер отступа между строками ячеек заданной секции
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return trackersCellParams.lineSpacing
-    }
-
-    /// Задаёт размер отступов между ячейками одной строки заданной секции (категории трекеров)
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - collectionViewLayout: Объект с типом размещения элементов внутри коллекции
-    ///   - section: Индекс секции (категории трекеров)
-    /// - Returns: Размер отступа между ячейками одной строки заданной секции
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return trackersCellParams.cellSpacing
-    }
-
-    /// Задаёт размер заголовка секции
-    /// - Parameters:
-    ///   - collectionView: Элемент управления
-    ///   - collectionViewLayout: Объект с типом размещения элементов внутри коллекции
-    ///   - section: Индекс секции (категории трекеров)
-    /// - Returns: Размер заголовка секции
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-
-        let headerSize = headerView.systemLayoutSizeFitting(
-            CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-        return headerSize
     }
 }

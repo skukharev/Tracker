@@ -8,7 +8,7 @@
 import UIKit
 
 
-protocol TrackersViewPresenterProtocol: AnyObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+protocol TrackersViewPresenterProtocol: AnyObject {
     /// Ассоциированный вью контроллер
     var viewController: TrackersViewPresenterDelegate? { get set }
     /// Текущая дата трекеров
@@ -30,5 +30,21 @@ protocol TrackersViewPresenterProtocol: AnyObject, UICollectionViewDataSource, U
     /// - Parameters:
     ///   - trackerCategory: выбранная категория трекера
     ///   - tracker: данные трекера
+    /// Конфигурирует заголовок секции для его отображения
+    /// - Parameters:
+    ///   - header: Объект-заголовок
+    ///   - indexPath: ИНдекс заголовка внутри коллекции
+    func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath)
+    /// Возвращает количество категорий трекеров на текущую дату
+    /// - Returns: количество категорий трекеров
+    func trackerCategoriesCount() -> Int
+    /// Возвращает количество трекеров на текущую дату в секции с заданным индексом внутри коллекции
+    /// - Parameter section: индекс секции, для которой необходимо вернуть общее число трекеров
+    /// - Returns: количество трекеров
+    func trackersCount(inSection section: Int) -> Int
+    /// Обработчик, вызываемый при успешном создании/редактировании трекера
+    /// - Parameters:
+    ///   - trackerCategory: наименование категории трекера
+    ///   - tracker: модель трекера
     func trackerDidRecorded(trackerCategory: String, tracker: Tracker)
 }

@@ -13,4 +13,23 @@ struct ScheduleCellModel {
     let weekDay: Weekday
     /// Повторение трекера в заданный день недели включено
     let isSelected: Bool
+    /// Текстовое представление дня недели
+    var weekDayName: String {
+        switch weekDay {
+        case .monday:
+            return "Понедельник"
+        case .tuesday:
+            return "Вторник"
+        case .wednesday:
+            return "Среда"
+        case .thursday:
+            return "Четверг"
+        case .friday:
+            return "Пятница"
+        case .saturday:
+            return "Суббота"
+        case .sunday:
+            return "Воскресенье"
+        }
+    }
 }

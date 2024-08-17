@@ -20,7 +20,8 @@ final class TrackerButtonsCell: UITableViewCell {
         let view = UIStackView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.axis = .vertical
-        view.distribution = .fillProportionally
+        view.distribution = .equalSpacing
+        view.alignment = .leading
         view.spacing = 2
         return view
     }()
@@ -71,12 +72,17 @@ final class TrackerButtonsCell: UITableViewCell {
         selectionStyle = .none
         labelsContainer.addArrangedSubview(titleLabel)
         labelsContainer.addArrangedSubview(subtitleLabel)
-        addSubviews([labelsContainer])
+        contentView.addSubviews([labelsContainer])
         setupConstraints()
     }
 
     /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
-        labelsContainer.edgesToSuperview()
+        NSLayoutConstraint.activate(
+            [
+                labelsContainer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                labelsContainer.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            ]
+        )
     }
 }

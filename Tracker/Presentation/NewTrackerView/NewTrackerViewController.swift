@@ -71,7 +71,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         return view
     }()
     /// Кнопки "Категория" и "Расписание"
-    private lazy var trackerButtons: UITableView = {
+    private lazy var trackerButtonsTableView: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.separatorEffect = .none
@@ -142,9 +142,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     func configure(_ presenter: NewTrackerViewPresenterProtocol, trackerType: TrackerType) {
         self.presenter = presenter
         presenter.viewController = self
-        trackerButtons.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
-        trackerButtons.dataSource = presenter
-        trackerButtons.delegate = presenter
+        trackerButtonsTableView.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
+        trackerButtonsTableView.dataSource = self
+        trackerButtonsTableView.delegate = self
         setupViewsWithTrackerType(trackerType: trackerType)
     }
 
@@ -177,7 +177,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             let scheduleButtonPath = IndexPath(row: 1, section: 0)
             buttonsPath.append(scheduleButtonPath)
         }
-        trackerButtons.reloadRows(at: buttonsPath, with: .fade)
+        trackerButtonsTableView.reloadRows(at: buttonsPath, with: .fade)
     }
 
     // MARK: - Private Methods
@@ -187,7 +187,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         view.backgroundColor = .appWhite
         trackerNameContainer.addArrangedSubview(trackerName)
         trackerNameContainer.addArrangedSubview(trackerNameWarningLabel)
-        controlsScrollView.addSubviews([trackerNameContainer, trackerButtons])
+        controlsScrollView.addSubviews([trackerNameContainer, trackerButtonsTableView])
         buttonsContainer.addArrangedSubview(cancelButton)
         buttonsContainer.addArrangedSubview(createButton)
         view.addSubviews([viewTitle, controlsScrollView, buttonsContainer])
@@ -244,9 +244,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             trackerNameWarningLabel.leadingAnchor.constraint(equalTo: trackerNameContainer.leadingAnchor),
             trackerNameWarningLabel.trailingAnchor.constraint(equalTo: trackerNameContainer.trailingAnchor),
             /// Кнопки "Категория" и "Расписание"
-            trackerButtons.topAnchor.constraint(equalTo: trackerNameContainer.bottomAnchor, constant: 24),
-            trackerButtons.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 16),
-            trackerButtons.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            trackerButtonsTableView.topAnchor.constraint(equalTo: trackerNameContainer.bottomAnchor, constant: 24),
+            trackerButtonsTableView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 16),
+            trackerButtonsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             /// Контейнер для кнопок
             buttonsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
@@ -265,10 +265,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         switch trackerType {
         case .habit:
             viewTitle.text = "Новая привычка"
-            trackerButtons.heightAnchor.constraint(equalToConstant: 150).isActive = true
+            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         case .event:
             viewTitle.text = "Новое нерегулярное событие"
-            trackerButtons.heightAnchor.constraint(equalToConstant: 75).isActive = true
+            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
         }
     }
 
@@ -276,5 +276,56 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     /// - Parameter sender: объект, инициировавший событие
     @objc private func trackerNameEditingDidChange(_ sender: UITextField) {
         presenter?.processTrackersName(sender.text)
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension NewTrackerViewController: UITableViewDataSource {
+    /// Возвращает количество кнопок на панели кнопок экрана редактирования трекера
+    /// - Parameters:
+    ///   - tableView: табличное представление с кнопками
+    ///   - section: индекс секции, для которой запрашивается количество кнопок
+    /// - Returns: Количество кнопок на панели
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch trackerType {
+        case .none:
+            return 0
+        case .habit:
+            return 2
+        case .event:
+            return 1
+        }
+    }
+
+    /// Используется для определения ячейки, которую требуется отобразить в заданной позиции панели кнопок экрана редактирования трекера
+    /// - Parameters:
+    ///   - tableView: табличное представление с кнопками
+    ///   - indexPath: индекс отображаемой кнопки
+    /// - Returns: сконфигурированную и готовую к показу кнопку
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TrackerButtonsCell.Constants.identifier, for: indexPath)
+        guard let buttonsCell = cell as? TrackerButtonsCell else {
+            print(#fileID, #function, #line, "Ошибка приведения типов")
+            return UITableViewCell()
+        }
+        presenter?.configureTrackerButtonCell(tableView, for: buttonsCell, with: indexPath)
+        return buttonsCell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension NewTrackerViewController: UITableViewDelegate {
+    /// Обработчик выделения заданной кнопки (ячейки)
+    /// - Parameters:
+    ///   - tableView: табличное представление с кнопками
+    ///   - indexPath: индекс отображаемой кнопки
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            print("Нажата кнопка Категория")
+        } else {
+            presenter?.showTrackerSchedule()
+        }
     }
 }

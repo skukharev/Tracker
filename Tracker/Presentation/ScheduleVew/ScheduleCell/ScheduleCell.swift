@@ -54,22 +54,7 @@ final class ScheduleCell: UITableViewCell {
 
     func showCellViewModel(_ model: ScheduleCellModel) {
         self.weekDay = model.weekDay
-        switch model.weekDay {
-        case .monday:
-            weekDayTitleLabel.text = "Понедельник"
-        case .tuesday:
-            weekDayTitleLabel.text = "Вторник"
-        case .wednesday:
-            weekDayTitleLabel.text = "Среда"
-        case .thursday:
-            weekDayTitleLabel.text = "Четверг"
-        case .friday:
-            weekDayTitleLabel.text = "Пятница"
-        case .saturday:
-            weekDayTitleLabel.text = "Суббота"
-        case .sunday:
-            weekDayTitleLabel.text = "Воскресенье"
-        }
+        weekDayTitleLabel.text = model.weekDayName
         weekDayToggle.isOn = model.isSelected
     }
 
