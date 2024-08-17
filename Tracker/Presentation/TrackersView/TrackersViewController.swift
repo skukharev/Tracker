@@ -80,7 +80,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         view.translatesAutoresizingMaskIntoConstraints = false
         view.searchBarStyle = .minimal
         view.placeholder = "Поиск"
-        view.searchTextField.font = GlobalConstants.ypRegular17
         return view
     }()
     /// Коллекция трекеров
@@ -197,7 +196,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 trackersSearchBar.topAnchor.constraint(equalTo: navBar.bottomAnchor),
                 trackersSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
                 trackersSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-                trackersSearchBar.heightAnchor.constraint(equalToConstant: 36),
                 /// Коллекция трекеров
                 trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: 10),
                 trackersCollection.leadingAnchor.constraint(equalTo: trackersSearchBar.leadingAnchor),
@@ -205,17 +203,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
             ]
         )
-
-        /// Приведение внешнего вида панели поиска к требованиям дизайна
-        for subView in trackersSearchBar.subviews {
-            for subsubView in subView.subviews {
-                for view in subsubView.subviews {
-                    if let textField = view as? UITextField {
-                        textField.edgesToSuperview()
-                    }
-                }
-            }
-        }
     }
 
     /// Обработчик жестов свайп-влево и свайп-впарво
