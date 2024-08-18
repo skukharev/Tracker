@@ -17,7 +17,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     // MARK: - Public Properties
 
     weak var viewController: NewTrackerViewPresenterDelegate?
-    weak var delegate: TrackersViewPresenterProtocol?
+    weak var delegate: AddTrackerViewPresenterDelegate?
 
     // MARK: - Private Properties
 
@@ -26,7 +26,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     /// Наименование трекера
     private var trackerName: String?
     /// Выбранное расписание трекера
-    private var schedule: Set<Weekday> = []
+    private var schedule: Week = []
 
     // MARK: - Public Methods
 
@@ -95,11 +95,12 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     func showTrackerSchedule() {
         guard let viewController = viewController as? UIViewController else { return }
-        let scheduleViewPresenter = ScheduleViewPresenter()
-        scheduleViewPresenter.showTrackerSchedule(with: schedule, on: viewController, by: self)
+        let targetViewController = ScheduleScreenAssembley.build(withDelegate: self, forSchedule: schedule)
+        let router = Router(viewController: viewController, targetViewController: targetViewController)
+        router.showNext(dismissCurrent: false)
     }
 
-    func updateTrackerSchedule(with schedule: Set<Weekday>) {
+    func updateTrackerSchedule(with schedule: Week) {
         self.schedule = schedule
         configureCreateButton()
         viewController?.updateButtonsPanel()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterDelegate {
+final class AddTrackerViewController: UIViewController, AddTrackerViewControllerDelegate {
     // MARK: - Public Properties
 
     var presenter: AddTrackerViewPresenterProtocol?
@@ -65,19 +65,6 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewPresenterD
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
-    }
-
-    // MARK: - Public Methods
-
-    /// Используется для связи вью контроллера с презентером
-    /// - Parameter presenter: презентер вью контроллера
-    func configure(_ presenter: AddTrackerViewPresenterProtocol) {
-        self.presenter = presenter
-        presenter.viewController = self
-    }
-
-    func hide() {
-        dismiss(animated: true)
     }
 
     // MARK: - Private Methods

@@ -60,24 +60,15 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        scheduleTableView.register(ScheduleCell.classForCoder(), forCellReuseIdentifier: ScheduleCell.Constants.identifier)
+        scheduleTableView.dataSource = self
+        scheduleTableView.delegate = self
         createAndLayoutViews()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         presenter?.needSaveSchedule()
-    }
-
-    // MARK: - Public Methods
-
-    /// Используется для связи вью контроллера с презентером
-    /// - Parameter presenter: презентер вью контроллера
-    func configure(_ presenter: ScheduleViewPresenterProtocol) {
-        self.presenter = presenter
-        presenter.viewController = self
-        scheduleTableView.register(ScheduleCell.classForCoder(), forCellReuseIdentifier: ScheduleCell.Constants.identifier)
-        scheduleTableView.dataSource = presenter
-        scheduleTableView.delegate = presenter
     }
 
     // MARK: - Private Methods
@@ -117,3 +108,36 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         dismiss(animated: true)
     }
 }
+
+// MARK: - UITableViewDataSource
+
+extension ScheduleViewController: UITableViewDataSource {
+    /// Возвращает количество ячеек на панели с расписанием повторения трекера
+    /// - Parameters:
+    ///   - tableView: табличное представление с расписанием
+    ///   - section: индекс секции, для которой запрашивается количество ячеек
+    /// - Returns: Количество кнопок на панели
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 7
+    }
+
+    /// Используется для определения ячейки, которую требуется отобразить в заданной позиции расписания
+    /// - Parameters:
+    ///   - tableView: табличное представление с расписанием
+    ///   - indexPath: индекс отображаемой ячейки
+    /// - Returns: сконфигурированную и готовую к показу кнопку
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleCell.Constants.identifier, for: indexPath)
+        guard let scheduleCell = cell as? ScheduleCell else {
+            print(#fileID, #function, #line, "Ошибка приведения типов")
+            return UITableViewCell()
+        }
+        presenter?.configureScheduleCell(for: scheduleCell, with: indexPath)
+        scheduleCell.delegate = presenter as? ScheduleCellDelegate
+        return scheduleCell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension ScheduleViewController: UITableViewDelegate {}

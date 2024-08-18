@@ -132,21 +132,13 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupHideKeyboardOnTap()
+        trackerButtonsTableView.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
+        trackerButtonsTableView.dataSource = self
+        trackerButtonsTableView.delegate = self
         createAndLayoutViews()
     }
 
     // MARK: - Public Methods
-
-    /// Используется для связи вью контроллера с презентером
-    /// - Parameter presenter: презентер вью контроллера
-    func configure(_ presenter: NewTrackerViewPresenterProtocol, trackerType: TrackerType) {
-        self.presenter = presenter
-        presenter.viewController = self
-        trackerButtonsTableView.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
-        trackerButtonsTableView.dataSource = self
-        trackerButtonsTableView.delegate = self
-        setupViewsWithTrackerType(trackerType: trackerType)
-    }
 
     func showTrackersNameViolation() {
         trackerNameWarningLabel.isHidden = false
@@ -154,10 +146,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     func hideTrackersNameViolation() {
         trackerNameWarningLabel.isHidden = true
-    }
-
-    func showViewController(_ viewController: UIViewController) {
-        present(viewController, animated: true)
     }
 
     func setCreateButtonEnable() {
@@ -168,6 +156,21 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     func setCreateButtonDisable() {
         createButton.backgroundColor = .appGray
         createButton.setTitleColor(.white, for: .normal)
+    }
+
+    /// Конфигурирует представление в зависимости от типа добавляемого трекера
+    /// - Parameter trackerType: Тип трекера
+    func setupViewsWithTrackerType(trackerType: TrackerType) {
+        self.trackerType = trackerType
+
+        switch trackerType {
+        case .habit:
+            viewTitle.text = "Новая привычка"
+            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        case .event:
+            viewTitle.text = "Новое нерегулярное событие"
+            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
+        }
     }
 
     func updateButtonsPanel() {
@@ -255,21 +258,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             ]
         )
         controlsScrollView.contentSize.width = view.bounds.width
-    }
-
-    /// Конфигурирует представление в зависимости от типа добавляемого трекера
-    /// - Parameter trackerType: Тип трекера
-    private func setupViewsWithTrackerType(trackerType: TrackerType) {
-        self.trackerType = trackerType
-
-        switch trackerType {
-        case .habit:
-            viewTitle.text = "Новая привычка"
-            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        case .event:
-            viewTitle.text = "Новое нерегулярное событие"
-            trackerButtonsTableView.heightAnchor.constraint(equalToConstant: 75).isActive = true
-        }
     }
 
     /// Обработчик изменения значения текстового поля ввода "Наименование трекера"

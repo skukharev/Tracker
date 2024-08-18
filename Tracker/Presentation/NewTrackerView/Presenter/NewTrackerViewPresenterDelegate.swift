@@ -12,8 +12,6 @@ protocol NewTrackerViewPresenterDelegate: AnyObject {
     var trackerType: TrackerType? { get }
     /// Скрывает предупреждение о недопустимом значении нименования трекера
     func hideTrackersNameViolation()
-    /// Отображает модально вью контроллер
-    func showViewController(_ viewController: UIViewController)
     /// Отображает предупреждение о недопустимом значении наименования трекера
     func showTrackersNameViolation()
     /// Меняет внешний вид кнопки записи трекера на недоступный для записи

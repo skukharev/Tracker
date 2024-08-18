@@ -29,5 +29,5 @@ protocol NewTrackerViewPresenterProtocol: AnyObject {
     func showTrackerSchedule()
     /// Обновляет расписание трекера
     /// - Parameter schedule: актуальное расписание запуска трекера
-    func updateTrackerSchedule(with schedule: Set<Weekday>)
+    func updateTrackerSchedule(with schedule: Week)
 }

@@ -43,12 +43,11 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     // MARK: - Public Methods
 
-    func addTracker(_ completion: @escaping (AddTrackerViewPresenterDelegate) -> Void) {
-        let addTrackerViewController = AddTrackerViewController()
-        let addTrackerViewPresenter = AddTrackerViewPresenter()
-        addTrackerViewController.configure(addTrackerViewPresenter)
-        addTrackerViewPresenter.delegate = self
-        completion(addTrackerViewController)
+    func addTracker() {
+        guard let viewController = viewController as? UIViewController else { return }
+        let targetViewController = AddTrackerScreenAssembley.build(withDelegate: self)
+        let router = Router(viewController: viewController, targetViewController: targetViewController)
+        router.showNext(dismissCurrent: false)
     }
 
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
@@ -108,21 +107,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     func trackersCount(inSection section: Int) -> Int {
         guard let trackersCount = categoriesOnDate[safe: section]?.trackers.count else { return 0 }
         return trackersCount
-    }
-
-    func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
-        var tmpCategories = categoriesDatabase
-        if let categoryIndex = tmpCategories.firstIndex(where: {
-            $0.categoryName.lowercased() == trackerCategory.lowercased()
-        }) {
-            var trackers = tmpCategories[categoryIndex].trackers
-            trackers.append(tracker)
-            tmpCategories[categoryIndex] = TrackerCategory(categoryName: tmpCategories[categoryIndex].categoryName, trackers: trackers)
-        } else {
-            tmpCategories.append(TrackerCategory(categoryName: trackerCategory, trackers: [tracker]))
-        }
-        categoriesDatabase = tmpCategories
-        loadTrackers()
     }
 
     // MARK: - Private Methods
@@ -185,5 +169,22 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     /// - Returns: Общее количество выполнений заданного трекера
     private func trackersRecordCount(withId id: UUID) -> Int {
         return completedTrackers.filter { $0.trackerId == id }.count
+    }
+}
+
+extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
+    func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
+        var tmpCategories = categoriesDatabase
+        if let categoryIndex = tmpCategories.firstIndex(where: {
+            $0.categoryName.lowercased() == trackerCategory.lowercased()
+        }) {
+            var trackers = tmpCategories[categoryIndex].trackers
+            trackers.append(tracker)
+            tmpCategories[categoryIndex] = TrackerCategory(categoryName: tmpCategories[categoryIndex].categoryName, trackers: trackers)
+        } else {
+            tmpCategories.append(TrackerCategory(categoryName: trackerCategory, trackers: [tracker]))
+        }
+        categoriesDatabase = tmpCategories
+        loadTrackers()
     }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias Week = Set<Weekday>
+
 /// Дни недели для использования в структуре Tracker
 enum Weekday: Int {
     case monday

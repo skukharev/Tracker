@@ -13,9 +13,8 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var viewController: TrackersViewPresenterDelegate? { get set }
     /// Текущая дата трекеров
     var currentDate: Date { get set }
-    /// Добавляет трекер
-    /// - Parameter completion: Замыкание, вызываемое после завершения конфигурирования вью контроллера для его отображения на экране
-    func addTracker(_ completion: @escaping (AddTrackerViewPresenterDelegate) -> Void)
+    /// Запускает функционал по добавлению трекера
+    func addTracker()
     /// В случае если трекер на текущую дату не выполнялся, то производит фиксацию выполнения трекера; и удаляет фиксацию выполнения трекера в противном случае
     /// - Parameters:
     ///   - for: Индекс трекера в коллекции трекеров
@@ -42,9 +41,4 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     /// - Parameter section: индекс секции, для которой необходимо вернуть общее число трекеров
     /// - Returns: количество трекеров
     func trackersCount(inSection section: Int) -> Int
-    /// Обработчик, вызываемый при успешном создании/редактировании трекера
-    /// - Parameters:
-    ///   - trackerCategory: наименование категории трекера
-    ///   - tracker: модель трекера
-    func trackerDidRecorded(trackerCategory: String, tracker: Tracker)
 }

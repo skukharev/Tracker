@@ -144,10 +144,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     /// Обработчик нажатия кнопки "Добавить трекер"
     /// - Parameter sender: объект-инициатор события
     @objc private func addTrackerTouchUpInside(_ sender: UIButton) {
-        presenter?.addTracker { [weak self] addTrackerViewController in
-            guard let viewController = addTrackerViewController as? UIViewController else { return }
-            self?.present(viewController, animated: true)
-        }
+        presenter?.addTracker()
     }
 
     ///  Обработчик изменения значения элемента управления датами

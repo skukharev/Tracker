@@ -10,18 +10,16 @@ import UIKit
 final class AddTrackerViewPresenter: AddTrackerViewPresenterProtocol {
     // MARK: - Public Properties
 
-    weak var viewController: (any AddTrackerViewPresenterDelegate)?
-    weak var delegate: TrackersViewPresenterProtocol?
+    weak var viewController: AddTrackerViewControllerDelegate?
+    weak var delegate: AddTrackerViewPresenterDelegate?
 
     // MARK: - Public Methods
 
     func addHabit() {
-        viewController?.hide()
         showNewTrackerViewController(withTrackerType: .habit)
     }
 
     func addEvent() {
-        viewController?.hide()
         showNewTrackerViewController(withTrackerType: .event)
     }
 
@@ -30,15 +28,9 @@ final class AddTrackerViewPresenter: AddTrackerViewPresenterProtocol {
     /// Отображает экран создания трекера
     /// - Parameter trackerType: тип добавляемого трекера: привычка либо событие
     private func showNewTrackerViewController(withTrackerType trackerType: TrackerType) {
-        let newTrackerViewController = NewTrackerViewController()
-        let newTrackerViewPresenter = NewTrackerViewPresenter()
-        newTrackerViewPresenter.delegate = self.delegate
-        newTrackerViewController.configure(newTrackerViewPresenter, trackerType: trackerType)
-
-        guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid window configuration")
-            return
-        }
-        window.rootViewController?.present(newTrackerViewController, animated: true)
+        guard let viewController = viewController as? UIViewController else { return }
+        let targetViewController = NewTrackerScreenAssembley.build(withDelegate: self.delegate, forTrackerType: trackerType)
+        let router = Router(viewController: viewController, targetViewController: targetViewController)
+        router.showNext(animatedDismissCurrent: false)
     }
 }
