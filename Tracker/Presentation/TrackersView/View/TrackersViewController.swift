@@ -18,7 +18,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     // MARK: - Constants
 
-    let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, cellHeight: 148, lineSpacing: 10)
+    let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
 
     // MARK: - Private Properties
 

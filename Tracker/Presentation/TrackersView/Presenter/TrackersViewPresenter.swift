@@ -79,7 +79,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         guard
             let category = categoriesOnDate[safe: indexPath.section],
             let tracker = category.trackers[safe: indexPath.row] else {
-            assertionFailure("Критическая ошибка доступа к данным трекера: искомый объект не найден по индексу секции \(indexPath.section) и индексу трекера \(indexPath.row)s")
+            assertionFailure("Критическая ошибка доступа к данным трекера: искомый объект не найден по индексу секции \(indexPath.section) и индексу трекера \(indexPath.row)")
             return
         }
         let cellViewModel = TrackersCellViewModel(

@@ -14,8 +14,22 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         case canNotSaveTracker
     }
 
+    // MARK: - Constants
+
+    /// Массив с доступными для выбора пользователем эмоджи трекера
+    let emojies = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
+
+    let colors = {
+        var colors: [UIColor] = []
+        for i in 1...18 {
+            colors.append(UIColor(named: "App Color Section " + i.intToString) ?? .appColorSection1)
+        }
+        return colors
+    }()
+
     // MARK: - Public Properties
 
+    /// Ассоциированный вью контроллер
     weak var viewController: NewTrackerViewPresenterDelegate?
     weak var delegate: AddTrackerViewPresenterDelegate?
 
@@ -27,6 +41,10 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     private var trackerName: String?
     /// Выбранное расписание трекера
     private var schedule: Week = []
+    /// Выбранный эмоджи для трекера
+    private var emoji: String?
+    /// Выбранный цвет трекера
+    private var color: UIColor?
 
     // MARK: - Public Methods
 
@@ -34,18 +52,21 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         guard
             let trackerType = viewController?.trackerType,
             let categoryName = categoryName,
-            let trackerName = trackerName
+            let trackerName = trackerName,
+            let emoji = emoji,
+            color != nil
         else {
             return false
         }
         let trackerCategoryIsCorrect = !categoryName.isEmpty
         let trackerNameIsCorrect = !trackerName.isEmpty && trackerName.count < 38
+        let trackerEmojiIsCorrect = !emoji.isEmpty
         switch trackerType {
         case .habit:
             let trackerscheduleIsCorrect = !schedule.isEmpty
-            if  trackerCategoryIsCorrect && trackerNameIsCorrect && trackerscheduleIsCorrect { return true }
+            if  trackerCategoryIsCorrect && trackerNameIsCorrect && trackerscheduleIsCorrect && trackerEmojiIsCorrect { return true }
         case .event:
-            if trackerCategoryIsCorrect && trackerNameIsCorrect { return true }
+            if trackerCategoryIsCorrect && trackerNameIsCorrect && trackerEmojiIsCorrect { return true }
         }
         return false
     }
@@ -64,6 +85,16 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         }
     }
 
+    func processColor(_ color: UIColor) {
+        self.color = color
+        configureCreateButton()
+    }
+
+    func processEmoji(_ emoji: String) {
+        self.emoji = emoji
+        configureCreateButton()
+    }
+
     func processTrackersName(_ trackerName: String?) {
         self.trackerName = trackerName
         guard let textLength = trackerName?.count else { return }
@@ -73,6 +104,25 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
             viewController?.hideTrackersNameViolation()
         }
         configureCreateButton()
+    }
+
+    func showColorCell(for cell: NewTrackerColorCell, at indexPath: IndexPath, withSelection selection: Bool) {
+        guard let color = colors[safe: indexPath.row] else {
+            assertionFailure("Критическая ошибка доступа к данным массива с цветами трекеров: искомый объект не найден по индексу цвета \(indexPath.row)")
+            return
+        }
+        let cellViewModel = NewTrackerColorCellModel(color: color, isSelected: selection)
+        cell.showCellViewModel(cellViewModel)
+    }
+
+    func showEmojiCell(for cell: NewTrackerEmojiCell, at indexPath: IndexPath, withSelection selection: Bool = false) {
+        guard
+            let emoji = emojies[safe: indexPath.row] else {
+            assertionFailure("Критическая ошибка доступа к данным массива эмоджи: искомый объект не найден по индексу эмоджи \(indexPath.row)")
+            return
+        }
+        let cellViewModel = NewTrackerEmojiCellModel(emoji: emoji, isSelected: selection)
+        cell.showCellViewModel(cellViewModel)
     }
 
     func saveTracker(_ completion: @escaping (Result<Void, any Error>) -> Void) {
@@ -85,8 +135,8 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
                 tracker: Tracker(
                     id: UUID(),
                     name: trackerName ?? "",
-                    color: .appColorSection1,
-                    emoji: "👍",
+                    color: color ?? UIColor(),
+                    emoji: emoji ?? "",
                     schedule: schedule
                 )
             )
@@ -117,6 +167,8 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         }
     }
 
+    /// Используется для формирования текстового описания повторений трекера
+    /// - Returns: текстовое описание дней повторения трекера
     private func getTrackerScheduleTitle() -> String? {
         if schedule.isEmpty { return nil }
         if schedule.count == 7 { return "Каждый день" }

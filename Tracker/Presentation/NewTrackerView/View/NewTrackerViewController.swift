@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterDelegate {
+final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterDelegate { // swiftlint:disable:this type_body_length
     // MARK: - Public Properties
 
     var presenter: NewTrackerViewPresenterProtocol?
@@ -56,6 +56,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         view.leftViewMode = .always
         view.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 10))
         view.clearButtonMode = .whileEditing
+        view.returnKeyType = .done
+        view.delegate = self
         view.addTarget(self, action: #selector(trackerNameEditingDidChange), for: .editingChanged)
         return view
     }()
@@ -74,17 +76,49 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     private lazy var trackerButtonsTableView: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.separatorEffect = .none
         view.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         view.allowsSelection = true
-        view.alwaysBounceVertical = true
-        view.insetsContentViewsToSafeArea = true
-        view.contentInsetAdjustmentBehavior = .automatic
         view.backgroundColor = .appBackground
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         view.rowHeight = 75
         view.estimatedRowHeight = view.rowHeight
+        return view
+    }()
+    /// Заголовок коллекции Emoji
+    private lazy var emojiLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.font = GlobalConstants.ypBold19
+        view.textColor = .appBlack
+        view.text = "Emoji"
+        return view
+    }()
+    /// Коллекция Emoji
+    internal lazy var emojiCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.allowsMultipleSelection = false
+        view.allowsSelection = true
+        return view
+    }()
+    /// Заголовок коллекции с цветами трекера
+    private lazy var colorsLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.font = GlobalConstants.ypBold19
+        view.textColor = .appBlack
+        view.text = "Цвет"
+        return view
+    }()
+    /// Коллекция с цветами трекера
+    internal lazy var colorsCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.allowsMultipleSelection = false
+        view.allowsSelection = true
         return view
     }()
     /// Контейнер для удобного размещения кнопок в соответствии с дизайном
@@ -126,15 +160,38 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         view.addTarget(self, action: #selector(createButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
     }()
+    /// Параметры отображения элементов управления в зависимости от типа устройства, на котором запущено приложение
+    internal var geometricParams: NewTrackerViewControllerGeometricParams {
+        if UIDevice.current.isiPhoneSE {
+            return NewTrackerViewControllerGeometricParams(
+                collectionViewHeight: 192,
+                collectionViewParams: UICollectionViewCellGeometricParams(cellCount: 6, topInset: 24, leftInset: 16, rightInset: 16, bottomInset: 24, cellSpacing: 0, lineSpacing: 0, cellHeight: 48, cellWidth: 48)
+            )
+        } else {
+            return NewTrackerViewControllerGeometricParams(
+                collectionViewHeight: 204,
+                collectionViewParams: UICollectionViewCellGeometricParams(cellCount: 6, topInset: 24, leftInset: 18, rightInset: 18, bottomInset: 24, cellSpacing: 5, lineSpacing: 0, cellHeight: 52, cellWidth: 52)
+            )
+        }
+    }
 
     // MARK: - Initializers
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupHideKeyboardOnTap()
+        /// Инициализация табличного представления с кнопками
         trackerButtonsTableView.register(TrackerButtonsCell.classForCoder(), forCellReuseIdentifier: TrackerButtonsCell.Constants.identifier)
         trackerButtonsTableView.dataSource = self
         trackerButtonsTableView.delegate = self
+        /// Инициализация коллекции с эмоджи
+        emojiCollectionView.register(NewTrackerEmojiCell.classForCoder(), forCellWithReuseIdentifier: NewTrackerEmojiCell.Constants.identifier)
+        emojiCollectionView.dataSource = self
+        emojiCollectionView.delegate = self
+        /// Инициализация коллекции с цветами трекера
+        colorsCollectionView.register(NewTrackerColorCell.classForCoder(), forCellWithReuseIdentifier: NewTrackerColorCell.Constants.identifier)
+        colorsCollectionView.dataSource = self
+        colorsCollectionView.delegate = self
         createAndLayoutViews()
     }
 
@@ -190,10 +247,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         view.backgroundColor = .appWhite
         trackerNameContainer.addArrangedSubview(trackerName)
         trackerNameContainer.addArrangedSubview(trackerNameWarningLabel)
-        controlsScrollView.addSubviews([trackerNameContainer, trackerButtonsTableView])
         buttonsContainer.addArrangedSubview(cancelButton)
         buttonsContainer.addArrangedSubview(createButton)
-        view.addSubviews([viewTitle, controlsScrollView, buttonsContainer])
+        controlsScrollView.addSubviews([trackerNameContainer, trackerButtonsTableView, emojiLabel, emojiCollectionView, colorsLabel, colorsCollectionView, buttonsContainer])
+        view.addSubviews([viewTitle, controlsScrollView])
         setupConstraints()
         setCreateButtonDisable()
     }
@@ -232,7 +289,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             controlsScrollView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 38),
             controlsScrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             controlsScrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            controlsScrollView.bottomAnchor.constraint(equalTo: buttonsContainer.topAnchor),
+            controlsScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             controlsScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             /// Панель для наименования трекера
             trackerNameContainer.topAnchor.constraint(equalTo: controlsScrollView.topAnchor),
@@ -250,70 +307,36 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             trackerButtonsTableView.topAnchor.constraint(equalTo: trackerNameContainer.bottomAnchor, constant: 24),
             trackerButtonsTableView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 16),
             trackerButtonsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            /// Заголовок коллекции Emoji
+            emojiLabel.topAnchor.constraint(equalTo: trackerButtonsTableView.bottomAnchor, constant: 32),
+            emojiLabel.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 28),
+            /// Коллекция Emoji
+            emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 1),
+            emojiCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            emojiCollectionView.heightAnchor.constraint(equalToConstant: geometricParams.collectionViewHeight),
+            /// Заголовок коллекции с цветами
+            colorsLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: 16),
+            colorsLabel.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 28),
+            /// Коллекция с цветами трекера
+            colorsCollectionView.topAnchor.constraint(equalTo: colorsLabel.bottomAnchor),
+            colorsCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 1),
+            colorsCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            colorsCollectionView.heightAnchor.constraint(equalToConstant: geometricParams.collectionViewHeight),
             /// Контейнер для кнопок
-            buttonsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            buttonsContainer.topAnchor.constraint(equalTo: colorsCollectionView.bottomAnchor),
+            buttonsContainer.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: 20),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             buttonsContainer.heightAnchor.constraint(equalToConstant: 60),
-            buttonsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            /// Без этого констрейнта ниже отображение элементов скролл-вью будет некорректным
+            buttonsContainer.bottomAnchor.constraint(equalTo: controlsScrollView.bottomAnchor)
             ]
         )
-        controlsScrollView.contentSize.width = view.bounds.width
     }
 
     /// Обработчик изменения значения текстового поля ввода "Наименование трекера"
     /// - Parameter sender: объект, инициировавший событие
     @objc private func trackerNameEditingDidChange(_ sender: UITextField) {
         presenter?.processTrackersName(sender.text)
-    }
-}
-
-// MARK: - UITableViewDataSource
-
-extension NewTrackerViewController: UITableViewDataSource {
-    /// Возвращает количество кнопок на панели кнопок экрана редактирования трекера
-    /// - Parameters:
-    ///   - tableView: табличное представление с кнопками
-    ///   - section: индекс секции, для которой запрашивается количество кнопок
-    /// - Returns: Количество кнопок на панели
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch trackerType {
-        case .none:
-            return 0
-        case .habit:
-            return 2
-        case .event:
-            return 1
-        }
-    }
-
-    /// Используется для определения ячейки, которую требуется отобразить в заданной позиции панели кнопок экрана редактирования трекера
-    /// - Parameters:
-    ///   - tableView: табличное представление с кнопками
-    ///   - indexPath: индекс отображаемой кнопки
-    /// - Returns: сконфигурированную и готовую к показу кнопку
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TrackerButtonsCell.Constants.identifier, for: indexPath)
-        guard let buttonsCell = cell as? TrackerButtonsCell else {
-            print(#fileID, #function, #line, "Ошибка приведения типов")
-            return UITableViewCell()
-        }
-        presenter?.configureTrackerButtonCell(tableView, for: buttonsCell, with: indexPath)
-        return buttonsCell
-    }
-}
-
-// MARK: - UITableViewDelegate
-
-extension NewTrackerViewController: UITableViewDelegate {
-    /// Обработчик выделения заданной кнопки (ячейки)
-    /// - Parameters:
-    ///   - tableView: табличное представление с кнопками
-    ///   - indexPath: индекс отображаемой кнопки
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            print("Нажата кнопка Категория")
-        } else {
-            presenter?.showTrackerSchedule()
-        }
     }
 }
