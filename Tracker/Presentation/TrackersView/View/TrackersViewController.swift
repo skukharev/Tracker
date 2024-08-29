@@ -357,7 +357,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
 
         let headerSize = headerView.systemLayoutSizeFitting(
-            CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
+            CGSize(width: collectionView.frame.width, height: 30),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )

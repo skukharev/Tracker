@@ -56,10 +56,8 @@ final class TrackersCollectionHeaderView: UICollectionReusableView {
     /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
-            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12)
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 12)
         ])
     }
 }

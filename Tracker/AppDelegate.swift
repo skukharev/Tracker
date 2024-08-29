@@ -10,7 +10,10 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        /// Регистрация трансформеров нестандартных типов данных Core Data
+        UIColorToDataTransformer.register()
+        WeekToDataTransformer.register()
+        _ = Database.shared.persistentContainer.viewContext
         return true
     }
 
