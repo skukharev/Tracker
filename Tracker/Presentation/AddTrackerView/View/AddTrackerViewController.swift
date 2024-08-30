@@ -8,6 +8,22 @@
 import UIKit
 
 final class AddTrackerViewController: UIViewController, AddTrackerViewControllerDelegate {
+    // MARK: - Types
+
+    enum Constants {
+        static let viewTitleText = "Создание трекера"
+        static let viewTitleTopConstraint: CGFloat = 27
+        static let addHabitButtonTitle = "Привычка"
+        static let addHabitButtonCornerRadius: CGFloat = 16
+        static let addEventButtonTitle = "Нерегулярное событие"
+        static let addEventButtonCornerRadius: CGFloat = 16
+        static let buttonsContainerLeadingConstraint: CGFloat = 20
+        static let buttonsContainerHeightConstraint: CGFloat = 136
+        static let addHabitButtonHeightConstraint: CGFloat = 60
+        static let addEventButtonTopConstraint: CGFloat = 16
+        static let addEventButtonHeightConstraint: CGFloat = 60
+    }
+
     // MARK: - Public Properties
 
     var presenter: AddTrackerViewPresenterProtocol?
@@ -20,7 +36,7 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewController
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypMedium16
         view.textColor = .appBlack
-        view.text = "Создание трекера"
+        view.text = Constants.viewTitleText
         return view
     }()
     /// Контейнер для удобного размещения кнопок в соответствии с дизайном
@@ -34,12 +50,12 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewController
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitleColor(.appWhite, for: .normal)
-        view.setTitle("Привычка", for: .normal)
+        view.setTitle(Constants.addHabitButtonTitle, for: .normal)
         view.backgroundColor = .appBlack
         view.titleLabel?.font = GlobalConstants.ypMedium16
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.addHabitButtonCornerRadius
         view.layer.masksToBounds = true
         view.addTarget(self, action: #selector(addHabitButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
@@ -49,12 +65,12 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewController
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitleColor(.appWhite, for: .normal)
-        view.setTitle("Нерегулярное событие", for: .normal)
+        view.setTitle(Constants.addEventButtonTitle, for: .normal)
         view.backgroundColor = .appBlack
         view.titleLabel?.font = GlobalConstants.ypMedium16
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.addEventButtonCornerRadius
         view.layer.masksToBounds = true
         view.addTarget(self, action: #selector(addEventButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
@@ -97,23 +113,23 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewController
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             /// Заголовок окна
-            viewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
+            viewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.viewTitleTopConstraint),
             viewTitle.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             /// Контейнер для кнопок
-            buttonsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            buttonsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-            buttonsContainer.heightAnchor.constraint(equalToConstant: 136),
+            buttonsContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.buttonsContainerLeadingConstraint),
+            buttonsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.buttonsContainerLeadingConstraint),
+            buttonsContainer.heightAnchor.constraint(equalToConstant: Constants.buttonsContainerHeightConstraint),
             buttonsContainer.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             /// Кнопка "Привычка"
             addHabitButton.topAnchor.constraint(equalTo: buttonsContainer.topAnchor),
             addHabitButton.leadingAnchor.constraint(equalTo: buttonsContainer.leadingAnchor),
             addHabitButton.trailingAnchor.constraint(equalTo: buttonsContainer.trailingAnchor),
-            addHabitButton.heightAnchor.constraint(equalToConstant: 60),
+            addHabitButton.heightAnchor.constraint(equalToConstant: Constants.addHabitButtonHeightConstraint),
             /// Кнопка "Нерегулярное событие"
-            addEventButton.topAnchor.constraint(equalTo: addHabitButton.bottomAnchor, constant: 16),
+            addEventButton.topAnchor.constraint(equalTo: addHabitButton.bottomAnchor, constant: Constants.addEventButtonTopConstraint),
             addEventButton.leadingAnchor.constraint(equalTo: buttonsContainer.leadingAnchor),
             addEventButton.trailingAnchor.constraint(equalTo: buttonsContainer.trailingAnchor),
-            addEventButton.heightAnchor.constraint(equalToConstant: 60)
+            addEventButton.heightAnchor.constraint(equalToConstant: Constants.addEventButtonHeightConstraint)
         ])
     }
 }
