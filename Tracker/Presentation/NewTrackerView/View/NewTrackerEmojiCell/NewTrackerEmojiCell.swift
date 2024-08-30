@@ -11,6 +11,7 @@ final class NewTrackerEmojiCell: UICollectionViewCell {
     // MARK: - Types
     enum Constants {
         static let identifier = "NewTrackerEmojiCell"
+        static let selectionViewCornerRadius: CGFloat = 16
     }
 
     // MARK: - Public Properties
@@ -24,7 +25,7 @@ final class NewTrackerEmojiCell: UICollectionViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .appLightGray
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.selectionViewCornerRadius
         view.layer.masksToBounds = true
         view.isHidden = true
         return view

@@ -14,6 +14,20 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         case canNotSaveTracker
     }
 
+    enum Constants {
+        static let colorAssetsPrefix = "App Color Section "
+        static let trackerButtonCellCategoryTitle = "Категория"
+        static let trackerButtonCellScheduleTitle = "Расписание"
+        static let everyDayTitle = "Каждый день"
+        static let monadyShortening = "Пн"
+        static let tuesdayShortening = "Вт"
+        static let wednesdayShortening = "Ср"
+        static let thursdayShortening = "Чт"
+        static let fridayShortening = "Пт"
+        static let saturdayShortening = "Сб"
+        static let sundayShortening = "Вс"
+    }
+
     // MARK: - Constants
 
     /// Массив с доступными для выбора пользователем эмоджи трекера
@@ -22,7 +36,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     let colors = {
         var colors: [UIColor] = []
         for i in 1...18 {
-            colors.append(UIColor(named: "App Color Section " + i.intToString) ?? .appColorSection1)
+            colors.append(UIColor(named: Constants.colorAssetsPrefix + i.intToString) ?? .appColorSection1)
         }
         return colors
     }()
@@ -79,9 +93,9 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         }
         cell.accessoryType = .disclosureIndicator
         if indexPath.row == 0 {
-            cell.configureButton(title: "Категория", subTitle: categoryName)
+            cell.configureButton(title: Constants.trackerButtonCellCategoryTitle, subTitle: categoryName)
         } else {
-            cell.configureButton(title: "Расписание", subTitle: getTrackerScheduleTitle())
+            cell.configureButton(title: Constants.trackerButtonCellScheduleTitle, subTitle: getTrackerScheduleTitle())
         }
     }
 
@@ -171,16 +185,16 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     /// - Returns: текстовое описание дней повторения трекера
     private func getTrackerScheduleTitle() -> String? {
         if schedule.isEmpty { return nil }
-        if schedule.count == 7 { return "Каждый день" }
+        if schedule.count == 7 { return Constants.everyDayTitle }
 
         var scheduleTitle = ""
-        if schedule.contains(.monday) { scheduleTitle += "Пн, " }
-        if schedule.contains(.tuesday) { scheduleTitle += "Вт, " }
-        if schedule.contains(.wednesday) { scheduleTitle += "Ср, " }
-        if schedule.contains(.thursday) { scheduleTitle += "Чт, " }
-        if schedule.contains(.friday) { scheduleTitle += "Пт, " }
-        if schedule.contains(.saturday) { scheduleTitle += "Сб, " }
-        if schedule.contains(.sunday) { scheduleTitle += "Вс, " }
+        if schedule.contains(.monday) { scheduleTitle += Constants.monadyShortening + ", " }
+        if schedule.contains(.tuesday) { scheduleTitle += Constants.tuesdayShortening + ", " }
+        if schedule.contains(.wednesday) { scheduleTitle += Constants.wednesdayShortening + ", " }
+        if schedule.contains(.thursday) { scheduleTitle += Constants.thursdayShortening + ", " }
+        if schedule.contains(.friday) { scheduleTitle += Constants.fridayShortening + ", " }
+        if schedule.contains(.saturday) { scheduleTitle += Constants.saturdayShortening + ", " }
+        if schedule.contains(.sunday) { scheduleTitle += Constants.sundayShortening + ", " }
 
         return String(scheduleTitle.dropLast(2))
     }

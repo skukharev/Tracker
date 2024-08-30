@@ -12,6 +12,9 @@ final class TrackerButtonsCell: UITableViewCell {
 
     enum Constants {
         static let identifier = "TrackerButtonsCell"
+        static let labelsContainerSpacing: CGFloat = 2
+        static let titleLabelInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        static let subtitleLabelInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
 
     // MARK: - Private Properties
@@ -22,12 +25,12 @@ final class TrackerButtonsCell: UITableViewCell {
         view.axis = .vertical
         view.distribution = .equalSpacing
         view.alignment = .leading
-        view.spacing = 2
+        view.spacing = Constants.labelsContainerSpacing
         return view
     }()
     /// Заголовок кнопки
     private lazy var titleLabel: InsetLabel = {
-        let view = InsetLabel(insets: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        let view = InsetLabel(insets: Constants.titleLabelInsets)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypRegular17
         view.textColor = .appBlack
@@ -36,7 +39,7 @@ final class TrackerButtonsCell: UITableViewCell {
     }()
     /// Подзаголовок кнопки
     private lazy var subtitleLabel: InsetLabel = {
-        let view = InsetLabel(insets: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        let view = InsetLabel(insets: Constants.subtitleLabelInsets)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypRegular17
         view.textColor = .appGray
