@@ -23,7 +23,25 @@ enum Weekday: Int, Codable {
     /// - Parameter date: дата, для которой определяется день недели
     /// - Returns: день недели
     static func dayOfTheWeek(of date: Date) -> Weekday? {
-        let currentWeekDay = (Calendar.current.component(.weekday, from: date) - Calendar.current.firstWeekday + 7) % 7
-        return Weekday(rawValue: currentWeekDay)
+        let currentWeekDay = Calendar.current.component(.weekday, from: date)
+
+        switch currentWeekDay {
+        case 1:
+            return .sunday
+        case 2:
+            return .monday
+        case 3:
+            return .tuesday
+        case 4:
+            return .wednesday
+        case 5:
+            return .thursday
+        case 6:
+            return .friday
+        case 7:
+            return .saturday
+        default:
+            return nil
+        }
     }
 }
