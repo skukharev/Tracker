@@ -17,6 +17,11 @@ final class SplashViewController: UIViewController {
         static let statisticsTabBarImageName = "StatisticsTabBarImage"
     }
 
+    private enum Constants {
+        static let trackersTabBarItemTitle = "Трекеры"
+        static let statisticsTabBarItemTitle = "Статистика"
+    }
+
     // MARK: - Private Properties
 
     /// Логотип приложения
@@ -62,12 +67,12 @@ final class SplashViewController: UIViewController {
     private func switchToMainScreen() {
         // Создание вью контроллера для экрана с трекерами
         let trackersViewController = TrackersViewController()
-        trackersViewController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(named: Identifiers.trackersTabBarImageName), tag: 1)
+        trackersViewController.tabBarItem = UITabBarItem(title: Constants.trackersTabBarItemTitle, image: UIImage(named: Identifiers.trackersTabBarImageName), tag: 1)
         let trackersViewPresenter = TrackersViewPresenter()
         trackersViewController.configure(trackersViewPresenter)
         // Создание вью контроллера для экрана со статистикой
         let statisticsViewController = StatisticsViewController()
-        statisticsViewController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(named: Identifiers.statisticsTabBarImageName), tag: 2)
+        statisticsViewController.tabBarItem = UITabBarItem(title: Constants.statisticsTabBarItemTitle, image: UIImage(named: Identifiers.statisticsTabBarImageName), tag: 2)
         let statisticsViewPresenter = StatisticsViewPresenter()
         statisticsViewController.configure(statisticsViewPresenter)
         // Создание вью контроллера для таб-бара
