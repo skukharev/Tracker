@@ -12,6 +12,7 @@ final class TrackersCollectionHeaderView: UICollectionReusableView {
 
     enum Constants {
         static let identifier = "TrackersCollectionViewHeader"
+        static let titleLabelLeadingConstraint: CGFloat = 12
     }
 
     // MARK: - Private Properties
@@ -57,7 +58,7 @@ final class TrackersCollectionHeaderView: UICollectionReusableView {
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 12)
+            titleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: Constants.titleLabelLeadingConstraint)
         ])
     }
 }

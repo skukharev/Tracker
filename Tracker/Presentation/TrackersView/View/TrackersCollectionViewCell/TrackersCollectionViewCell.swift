@@ -12,6 +12,22 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
 
     enum Constants {
         static let identifier = "TrackersCollectionViewCell"
+        static let trackerSplashViewCornerRadius: CGFloat = 16
+        static let trackersEmojiCornerRadius: CGFloat = 12
+        static let recordButtonCornerRadius: CGFloat = 17
+        static let recordButtonLayerOpacitySelected: Float = 0.3
+        static let recordButtonLayerOpacityDeselected: Float = 1
+        static let recordButtonTopConstraint: CGFloat = 8
+        static let recordButtonTrailingConstraint: CGFloat = -12
+        static let recordButtonWidthConstraint: CGFloat = 34
+        static let trackerSplashViewHeightConstraint: CGFloat = 90
+        static let trackersEmojiTopConstraint: CGFloat = 12
+        static let trackersEmojiLeadingConstraint: CGFloat = 12
+        static let trackersEmojiWidthConstraint: CGFloat = 24
+        static let trackersNameTopConstraint: CGFloat = 44
+        static let trackersNameLeadingConstraint: CGFloat = 12
+        static let repeatsCountTopConstraint: CGFloat = 16
+        static let repeatsCountLeadingConstraint: CGFloat = 12
     }
 
     // MARK: - Public Properties
@@ -24,7 +40,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
     private lazy var trackerSplashView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.trackerSplashViewCornerRadius
         view.layer.masksToBounds = true
         return view
     }()
@@ -37,7 +53,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
         view.backgroundColor = .appTrackersCellButtonSplash
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = Constants.trackersEmojiCornerRadius
         view.layer.masksToBounds = true
         return view
     }()
@@ -70,7 +86,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         view.tintColor = .appWhite
         view.contentHorizontalAlignment = .center
         view.contentVerticalAlignment = .center
-        view.layer.cornerRadius = 17
+        view.layer.cornerRadius = Constants.recordButtonCornerRadius
         view.layer.masksToBounds = true
         view.addTarget(self, action: #selector(recordButtonTouchUpInside(_:)), for: .touchUpInside)
         view.addTarget(self, action: #selector(recordButtonTouchDown(_:)), for: .touchDown)
@@ -106,10 +122,10 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         /// Кнопка трекера
         recordButton.backgroundColor = model.color
         if model.isCompleted {
-            self.recordButton.layer.opacity = 0.3
+            self.recordButton.layer.opacity = Constants.recordButtonLayerOpacitySelected
             self.recordButton.setImage(GlobalConstants.doneButton, for: .normal)
         } else {
-            self.recordButton.layer.opacity = 1
+            self.recordButton.layer.opacity = Constants.recordButtonLayerOpacityDeselected
             self.recordButton.setImage(GlobalConstants.plusButton, for: .normal)
         }
     }
@@ -131,25 +147,25 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
                 trackerSplashView.topAnchor.constraint(equalTo: contentView.topAnchor),
                 trackerSplashView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 trackerSplashView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                trackerSplashView.heightAnchor.constraint(equalToConstant: 90),
+                trackerSplashView.heightAnchor.constraint(equalToConstant: Constants.trackerSplashViewHeightConstraint),
                 /// Эмоджи
-                trackersEmoji.topAnchor.constraint(equalTo: trackerSplashView.topAnchor, constant: 12),
-                trackersEmoji.leadingAnchor.constraint(equalTo: trackerSplashView.leadingAnchor, constant: 12),
-                trackersEmoji.widthAnchor.constraint(equalToConstant: 24),
-                trackersEmoji.heightAnchor.constraint(equalToConstant: 24),
+                trackersEmoji.topAnchor.constraint(equalTo: trackerSplashView.topAnchor, constant: Constants.trackersEmojiTopConstraint),
+                trackersEmoji.leadingAnchor.constraint(equalTo: trackerSplashView.leadingAnchor, constant: Constants.trackersEmojiLeadingConstraint),
+                trackersEmoji.widthAnchor.constraint(equalToConstant: Constants.trackersEmojiWidthConstraint),
+                trackersEmoji.heightAnchor.constraint(equalToConstant: Constants.trackersEmojiWidthConstraint),
                 /// Наименование трекера
-                trackersName.topAnchor.constraint(equalTo: trackerSplashView.topAnchor, constant: 44),
-                trackersName.leadingAnchor.constraint(equalTo: trackerSplashView.leadingAnchor, constant: 12),
-                trackersName.trailingAnchor.constraint(equalTo: trackerSplashView.trailingAnchor, constant: -12),
-                trackersName.bottomAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: -12),
+                trackersName.topAnchor.constraint(equalTo: trackerSplashView.topAnchor, constant: Constants.trackersNameTopConstraint),
+                trackersName.leadingAnchor.constraint(equalTo: trackerSplashView.leadingAnchor, constant: Constants.trackersNameLeadingConstraint),
+                trackersName.trailingAnchor.constraint(equalTo: trackerSplashView.trailingAnchor, constant: -Constants.trackersNameLeadingConstraint),
+                trackersName.bottomAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: -Constants.trackersNameLeadingConstraint),
                 /// Количество повторений трекера
-                repeatsCount.topAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: 16),
-                repeatsCount.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+                repeatsCount.topAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: Constants.repeatsCountTopConstraint),
+                repeatsCount.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.repeatsCountLeadingConstraint),
                 /// Кнопка записи события трекера
-                recordButton.topAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: 8),
-                recordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-                recordButton.widthAnchor.constraint(equalToConstant: 34),
-                recordButton.heightAnchor.constraint(equalToConstant: 34)
+                recordButton.topAnchor.constraint(equalTo: trackerSplashView.bottomAnchor, constant: Constants.recordButtonTopConstraint),
+                recordButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.recordButtonTrailingConstraint),
+                recordButton.widthAnchor.constraint(equalToConstant: Constants.recordButtonWidthConstraint),
+                recordButton.heightAnchor.constraint(equalToConstant: Constants.recordButtonWidthConstraint)
             ]
         )
     }
