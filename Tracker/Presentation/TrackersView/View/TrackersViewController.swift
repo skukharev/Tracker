@@ -93,10 +93,10 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     // MARK: - Public Methods
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.setupHideKeyboardOnTap()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         createAndLayoutViews()
+        self.setupHideKeyboardOnTap()
         presenter?.currentDate = Date()
     }
 
@@ -182,22 +182,17 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
-        guard
-            let navBar = navigationController?.navigationBar,
-            let tabBar = navigationController?.tabBarController?.tabBar
-        else { return }
-
         NSLayoutConstraint.activate(
             [
                 /// Кнопка поиска трекеров
-                trackersSearchBar.topAnchor.constraint(equalTo: navBar.bottomAnchor),
+                trackersSearchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 trackersSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
                 trackersSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
                 /// Коллекция трекеров
                 trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: 10),
                 trackersCollection.leadingAnchor.constraint(equalTo: trackersSearchBar.leadingAnchor),
                 trackersCollection.trailingAnchor.constraint(equalTo: trackersSearchBar.trailingAnchor),
-                trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ]
         )
     }

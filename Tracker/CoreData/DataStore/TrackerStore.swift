@@ -24,7 +24,7 @@ final class TrackerStore: NSObject {
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.context,
-            sectionNameKeyPath: #keyPath(TrackerCoreData.category),
+            sectionNameKeyPath: #keyPath(TrackerCoreData.category.name),
             cacheName: nil
         )
         return fetchedResultsController
@@ -106,16 +106,7 @@ final class TrackerStore: NSObject {
 
 extension TrackerStore: TrackerStoreProtocol {
     func categoryName(_ section: Int) -> String {
-        guard
-            let sectionInfo = fetchedResultsController.sections?[safe: section],
-            let categotyIDURL = URL(string: sectionInfo.name),
-            let categoryID = context.persistentStoreCoordinator?.managedObjectID(forURIRepresentation: categotyIDURL),
-            let category = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData
-        else {
-            assertionFailure("Ошибка получения категории трекеров")
-            return ""
-        }
-        return category.name ?? ""
+        return fetchedResultsController.sections?[safe: section]?.name ?? ""
     }
 
     func loadData(atDate currentDate: Date) {
@@ -124,12 +115,8 @@ extension TrackerStore: TrackerStoreProtocol {
             return
         }
 
-        /// В выборку заданного дня попадают:
-        /// - периодические трекеры, которые имеют повторение в заданный день недели
         let scheduledTrackers = NSPredicate(format: "%K CONTAINS %ld", scheduleKeyPath, dayOfTheWeek.rawValue)
-        /// - непериодические и невыполненные трекеры
         let nonscheduledTrackers = NSPredicate(format: "%K == %@ AND SUBQUERY(dates, $X, $X.trackerId == SELF.id).@count == 0", scheduleKeyPath, emptyWeek)
-        /// - непериодические и выполненные в заданный день трекеры
         let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K == %@ AND SUBQUERY(dates, $X, $X.trackerId == SELF.id AND $X.recordDate == %@).@count > 0", scheduleKeyPath, emptyWeek, currentDate as NSDate)
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
         fetchedResultsController.fetchRequest.predicate = compoundPredicate
@@ -141,7 +128,7 @@ extension TrackerStore: TrackerStoreProtocol {
         }
     }
 
-    var numberOfCategories: Int {
+    func numberOfCategories() -> Int {
         return fetchedResultsController.sections?.count ?? 0
     }
 

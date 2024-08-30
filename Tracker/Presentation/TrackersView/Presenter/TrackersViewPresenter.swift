@@ -94,7 +94,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     func trackerCategoriesCount() -> Int {
-        return trackerStore.numberOfCategories
+        return trackerStore.numberOfCategories()
     }
 
     func trackersCount(inSection section: Int) -> Int {
@@ -113,7 +113,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     /// Загружает трекеры из базы данных
     private func loadTrackers() {
         trackerStore.loadData(atDate: currentDate)
-        if trackerStore.numberOfCategories == 0 {
+        if trackerStore.numberOfCategories() == 0 {
             viewController?.showTrackersListStub()
         } else {
             viewController?.showTrackersList()

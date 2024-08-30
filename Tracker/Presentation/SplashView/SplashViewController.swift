@@ -34,8 +34,8 @@ final class SplashViewController: UIViewController {
 
     // MARK: - UIViewController
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         createAndLayoutViews()
         switchToMainScreen()
     }
