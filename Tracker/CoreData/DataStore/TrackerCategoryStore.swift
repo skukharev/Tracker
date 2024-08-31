@@ -34,7 +34,7 @@ final class TrackerCategoryStore {
         request.returnsObjectsAsFaults = false
         request.resultType = .managedObjectIDResultType
         request.fetchLimit = 1
-        request.predicate = NSPredicate(format: "%K CONTAINS[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
+        request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
         if
             let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
             let categoryID = categories.finalResult?.first as? NSManagedObjectID,
