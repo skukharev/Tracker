@@ -11,10 +11,12 @@ import UIKit
 final class SplashViewController: UIViewController {
     // MARK: - Types
 
-    private enum Identifiers {
+    private enum Constants {
         static let applicationLogoImageName = "AppLogo"
         static let trackersTabBarImageName = "TrackersTabBarImage"
         static let statisticsTabBarImageName = "StatisticsTabBarImage"
+        static let trackersTabBarItemTitle = "Трекеры"
+        static let statisticsTabBarItemTitle = "Статистика"
     }
 
     // MARK: - Private Properties
@@ -23,7 +25,7 @@ final class SplashViewController: UIViewController {
     private lazy var applicationLogo: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let appImage = UIImage(named: Identifiers.applicationLogoImageName) else {
+        guard let appImage = UIImage(named: Constants.applicationLogoImageName) else {
             assertionFailure("Ошибка загрузки логотипа приложения")
             return image
         }
@@ -34,8 +36,8 @@ final class SplashViewController: UIViewController {
 
     // MARK: - UIViewController
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         createAndLayoutViews()
         switchToMainScreen()
     }
@@ -62,17 +64,17 @@ final class SplashViewController: UIViewController {
     private func switchToMainScreen() {
         // Создание вью контроллера для экрана с трекерами
         let trackersViewController = TrackersViewController()
-        trackersViewController.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(named: Identifiers.trackersTabBarImageName), tag: 1)
+        trackersViewController.tabBarItem = UITabBarItem(title: Constants.trackersTabBarItemTitle, image: UIImage(named: Constants.trackersTabBarImageName), tag: 1)
         let trackersViewPresenter = TrackersViewPresenter()
         trackersViewController.configure(trackersViewPresenter)
         // Создание вью контроллера для экрана со статистикой
         let statisticsViewController = StatisticsViewController()
-        statisticsViewController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(named: Identifiers.statisticsTabBarImageName), tag: 2)
+        statisticsViewController.tabBarItem = UITabBarItem(title: Constants.statisticsTabBarItemTitle, image: UIImage(named: Constants.statisticsTabBarImageName), tag: 2)
         let statisticsViewPresenter = StatisticsViewPresenter()
         statisticsViewController.configure(statisticsViewPresenter)
         // Создание вью контроллера для таб-бара
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [UINavigationController(rootViewController: trackersViewController), statisticsViewController]
+        tabBarController.viewControllers = [UINavigationController(rootViewController: trackersViewController), UINavigationController(rootViewController: statisticsViewController)]
         /// Настройка цвета фона таб-бара
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = .appWhite
@@ -85,7 +87,7 @@ final class SplashViewController: UIViewController {
         tabBarController.tabBar.addTopBorder(with: .appTabBarTopBorder, andWidth: 1)
         // Получаем экземпляр `window` приложения
         guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("Invalid window configuration")
+            assertionFailure("Ошибка получения ссылки на экран устройства")
             return
         }
         window.rootViewController = tabBarController

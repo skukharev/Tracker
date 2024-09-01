@@ -11,14 +11,19 @@ import UIKit
 final class TrackersViewController: UIViewController, TrackersViewPresenterDelegate {
     // MARK: - Types
 
-    private enum Identifiers {
+    private enum Constants {
         static let addTrackerButtonImageName = "AddTrackerImage"
         static let trackersStubImageName = "TrackersStub"
+        static let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
+        static let trackersChooseDatePickerCornerRadius: CGFloat = 8
+        static let trackersStubImageLabelText = "Что будем отслеживать?"
+        static let trackersSearchBarPlaceholder = "Поиск"
+        static let trackersSearchBarLeadingConstraint: CGFloat = 16
+        static let trackersStubImageWidthConstraint: CGFloat = 80
+        static let trackersStubImageLabelTopConstraint: CGFloat = 8
+        static let navigationItemTitle = "Трекеры"
+        static let trackersCollectionTopConstraint: CGFloat = 10
     }
-
-    // MARK: - Constants
-
-    let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
 
     // MARK: - Private Properties
 
@@ -27,7 +32,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: Identifiers.addTrackerButtonImageName), for: .normal)
+        button.setImage(UIImage(named: Constants.addTrackerButtonImageName), for: .normal)
         button.tintColor = .appBlack
         button.addTarget(self, action: #selector(addTrackerTouchUpInside(_:)), for: .touchUpInside)
         button.accessibilityIdentifier = "AddTracker"
@@ -49,7 +54,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         datePicker.backgroundColor = .appDatePickerBackground
         datePicker.setValue(UIColor.appDatePickerText, forKey: "textColor")
         datePicker.addTarget(self, action: #selector(datePickerValueChanged(_:)), for: .valueChanged)
-        datePicker.layer.cornerRadius = 8
+        datePicker.layer.cornerRadius = Constants.trackersChooseDatePickerCornerRadius
         datePicker.layer.masksToBounds = true
         return datePicker
     }()
@@ -57,7 +62,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var trackersStubImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let stubImage = UIImage(named: Identifiers.trackersStubImageName) else {
+        guard let stubImage = UIImage(named: Constants.trackersStubImageName) else {
             assertionFailure("Ошибка загрузки логотипа заглушки")
             return image
         }
@@ -71,7 +76,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = GlobalConstants.ypMedium12
         label.textColor = .appBlack
-        label.text = "Что будем отслеживать?"
+        label.text = Constants.trackersStubImageLabelText
         return label
     }()
     /// Панель поиска  трекеров
@@ -79,7 +84,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let view = UISearchBar()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.searchBarStyle = .minimal
-        view.placeholder = "Поиск"
+        view.placeholder = Constants.trackersSearchBarPlaceholder
         return view
     }()
     /// Коллекция трекеров
@@ -93,10 +98,10 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     // MARK: - Public Methods
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.setupHideKeyboardOnTap()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         createAndLayoutViews()
+        self.setupHideKeyboardOnTap()
         presenter?.currentDate = Date()
     }
 
@@ -113,12 +118,12 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
             NSLayoutConstraint.activate(
                 [
                     // Заглушка
-                    trackersStubImage.widthAnchor.constraint(equalToConstant: 80),
-                    trackersStubImage.heightAnchor.constraint(equalToConstant: 80),
+                    trackersStubImage.widthAnchor.constraint(equalToConstant: Constants.trackersStubImageWidthConstraint),
+                    trackersStubImage.heightAnchor.constraint(equalToConstant: Constants.trackersStubImageWidthConstraint),
                     trackersStubImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
                     trackersStubImage.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
                     // Текст заглушки
-                    trackersStubImageLabel.topAnchor.constraint(equalTo: trackersStubImage.bottomAnchor, constant: 8),
+                    trackersStubImageLabel.topAnchor.constraint(equalTo: trackersStubImage.bottomAnchor, constant: Constants.trackersStubImageLabelTopConstraint),
                     trackersStubImageLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
                 ]
             )
@@ -159,7 +164,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let window = UIApplication.shared.windows.first { $0.isKeyWindow }
         window?.backgroundColor = .appWhite
         /// Панель навигации
-        navigationItem.title = "Трекеры"
+        navigationItem.title = Constants.navigationItemTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)
@@ -182,22 +187,17 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
-        guard
-            let navBar = navigationController?.navigationBar,
-            let tabBar = navigationController?.tabBarController?.tabBar
-        else { return }
-
         NSLayoutConstraint.activate(
             [
                 /// Кнопка поиска трекеров
-                trackersSearchBar.topAnchor.constraint(equalTo: navBar.bottomAnchor),
-                trackersSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-                trackersSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                trackersSearchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                trackersSearchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.trackersSearchBarLeadingConstraint),
+                trackersSearchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.trackersSearchBarLeadingConstraint),
                 /// Коллекция трекеров
-                trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: 10),
+                trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: Constants.trackersCollectionTopConstraint),
                 trackersCollection.leadingAnchor.constraint(equalTo: trackersSearchBar.leadingAnchor),
                 trackersCollection.trailingAnchor.constraint(equalTo: trackersSearchBar.trailingAnchor),
-                trackersCollection.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ]
         )
     }
@@ -310,9 +310,9 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     ///   - indexPath: Индекс ячейки в коллекции трекеров
     /// - Returns: Размер ячейки с трекером
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.frame.width - trackersCellParams.paddingWidth
-        let cellWidth = availableWidth / CGFloat(trackersCellParams.cellCount)
-        return CGSize(width: cellWidth, height: trackersCellParams.cellHeight)
+        let availableWidth = collectionView.frame.width - Constants.trackersCellParams.paddingWidth
+        let cellWidth = availableWidth / CGFloat(Constants.trackersCellParams.cellCount)
+        return CGSize(width: cellWidth, height: Constants.trackersCellParams.cellHeight)
     }
 
     /// Задаёт размеры отступов ячеек заданной секции (категории трекеров) от границ коллекции
@@ -322,7 +322,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     ///   - section: Индекс секции (категории трекеров)
     /// - Returns: Размеры отступов ячеек секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: trackersCellParams.topInset, left: trackersCellParams.leftInset, bottom: trackersCellParams.bottomInset, right: trackersCellParams.rightInset)
+        return UIEdgeInsets(top: Constants.trackersCellParams.topInset, left: Constants.trackersCellParams.leftInset, bottom: Constants.trackersCellParams.bottomInset, right: Constants.trackersCellParams.rightInset)
     }
 
     /// Задаёт размеры отступов между строками ячеек заданной секции (категории трекеров)
@@ -332,7 +332,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     ///   - section: Индекс секции (категории трекеров)
     /// - Returns: Размер отступа между строками ячеек заданной секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return trackersCellParams.lineSpacing
+        return Constants.trackersCellParams.lineSpacing
     }
 
     /// Задаёт размер отступов между ячейками одной строки заданной секции (категории трекеров)
@@ -342,7 +342,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     ///   - section: Индекс секции (категории трекеров)
     /// - Returns: Размер отступа между ячейками одной строки заданной секции
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return trackersCellParams.cellSpacing
+        return Constants.trackersCellParams.cellSpacing
     }
 
     /// Задаёт размер заголовка секции
@@ -357,7 +357,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
 
         let headerSize = headerView.systemLayoutSizeFitting(
-            CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height),
+            CGSize(width: collectionView.frame.width, height: 30),
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )

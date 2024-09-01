@@ -8,6 +8,28 @@
 import UIKit
 
 final class ScheduleViewController: UIViewController, ScheduleViewPresenterDelegate {
+    // MARK: - Types
+
+    enum Constants {
+        static let viewTitleText = "Расписание"
+        static let scheduleTableViewSeparatorInsetsTop: CGFloat = 0
+        static let scheduleTableViewSeparatorInsetsLeft: CGFloat = 16
+        static let scheduleTableViewSeparatorInsetsBottom: CGFloat = 0
+        static let scheduleTableViewSeparatorInsetsRight: CGFloat = 16
+        static let scheduleTableViewCornerRadius: CGFloat = 16
+        static let scheduleTableViewRowHeight: CGFloat = 75
+        static let readyButtonTitle = "Готово"
+        static let readyButtonCornerRadius: CGFloat = 16
+        static let viewTitleTopConstraint: CGFloat = 27
+        static let scheduleTableViewTopConstraint: CGFloat = 30
+        static let scheduleTableViewLeadingConstraint: CGFloat = 16
+        static let scheduleTableViewTrailingConstraint: CGFloat = -16
+        static let readyButtonLeadingConstraint: CGFloat = 20
+        static let readyButtonTrailingConstraint: CGFloat = -20
+        static let readyButtonHeightConstraint: CGFloat = 60
+        static let readyButtonBottomConstraint: CGFloat = -16
+    }
+
     // MARK: - Public Properties
 
     var presenter: ScheduleViewPresenterProtocol?
@@ -20,7 +42,7 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypMedium16
         view.textColor = .appBlack
-        view.text = "Расписание"
+        view.text = Constants.viewTitleText
         return view
     }()
     /// Расписание трекера
@@ -28,15 +50,20 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.separatorEffect = .none
-        view.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        view.separatorInset = UIEdgeInsets(
+            top: Constants.scheduleTableViewSeparatorInsetsTop,
+            left: Constants.scheduleTableViewSeparatorInsetsLeft,
+            bottom: Constants.scheduleTableViewSeparatorInsetsBottom,
+            right: Constants.scheduleTableViewSeparatorInsetsRight
+        )
         view.allowsSelection = true
         view.alwaysBounceVertical = true
         view.insetsContentViewsToSafeArea = true
         view.contentInsetAdjustmentBehavior = .automatic
         view.backgroundColor = .appBackground
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.scheduleTableViewCornerRadius
         view.layer.masksToBounds = true
-        view.rowHeight = 75
+        view.rowHeight = Constants.scheduleTableViewRowHeight
         view.estimatedRowHeight = view.rowHeight
         return view
     }()
@@ -45,12 +72,12 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitleColor(.appWhite, for: .normal)
-        view.setTitle("Готово", for: .normal)
+        view.setTitle(Constants.readyButtonTitle, for: .normal)
         view.titleLabel?.font = GlobalConstants.ypMedium16
         view.backgroundColor = .appBlack
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.readyButtonCornerRadius
         view.layer.masksToBounds = true
         view.addTarget(self, action: #selector(readyButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
@@ -85,18 +112,18 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         NSLayoutConstraint.activate(
             [
                 /// Заголовок окна
-                viewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
+                viewTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Constants.viewTitleTopConstraint),
                 viewTitle.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
                 /// Расписание трекера
-                scheduleTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: 30),
-                scheduleTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-                scheduleTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-                scheduleTableView.heightAnchor.constraint(equalToConstant: 75 * 7),
+                scheduleTableView.topAnchor.constraint(equalTo: viewTitle.bottomAnchor, constant: Constants.scheduleTableViewTopConstraint),
+                scheduleTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.scheduleTableViewLeadingConstraint),
+                scheduleTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: Constants.scheduleTableViewTrailingConstraint),
+                scheduleTableView.heightAnchor.constraint(equalToConstant: Constants.scheduleTableViewRowHeight * 7),
                 /// Кнопка "Готово"
-                readyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                readyButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-                readyButton.heightAnchor.constraint(equalToConstant: 60),
-                readyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
+                readyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.readyButtonLeadingConstraint),
+                readyButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: Constants.readyButtonTrailingConstraint),
+                readyButton.heightAnchor.constraint(equalToConstant: Constants.readyButtonHeightConstraint),
+                readyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: Constants.readyButtonBottomConstraint)
             ]
         )
     }
@@ -129,7 +156,7 @@ extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ScheduleCell.Constants.identifier, for: indexPath)
         guard let scheduleCell = cell as? ScheduleCell else {
-            print(#fileID, #function, #line, "Ошибка приведения типов")
+            print(#fileID, #function, #line, "Ошибка приведения типа ячейки TableView к ScheduleCell")
             return UITableViewCell()
         }
         presenter?.configureScheduleCell(for: scheduleCell, with: indexPath)

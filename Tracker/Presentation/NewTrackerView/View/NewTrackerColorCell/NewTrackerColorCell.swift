@@ -11,6 +11,11 @@ final class NewTrackerColorCell: UICollectionViewCell {
     // MARK: - Types
     enum Constants {
         static let identifier = "NewTrackerColorCell"
+        static let selectionViewCornerRadius: CGFloat = 16
+        static let colorViewCornerRadius: CGFloat = 8
+        static let colorViewSelectedBorderWidth: CGFloat = 3
+        static let colorViewUnselectedBorderWidth: CGFloat = 0
+        static let colorViewConstraints: CGFloat = 6
     }
 
     // MARK: - Public Properties
@@ -24,7 +29,7 @@ final class NewTrackerColorCell: UICollectionViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .appLightGray
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = Constants.selectionViewCornerRadius
         view.layer.masksToBounds = true
         view.isHidden = true
         return view
@@ -33,7 +38,7 @@ final class NewTrackerColorCell: UICollectionViewCell {
     private lazy var colorView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = Constants.colorViewCornerRadius
         view.layer.borderColor = UIColor.white.cgColor
         view.layer.masksToBounds = true
         return view
@@ -60,11 +65,11 @@ final class NewTrackerColorCell: UICollectionViewCell {
         selectionView.backgroundColor = model.color.withAlphaComponent(0.3)
         selectionView.isHidden = !model.isSelected
         if model.isSelected {
-            colorView.layer.borderWidth = 3
+            colorView.layer.borderWidth = Constants.colorViewSelectedBorderWidth
             guard let delegate = delegate else { return }
             delegate.colorDidChange(model.color)
         } else {
-            colorView.layer.borderWidth = 0
+            colorView.layer.borderWidth = Constants.colorViewUnselectedBorderWidth
         }
     }
 
@@ -81,10 +86,10 @@ final class NewTrackerColorCell: UICollectionViewCell {
         selectionView.edgesToSuperview()
         NSLayoutConstraint.activate(
             [
-                colorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-                colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
-                colorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-                colorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6)
+                colorView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Constants.colorViewConstraints),
+                colorView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.colorViewConstraints),
+                colorView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.colorViewConstraints),
+                colorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Constants.colorViewConstraints)
             ]
         )
     }

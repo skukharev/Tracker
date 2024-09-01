@@ -12,6 +12,11 @@ final class ScheduleCell: UITableViewCell {
 
     enum Constants {
         static let identifier = "ScheduleCell"
+        static let weekDayTitleLabelInsetsTop: CGFloat = 0
+        static let weekDayTitleLabelInsetsLeft: CGFloat = 16
+        static let weekDayTitleLabelInsetsBottom: CGFloat = 0
+        static let weekDayTitleLabelInsetsRight: CGFloat = 16
+        static let weekDayToggleTrailingConstraint: CGFloat = -16
     }
 
     // MARK: - Public Properties
@@ -23,7 +28,14 @@ final class ScheduleCell: UITableViewCell {
 
     /// Наименование дня недели
     private lazy var weekDayTitleLabel: InsetLabel = {
-        let view = InsetLabel(insets: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+        let view = InsetLabel(
+            insets: UIEdgeInsets(
+                top: Constants.weekDayTitleLabelInsetsTop,
+                left: Constants.weekDayTitleLabelInsetsLeft,
+                bottom: Constants.weekDayTitleLabelInsetsBottom,
+                right: Constants.weekDayTitleLabelInsetsRight
+            )
+        )
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypRegular17
         view.textColor = .appBlack
@@ -77,7 +89,7 @@ final class ScheduleCell: UITableViewCell {
                 weekDayTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 weekDayTitleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
                 /// Переключатель дня недели
-                weekDayToggle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                weekDayToggle.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.weekDayToggleTrailingConstraint),
                 weekDayToggle.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
             ]
         )
