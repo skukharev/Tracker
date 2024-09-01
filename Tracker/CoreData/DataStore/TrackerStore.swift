@@ -116,8 +116,8 @@ extension TrackerStore: TrackerStoreProtocol {
         }
 
         let scheduledTrackers = NSPredicate(format: "%K CONTAINS %ld", scheduleKeyPath, dayOfTheWeek.rawValue)
-        let nonscheduledTrackers = NSPredicate(format: "%K == %@ AND SUBQUERY(dates, $X, $X.trackerId == SELF.id).@count == 0", scheduleKeyPath, emptyWeek)
-        let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K == %@ AND SUBQUERY(dates, $X, $X.trackerId == SELF.id AND $X.recordDate == %@).@count > 0", scheduleKeyPath, emptyWeek, currentDate as NSDate)
+        let nonscheduledTrackers = NSPredicate(format: "%K = %@ AND SUBQUERY(%K, $X, $X.trackerId = SELF.id).@count = 0", scheduleKeyPath, emptyWeek, #keyPath(TrackerCoreData.dates))
+        let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K = %@ AND ANY %K = %@", scheduleKeyPath, emptyWeek, #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
         let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
         fetchedResultsController.fetchRequest.predicate = compoundPredicate
 
