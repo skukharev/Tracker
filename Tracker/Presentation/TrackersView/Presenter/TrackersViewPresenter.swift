@@ -43,6 +43,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     /// Ссылка на экземпляр Store-класса для работы с трекерами
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
+        store.delegate = self
         return store
     }()
     /// Ссылка на экземпляр Store-класса для работы с записями событий трекеров
@@ -94,6 +95,12 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     func trackerCategoriesCount() -> Int {
+        let numberOfCategories = trackerStore.numberOfCategories()
+        if numberOfCategories == 0 {
+            viewController?.showTrackersListStub()
+        } else {
+            viewController?.hideTrackersListStub()
+        }
         return trackerStore.numberOfCategories()
     }
 
@@ -134,7 +141,14 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
     func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
         if let categoryID = trackerCategoryStore.addTrackerCategory(withName: trackerCategory) {
             _ = trackerStore.addTracker(tracker, withCategoryID: categoryID)
-            loadTrackers()
         }
+    }
+}
+
+// MARK: - TrackerStoreDelegate
+
+extension TrackersViewPresenter: TrackerStoreDelegate {
+    func didUpdate(_ update: TrackerStoreUpdate) {
+        viewController?.updateTrackersCollection(at: update)
     }
 }

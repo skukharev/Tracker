@@ -112,6 +112,15 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         presenter.viewController = self
     }
 
+    func hideTrackersListStub() {
+        if view.subviews.contains(trackersStubImage) {
+            trackersStubImage.isHidden = true
+        }
+        if view.subviews.contains(trackersStubImageLabel) {
+            trackersStubImageLabel.isHidden = true
+        }
+    }
+
     func showTrackersListStub() {
         if !view.subviews.contains(trackersStubImage) {
             view.addSubviews([trackersStubImage, trackersStubImageLabel])
@@ -128,20 +137,30 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 ]
             )
         }
-        trackersCollection.isHidden = true
         trackersStubImage.isHidden = false
         trackersStubImageLabel.isHidden = false
     }
 
     func showTrackersList() {
-        if view.subviews.contains(trackersStubImage) {
-            trackersStubImage.isHidden = true
-        }
-        if view.subviews.contains(trackersStubImageLabel) {
-            trackersStubImageLabel.isHidden = true
-        }
-        trackersCollection.isHidden = false
+        hideTrackersListStub()
         trackersCollection.reloadData()
+    }
+
+    func updateTrackersCollection(at indexPaths: TrackerStoreUpdate) {
+        trackersCollection.performBatchUpdates {
+            if let insertedSectionIndexes = indexPaths.insertedSectionIndexes {
+                trackersCollection.insertSections(insertedSectionIndexes)
+            }
+            if let deletedSectionIndexes = indexPaths.deletedSectionIndexes {
+                trackersCollection.deleteSections(deletedSectionIndexes)
+            }
+            if !indexPaths.insertedPaths.isEmpty {
+                trackersCollection.insertItems(at: indexPaths.insertedPaths)
+            }
+            if !indexPaths.deletedPaths.isEmpty {
+                trackersCollection.deleteItems(at: indexPaths.deletedPaths)
+            }
+        }
     }
 
     // MARK: - Private Methods
@@ -254,7 +273,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     ///   - section: Индекс секции в коллекции
     /// - Returns: Количество ячеек (трекеров) в заданной секции (категории трекеров)
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let presenter = presenter else { return 0}
+        guard let presenter = presenter else { return 0 }
         return presenter.trackersCount(inSection: section)
     }
 

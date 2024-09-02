@@ -39,7 +39,6 @@
 		0772CAF72C762C7300EDC654 /* NewTrackerColorCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772CAF62C762C7300EDC654 /* NewTrackerColorCellModel.swift */; };
 		0772CB212C77179F00EDC654 /* Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0772CB1F2C77179F00EDC654 /* Database.xcdatamodeld */; };
 		0772CB232C77205700EDC654 /* UIColorToDataTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772CB222C77205700EDC654 /* UIColorToDataTransformer.swift */; };
-		0772CB252C77299200EDC654 /* WeekToDataTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772CB242C77299200EDC654 /* WeekToDataTransformer.swift */; };
 		0772CB272C777E8100EDC654 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772CB262C777E8000EDC654 /* Database.swift */; };
 		079432A72C54D55900DDCE10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432A62C54D55900DDCE10 /* AppDelegate.swift */; };
 		079432A92C54D55900DDCE10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432A82C54D55900DDCE10 /* SceneDelegate.swift */; };
@@ -57,6 +56,8 @@
 		079432DB2C561F7C00DDCE10 /* StatisticsViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */; };
 		079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */; };
 		07A8C48D2C7F2816002EC584 /* TrackerStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */; };
+		07AA9E9D2C85BCC4005C3724 /* TrackerStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */; };
+		07AA9E9F2C85BD34005C3724 /* TrackerStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AA9E9E2C85BD34005C3724 /* TrackerStoreDelegate.swift */; };
 		07ADBA882C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ADBA872C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift */; };
 		07ADBA8A2C67F823000BC87F /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07ADBA892C67F822000BC87F /* Date+Extensions.swift */; };
 		07C20A922C6E569D00463177 /* UITabBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C20A912C6E569D00463177 /* UITabBar+Extensions.swift */; };
@@ -113,7 +114,6 @@
 		0772CAF62C762C7300EDC654 /* NewTrackerColorCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerColorCellModel.swift; sourceTree = "<group>"; };
 		0772CB202C77179F00EDC654 /* Database.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Database.xcdatamodel; sourceTree = "<group>"; };
 		0772CB222C77205700EDC654 /* UIColorToDataTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorToDataTransformer.swift; sourceTree = "<group>"; };
-		0772CB242C77299200EDC654 /* WeekToDataTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekToDataTransformer.swift; sourceTree = "<group>"; };
 		0772CB262C777E8000EDC654 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		079432A32C54D55900DDCE10 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		079432A62C54D55900DDCE10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,6 +133,8 @@
 		079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewProtocol.swift; sourceTree = "<group>"; };
 		079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenterDelegate.swift; sourceTree = "<group>"; };
 		07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreProtocol.swift; sourceTree = "<group>"; };
+		07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreUpdate.swift; sourceTree = "<group>"; };
+		07AA9E9E2C85BD34005C3724 /* TrackerStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreDelegate.swift; sourceTree = "<group>"; };
 		07ADBA872C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImpactFeedbackGenerator+Extensions.swift"; sourceTree = "<group>"; };
 		07ADBA892C67F822000BC87F /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		07C20A912C6E569D00463177 /* UITabBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Extensions.swift"; sourceTree = "<group>"; };
@@ -472,7 +474,6 @@
 			children = (
 				0772CB1F2C77179F00EDC654 /* Database.xcdatamodeld */,
 				0772CB222C77205700EDC654 /* UIColorToDataTransformer.swift */,
-				0772CB242C77299200EDC654 /* WeekToDataTransformer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -484,6 +485,8 @@
 				07FD687A2C787E37004A8794 /* TrackerStore.swift */,
 				07FD687C2C787E56004A8794 /* TrackerRecordStore.swift */,
 				07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */,
+				07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */,
+				07AA9E9E2C85BD34005C3724 /* TrackerStoreDelegate.swift */,
 			);
 			path = DataStore;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				0700E19D2C71BA6100DAA89C /* AddTrackerScreenAssembley.swift in Sources */,
 				073C8C2C2C6A46B7006D8E7D /* TrackerType.swift in Sources */,
 				0772CB212C77179F00EDC654 /* Database.xcdatamodeld in Sources */,
+				07AA9E9F2C85BD34005C3724 /* TrackerStoreDelegate.swift in Sources */,
 				073C8C3D2C6DB1F8006D8E7D /* ScheduleViewPresenterProtocol.swift in Sources */,
 				07ADBA882C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift in Sources */,
 				0700E19F2C71C3A800DAA89C /* AddTrackerViewControllerDelegate.swift in Sources */,
@@ -641,7 +645,6 @@
 				07D9897B2C69023900CF9B3E /* AddTrackerViewPresenterDelegate.swift in Sources */,
 				0772CAE92C74EFA400EDC654 /* NewTrackerEmojiCell.swift in Sources */,
 				07D989782C69018C00CF9B3E /* AddTrackerViewPresenterProtocol.swift in Sources */,
-				0772CB252C77299200EDC654 /* WeekToDataTransformer.swift in Sources */,
 				07D989742C68FB6D00CF9B3E /* AddTrackerViewController.swift in Sources */,
 				07D1B2182C63D671003BCD19 /* TrackersCellViewModel.swift in Sources */,
 				07D989722C68764500CF9B3E /* TrackersCollectionHeaderView.swift in Sources */,
@@ -682,6 +685,7 @@
 				079432C52C55716700DDCE10 /* SplashViewController.swift in Sources */,
 				0772CAF52C762AB700EDC654 /* NewTrackerColorCellDelegate.swift in Sources */,
 				073C8C322C6D0C29006D8E7D /* TrackerButtonsCell.swift in Sources */,
+				07AA9E9D2C85BCC4005C3724 /* TrackerStoreUpdate.swift in Sources */,
 				079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */,
 				07D989762C68FC6400CF9B3E /* AddTrackerViewPresenter.swift in Sources */,
 				0772CAEB2C75E5C100EDC654 /* NewTrackerViewController+Extensions.swift in Sources */,
