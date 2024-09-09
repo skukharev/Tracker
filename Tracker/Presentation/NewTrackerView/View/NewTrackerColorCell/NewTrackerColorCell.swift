@@ -9,6 +9,7 @@ import UIKit
 
 final class NewTrackerColorCell: UICollectionViewCell {
     // MARK: - Types
+
     enum Constants {
         static let identifier = "NewTrackerColorCell"
         static let selectionViewCornerRadius: CGFloat = 16

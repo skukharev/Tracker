@@ -19,4 +19,10 @@ enum GlobalConstants {
     static let ypMedium10 = UIFont.systemFont(ofSize: 10, weight: .medium)
     static let doneButton = UIImage(named: "DoneButton") ?? UIImage()
     static let plusButton = UIImage(systemName: "plus") ?? UIImage()
+    static let onboardingPage1Image = UIImage(named: "OnboardingPage1") ?? UIImage()
+    static let onboardingPage2Image = UIImage(named: "OnboardingPage2") ?? UIImage()
+    static let trackersTabBarItemTitle = "Трекеры"
+    static let trackersTabBarImageName = "TrackersTabBarImage"
+    static let statisticsTabBarImageName = "StatisticsTabBarImage"
+    static let statisticsTabBarItemTitle = "Статистика"
 }
