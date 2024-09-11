@@ -95,6 +95,51 @@ final class TrackerCategoryStore: NSObject {
         return .success(())
     }
 
+    /// Используется для проверки возможности удаления категории трекеров
+    /// - Parameter categoryName: Наименование категории трекеров
+    /// - Returns: Возвращает Истину в случае, если у категории отсутствуют трекеры и её можно удалить из базы данных; возвращает Ложь в противном случае
+    func checkCategoryDelete(withName categoryName: String) -> Bool {
+        var result = true
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.resultType = .managedObjectIDResultType
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
+        if
+            let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let categoryID = categories.finalResult?.first as? NSManagedObjectID,
+            let categoryRecord = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData {
+            if
+                let trackers = categoryRecord.trackers,
+                trackers.count >= 1 {
+                result = false
+            }
+        }
+        return result
+    }
+
+    /// Используется для удаления категории  трекеров
+    /// - Parameter categoryName: Наименование удаляемой категории трекеров
+    func deleteCategory(withName categoryName: String) {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.resultType = .managedObjectIDResultType
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
+        if
+            let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let categoryID = categories.finalResult?.first as? NSManagedObjectID,
+            let categoryRecord = try? context.existingObject(with: categoryID) {
+            do {
+                context.delete(categoryRecord)
+                try context.save()
+            } catch let error {
+                context.rollback()
+                assertionFailure("При удалении категории из базы данных произошла ошибка \(error.localizedDescription)")
+            }
+        }
+    }
+
     /// Изменяет категорию трекеров
     /// - Parameters:
     ///   - categoryName: Текущее наименование категории

@@ -14,15 +14,15 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     weak var delegate: NewTrackerViewPresenterProtocol?
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>?
     var onNeedReloadCategoriesList: Binding<Void>?
+
+    // MARK: - Private Properties
+
     /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
-    lazy var trackerCategoryStore: TrackerCategoryStore = {
+    private lazy var trackerCategoryStore: TrackerCategoryStore = {
         let store = TrackerCategoryStore()
         store.delegate = self
         return store
     }()
-
-    // MARK: - Private Properties
-
 
     // MARK: - Public Methods
 
@@ -34,6 +34,14 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
         guard let name = trackerCategoryStore.category(at: indexPath) else { return nil }
         let isSelected = name.caseInsensitiveCompare(categoryName ?? "") == .orderedSame
         return CategoryCellModel(name: name, isSelected: isSelected)
+    }
+
+    func deleteCategory(withCategory categoryName: String) {
+        trackerCategoryStore.deleteCategory(withName: categoryName)
+    }
+
+    func deleteCategoryRequest(withCategory categoryName: String) -> Bool {
+        return trackerCategoryStore.checkCategoryDelete(withName: categoryName)
     }
 
     func didSelectCategory(at indexPath: IndexPath) {

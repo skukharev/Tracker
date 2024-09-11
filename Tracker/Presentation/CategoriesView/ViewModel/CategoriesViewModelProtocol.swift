@@ -26,4 +26,11 @@ protocol CategoriesViewModelProtocol: AnyObject {
     /// Событие, вызываемое вью контроллером при выборе категории трекера из списка
     /// - Parameter indexPath: Индекс выбранной категории
     func didSelectCategory(at indexPath: IndexPath)
+    /// Используется для удаления категории трекеров
+    /// - Parameter categoryName: Наименование удаляемой категории
+    func deleteCategory(withCategory categoryName: String)
+    /// Используется для определения возможности удаления категории трекеров
+    /// - Parameter categoryName: Наименование категории трекеров
+    /// - Returns: Возвращает Истину в случае, если категорию трекеров можно удалить; возвращает Ложь в противном случае
+    func deleteCategoryRequest(withCategory categoryName: String) -> Bool
 }

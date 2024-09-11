@@ -37,6 +37,12 @@ final class CategoriesViewController: UIViewController {
         static let categoriesStubImageLabelText = "Привычки и события можно\nобъединить по смыслу"
         static let categoriesStubImageWidthConstraint: CGFloat = 80
         static let categoriesStubImageLabelTopConstraint: CGFloat = 8
+        static let deleteCategoryDenyAlertTitle = "Действие ограничено"
+        static let deleteCategoryDenyAlertMessage = "Для категории определены трекеры, поэтому её удаление ограничено"
+        static let confirmCategoryDeleteAlertTitle = "Подтвердите действие"
+        static let confirmCategoryDeleteAlertMessage = "Вы действительно хотите удалить категорию?"
+        static let confirmCategoryDeleteAlertYesButtonText = "Да"
+        static let confirmCategoryDeleteAlertNoButtonText = "Нет"
     }
 
     // MARK: - Private Properties
@@ -166,6 +172,26 @@ final class CategoriesViewController: UIViewController {
         }
     }
 
+    /// Используется для подтверждения пользователем и последующего удаления категории
+    /// - Parameter categoryName: Наименование удаляемой категории
+    private func confirmCategoryDelete(withCategory categoryName: String) {
+        let alertView = UIAlertController(
+            title: Constants.confirmCategoryDeleteAlertTitle,
+            message: Constants.confirmCategoryDeleteAlertMessage,
+            preferredStyle: .alert
+        )
+        alertView.addAction(UIAlertAction(title: Constants.confirmCategoryDeleteAlertNoButtonText, style: .cancel))
+        alertView.addAction(
+            UIAlertAction(
+                title: Constants.confirmCategoryDeleteAlertYesButtonText,
+                style: .destructive) { [weak self] _ in
+                    self?.viewModel?.deleteCategory(withCategory: categoryName)
+            }
+        )
+        alertView.view.accessibilityIdentifier = "confirmCategoryDeletePresenter"
+        present(alertView, animated: true)
+    }
+
     /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
@@ -230,6 +256,18 @@ final class CategoriesViewController: UIViewController {
         }
         categoriesStubImage.isHidden = false
         categoriesStubImageLabel.isHidden = false
+    }
+
+    /// Отображает алерт с запретом удаления категории с подчинёнными трекерами
+    private func showDeleteCategoryDenyAlert() {
+        let alertView = UIAlertController(
+            title: Constants.deleteCategoryDenyAlertTitle,
+            message: Constants.deleteCategoryDenyAlertMessage,
+            preferredStyle: .alert
+        )
+        alertView.addAction(UIAlertAction(title: "OK", style: .default))
+        alertView.view.accessibilityIdentifier = "showDeleteCategoryDenyAlertPresenter"
+        present(alertView, animated: true)
     }
 
     /// Отображает экран создания/редактирования категории
@@ -307,8 +345,18 @@ extension CategoriesViewController: UITableViewDelegate {
                 else { return }
                 self?.showCategoryEditScreen(withCategory: NewCategoryModel(name: categoryCellModel.name))
             }
-            let deleteAction = UIAction(title: Constants.categoriesTableViewDeleteActionText, attributes: .destructive) { _ in
-                print("Удалить")
+            let deleteAction = UIAction(title: Constants.categoriesTableViewDeleteActionText, attributes: .destructive) { [weak self] _ in
+                guard
+                    let self = self,
+                    let viewModel = self.viewModel,
+                    let categoryCellModel = viewModel.category(at: indexPath)
+                else { return }
+
+                if !viewModel.deleteCategoryRequest(withCategory: categoryCellModel.name) {
+                    self.showDeleteCategoryDenyAlert()
+                    return
+                }
+                self.confirmCategoryDelete(withCategory: categoryCellModel.name)
             }
             return UIMenu(title: "", children: [editAction, deleteAction])
         }
