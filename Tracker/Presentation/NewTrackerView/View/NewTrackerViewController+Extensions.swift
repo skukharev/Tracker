@@ -51,7 +51,7 @@ extension NewTrackerViewController: UITableViewDelegate {
     ///   - indexPath: индекс отображаемой кнопки
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            print("Нажата кнопка Категория")
+            presenter?.showCategories()
         } else {
             presenter?.showTrackerSchedule()
         }
