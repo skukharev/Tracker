@@ -95,6 +95,34 @@ final class TrackerCategoryStore: NSObject {
         return .success(())
     }
 
+    /// Изменяет категорию трекеров
+    /// - Parameters:
+    ///   - categoryName: Текущее наименование категории
+    ///   - newCategoryName: Новое наименование категории
+    /// - Returns: Результат операции: Истина - при успешном изменении, Ложь - в противном случае
+    func editTrackerCategory(withName categoryName: String, andNewName newCategoryName: String) -> Bool {
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.resultType = .managedObjectIDResultType
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
+        guard
+            let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let categoryID = categories.finalResult?.first as? NSManagedObjectID,
+            let categoryRecord = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData
+        else { return false }
+        let trackerCategoryCoreData = categoryRecord
+        updateExistingCategory(trackerCategoryCoreData, with: newCategoryName)
+        do {
+            try context.save()
+            return true
+        } catch let error {
+            context.rollback()
+            assertionFailure("При записи категории в базу данных произошла ошибка \(error.localizedDescription)")
+            return false
+        }
+    }
+
     // MARK: - Private Methods
 
     /// Используется для заполнения записи в базе данных по категории трекера перед добавлением / изменением
@@ -118,7 +146,20 @@ final class TrackerCategoryStore: NSObject {
 
     /// Используется для проверки существования в базе данных категории трекеров с заданным наименованием
     /// - Parameter categoryName: Тестируемое наименование категории трекеров
-    private func validateOnExistingCategory(_ categoryName: String?) throws {}
+    private func validateOnExistingCategory(_ categoryName: String?) throws {
+        guard let categoryName = categoryName else { return }
+        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.returnsObjectsAsFaults = false
+        request.resultType = .managedObjectIDResultType
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
+        if
+            let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let categoryID = categories.finalResult?.first as? NSManagedObjectID,
+            let categoryRecord = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData {
+            throw TrackerCategoryError.categoryNameAlreadyExists
+        }
+    }
 }
 
 // MARK: - TrackerCategoryProtocol

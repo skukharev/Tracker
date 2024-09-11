@@ -16,7 +16,7 @@ enum TrackerCategoryError: Error {
         case .emptyCategoryName:
             return "Необходимо ввести наименование категории"
         case .categoryNameAlreadyExists:
-            return "Категория с заданным именем уже существует"
+            return "Категория с заданным именем уже существует!"
         }
     }
 }

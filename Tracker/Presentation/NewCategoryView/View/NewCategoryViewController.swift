@@ -34,11 +34,10 @@ final class NewCategoryViewController: UIViewController {
         static let saveButtonLeadingConstraint: CGFloat = 20
         static let saveButtonBottomConstraint: CGFloat = 16
         static let saveButtonHeightConstraint: CGFloat = 60
+        static let categoryNameWarningLabelTextColor = UIColor.appRed
+        static let categoryNameWarningLabelFont = GlobalConstants.ypRegular17
+        static let categoryNameWarningLabelTopConstraint: CGFloat = 8
     }
-
-    // MARK: - Public Properties
-
-    // MARK: - IBOutlet
 
     // MARK: - Private Properties
 
@@ -69,6 +68,17 @@ final class NewCategoryViewController: UIViewController {
         view.returnKeyType = .done
         view.delegate = self
         view.addTarget(self, action: #selector(categoryNameEditingDidChange(_:)), for: .editingChanged)
+        return view
+    }()
+    /// Предупреждение о существовании в базе данных категории с заданным наименованием
+    private lazy var categoryNameWarningLabel: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.textColor = Constants.categoryNameWarningLabelTextColor
+        view.font = Constants.categoryNameWarningLabelFont
+        view.numberOfLines = 2
+        view.textAlignment = .center
+        view.isHidden = true
         return view
     }()
     /// Кнопка записи категории трекера в базу данных
@@ -117,14 +127,22 @@ final class NewCategoryViewController: UIViewController {
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.onCategoryChange = { [weak self] category in
+            guard let self = self else { return }
             if category != nil {
-                self?.viewTitle.text = Constants.viewTitleTextForEditCategory
+                self.viewTitle.text = Constants.viewTitleTextForEditCategory
+                self.categoryName.text = category?.name
+                if let categoryName = self.categoryName.text {
+                    viewModel.didCategoryNameEnter(categoryName)
+                }
             } else {
-                self?.viewTitle.text = Constants.viewTitleTextForNewCategory
+                self.viewTitle.text = Constants.viewTitleTextForNewCategory
             }
-            viewModel.onSaveCategoryAllowedStateChange = { [weak self] isSaveAllowed in
-                self?.adjustSaveButtonState(isSaveAllowed)
-            }
+        }
+        viewModel.onSaveCategoryAllowedStateChange = { [weak self] isSaveAllowed in
+            self?.adjustSaveButtonState(isSaveAllowed)
+        }
+        viewModel.onErrorStateChange = { [weak self] errorText in
+            self?.showError(errorText)
         }
     }
 
@@ -137,7 +155,7 @@ final class NewCategoryViewController: UIViewController {
     /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
-        view.addSubviews([viewTitle, categoryName, saveButton])
+        view.addSubviews([viewTitle, categoryName, categoryNameWarningLabel, saveButton])
         setupConstraints()
     }
 
@@ -164,6 +182,10 @@ final class NewCategoryViewController: UIViewController {
                 categoryName.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.categoryNameLeadingConstraint),
                 categoryName.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.categoryNameLeadingConstraint),
                 categoryName.heightAnchor.constraint(equalToConstant: Constants.categoryNameHeightConstraint),
+                /// Текст для отображения ошибок
+                categoryNameWarningLabel.topAnchor.constraint(equalTo: categoryName.bottomAnchor, constant: Constants.categoryNameWarningLabelTopConstraint),
+                categoryNameWarningLabel.leadingAnchor.constraint(equalTo: categoryName.leadingAnchor),
+                categoryNameWarningLabel.trailingAnchor.constraint(equalTo: categoryName.trailingAnchor),
                 /// Кнопка "Готово"
                 saveButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.saveButtonLeadingConstraint),
                 saveButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.saveButtonLeadingConstraint),
@@ -171,6 +193,13 @@ final class NewCategoryViewController: UIViewController {
                 saveButton.heightAnchor.constraint(equalToConstant: Constants.saveButtonHeightConstraint)
             ]
         )
+    }
+
+    /// Используется для отображения предупреждений при сохранении категории трекеров
+    /// - Parameter errorText: Текст ошибки
+    private func showError(_ errorText: String?) {
+        categoryNameWarningLabel.isHidden = errorText == nil
+        categoryNameWarningLabel.text = errorText
     }
 }
 

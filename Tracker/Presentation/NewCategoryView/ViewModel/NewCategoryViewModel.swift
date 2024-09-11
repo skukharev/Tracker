@@ -18,6 +18,7 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
     var delegate: (any CategoriesViewModelProtocol)?
     var onCategoryChange: Binding<NewCategoryModel?>?
     var onSaveCategoryAllowedStateChange: Binding<Bool>?
+    var onErrorStateChange: Binding<String?>?
 
     // MARK: - Private Properties
 
@@ -34,13 +35,27 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
         switch checkResult {
         case .success:
             onSaveCategoryAllowedStateChange?(true)
-        case .failure:
+            onErrorStateChange?(nil)
+        case .failure(let error):
             onSaveCategoryAllowedStateChange?(false)
+            if let error = error as? TrackerCategoryError {
+                switch error {
+                case .categoryNameAlreadyExists:
+                    onErrorStateChange?(error.localizedDescription)
+                default:
+                    break
+                }
+            }
         }
     }
 
     func saveCategory(withName categoryName: String) {
-        if category == nil {
+        if let category = category {
+            let editResult = trackerCategoryStore.editTrackerCategory(withName: category.name, andNewName: categoryName)
+            if editResult {
+                delegate?.onNeedReloadCategoriesList?(())
+            }
+        } else {
             _ = trackerCategoryStore.addTrackerCategory(withName: categoryName)
         }
     }

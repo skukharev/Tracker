@@ -10,6 +10,7 @@ import UIKit
 final class CategoriesViewController: UIViewController {
     // MARK: - Types
 
+    /// Настройки дизайна
     enum Constants {
         static let categoriesStubImageName = "TrackersStub"
         static let viewTitleFont = GlobalConstants.ypMedium16
@@ -21,6 +22,8 @@ final class CategoriesViewController: UIViewController {
         static let categoriesTableViewSeparatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let categoriesTableViewCornerRadius: CGFloat = 16
         static let categoriesTableViewRowHeight: CGFloat = 75
+        static let categoriesTableViewEditActionText = "Редактировать"
+        static let categoriesTableViewDeleteActionText = "Удалить"
         static let addCategoryButtonTitleFont = GlobalConstants.ypMedium16
         static let addCategoryButtonTitle = "Добавить категорию"
         static let addCategoryButtonTitleColor = UIColor.appWhite
@@ -140,10 +143,7 @@ final class CategoriesViewController: UIViewController {
     /// Обработчик нажатия на кнопку "Добавить категорию"
     /// - Parameter sender: инициатор события
     @objc private func addCategoryButtonTouchUpInside(_ sender: UIButton) {
-        guard let viewModel = viewModel else { return }
-        let targetViewController = NewCategoryScreenAssembley.build(withDelegate: viewModel)
-        let router = Router(viewController: self, targetViewController: targetViewController)
-        router.showNext(dismissCurrent: false)
+        showCategoryEditScreen()
     }
 
     private func bind() {
@@ -160,6 +160,9 @@ final class CategoriesViewController: UIViewController {
                     self.categoriesTableView.deleteRows(at: deletedIndex, with: .automatic)
                 }
             }
+        }
+        viewModel.onNeedReloadCategoriesList = { [weak self] _ in
+            self?.categoriesTableView.reloadData()
         }
     }
 
@@ -228,6 +231,15 @@ final class CategoriesViewController: UIViewController {
         categoriesStubImage.isHidden = false
         categoriesStubImageLabel.isHidden = false
     }
+
+    /// Отображает экран создания/редактирования категории
+    /// - Parameter category: модель с заполненными реквизитами категории. Если модель пустая, то отображается экран создания категории; в противном случае - экран редактирования категории
+    private func showCategoryEditScreen(withCategory category: NewCategoryModel? = nil) {
+        guard let viewModel = viewModel else { return }
+        let targetViewController = NewCategoryScreenAssembley.build(withDelegate: viewModel, withCategory: category)
+        let router = Router(viewController: self, targetViewController: targetViewController)
+        router.showNext(dismissCurrent: false)
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -284,5 +296,22 @@ extension CategoriesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true)
         viewModel?.didSelectCategory(at: indexPath)
+    }
+
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = UIAction(title: Constants.categoriesTableViewEditActionText) { [weak self] _ in
+                guard
+                    let viewModel = self?.viewModel,
+                    let categoryCellModel = viewModel.category(at: indexPath)
+                else { return }
+                self?.showCategoryEditScreen(withCategory: NewCategoryModel(name: categoryCellModel.name))
+            }
+            let deleteAction = UIAction(title: Constants.categoriesTableViewDeleteActionText, attributes: .destructive) { _ in
+                print("Удалить")
+            }
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
+        return configuration
     }
 }
