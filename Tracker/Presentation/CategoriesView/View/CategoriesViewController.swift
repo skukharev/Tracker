@@ -152,6 +152,7 @@ final class CategoriesViewController: UIViewController {
         showCategoryEditScreen()
     }
 
+    /// Создаёт биндинги между View и ViewModel
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.onCategoriesListChange = { [weak self] update in
@@ -336,6 +337,12 @@ extension CategoriesViewController: UITableViewDelegate {
         viewModel?.didSelectCategory(at: indexPath)
     }
 
+    /// Обработчик отображения контекстного меню для заданной ячейки из списка категорий
+    /// - Parameters:
+    ///   - tableView: табличное представление со списком категорий
+    ///   - indexPath: индекс выбранной ячейки с категорией
+    ///   - point: Точка вызова контекстного меню
+    /// - Returns: Сконфигурированное к показу контекстное меню
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             let editAction = UIAction(title: Constants.categoriesTableViewEditActionText) { [weak self] _ in

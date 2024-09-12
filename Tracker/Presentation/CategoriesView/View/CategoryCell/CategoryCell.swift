@@ -50,6 +50,8 @@ final class CategoryCell: UITableViewCell {
 
     // MARK: - Public Methods
 
+    /// Отображает содержимое модели ячейки
+    /// - Parameter model: <#model description#>
     public func configureCell(with model: CategoryCellModel) {
         categoryNameLabel.text = model.name
         if model.isSelected {

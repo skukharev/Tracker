@@ -124,6 +124,7 @@ final class NewCategoryViewController: UIViewController {
         saveButton.backgroundColor = isEnabled ? Constants.saveButtonBackgroundColorForEnabled : Constants.saveButtonBackgroundColorForDisabled
     }
 
+    /// Создаёт биндинги между View и ViewModel
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.onCategoryChange = { [weak self] category in

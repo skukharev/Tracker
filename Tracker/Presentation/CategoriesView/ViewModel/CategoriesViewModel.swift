@@ -14,15 +14,13 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     weak var delegate: NewTrackerViewPresenterProtocol?
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>?
     var onNeedReloadCategoriesList: Binding<Void>?
+    let trackerCategoryStore = TrackerCategoryStore.shared
 
-    // MARK: - Private Properties
+    // MARK: - Initializers
 
-    /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
-    private lazy var trackerCategoryStore: TrackerCategoryStore = {
-        let store = TrackerCategoryStore()
-        store.delegate = self
-        return store
-    }()
+    init() {
+        trackerCategoryStore.delegate = self
+    }
 
     // MARK: - Public Methods
 

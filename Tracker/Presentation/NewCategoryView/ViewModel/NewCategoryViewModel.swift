@@ -19,14 +19,7 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
     var onCategoryChange: Binding<NewCategoryModel?>?
     var onSaveCategoryAllowedStateChange: Binding<Bool>?
     var onErrorStateChange: Binding<String?>?
-
-    // MARK: - Private Properties
-
-    /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
-    private lazy var trackerCategoryStore: TrackerCategoryStore = {
-        let store = TrackerCategoryStore()
-        return store
-    }()
+    let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Public Methods
 

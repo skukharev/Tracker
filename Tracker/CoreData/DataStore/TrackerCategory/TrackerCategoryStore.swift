@@ -13,6 +13,8 @@ final class TrackerCategoryStore: NSObject {
 
     private let context: NSManagedObjectContext
     private let trackerCategoryNameKeyPath = #keyPath(TrackerCategoryCoreData.name)
+    static let shared = TrackerCategoryStore()
+
 
     // MARK: - Public Properties
 
