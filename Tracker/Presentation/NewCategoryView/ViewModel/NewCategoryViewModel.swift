@@ -44,10 +44,7 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
 
     func saveCategory(withName categoryName: String) {
         if let category = category {
-            let editResult = trackerCategoryStore.editTrackerCategory(withName: category.name, andNewName: categoryName)
-            if editResult {
-                delegate?.onNeedReloadCategoriesList?(())
-            }
+            _ = trackerCategoryStore.editTrackerCategory(withName: category.name, andNewName: categoryName)
         } else {
             _ = trackerCategoryStore.addTrackerCategory(withName: categoryName)
         }

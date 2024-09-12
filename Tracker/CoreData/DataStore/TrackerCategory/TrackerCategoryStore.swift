@@ -37,6 +37,7 @@ final class TrackerCategoryStore: NSObject {
     }()
     private var insertedIndexes: IndexSet?
     private var deletedIndexes: IndexSet?
+    private var updatedIndexes: IndexSet?
 
     // MARK: - Initializers
 
@@ -234,6 +235,7 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         insertedIndexes = IndexSet()
         deletedIndexes = IndexSet()
+        updatedIndexes = IndexSet()
     }
 
     /// Метод controllerDidChangeContent срабатывает после добавления или удаления объектов. В нём мы передаём индексы изменённых объектов в класс MainViewController и очищаем до следующего изменения переменные, которые содержат индексы.
@@ -241,11 +243,13 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         delegate?.didUpdate(
             TrackerCategoryStoreUpdate(
                 insertedIndexes: insertedIndexes,
-                deletedIndexes: deletedIndexes
+                deletedIndexes: deletedIndexes,
+                updatedIndexes: updatedIndexes
             )
         )
         insertedIndexes = nil
         deletedIndexes = nil
+        updatedIndexes = nil
     }
 
     /// Метод controller(_: didChange anObject) срабатывает после того как изменится состояние конкретного объекта. Мы добавляем индекс изменённого объекта в соответствующий набор индексов: deletedIndexes — для удалённых объектов, insertedIndexes — для добавленных.
@@ -262,7 +266,9 @@ extension TrackerCategoryStore: NSFetchedResultsControllerDelegate {
         case .move:
             break
         case .update:
-            break
+            if let indexPath = indexPath {
+                updatedIndexes?.insert(indexPath.item)
+            }
         @unknown default:
             break
         }

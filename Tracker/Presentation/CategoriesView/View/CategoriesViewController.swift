@@ -166,10 +166,11 @@ final class CategoriesViewController: UIViewController {
                     let deletedIndex = deletedIndexes.map { IndexPath(row: $0, section: 0) }
                     self.categoriesTableView.deleteRows(at: deletedIndex, with: .automatic)
                 }
+                if let updatedIndexes = update.updatedIndexes {
+                    let updatedIndex = updatedIndexes.map { IndexPath(row: $0, section: 0) }
+                    self.categoriesTableView.reloadRows(at: updatedIndex, with: .automatic)
+                }
             }
-        }
-        viewModel.onNeedReloadCategoriesList = { [weak self] _ in
-            self?.categoriesTableView.reloadData()
         }
     }
 

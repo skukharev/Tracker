@@ -11,4 +11,5 @@ import Foundation
 struct TrackerCategoryStoreUpdate {
     let insertedIndexes: IndexSet?
     let deletedIndexes: IndexSet?
+    let updatedIndexes: IndexSet?
 }

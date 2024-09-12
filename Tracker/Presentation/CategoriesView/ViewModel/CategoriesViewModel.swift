@@ -13,7 +13,6 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     var categoryName: String?
     weak var delegate: NewTrackerViewPresenterProtocol?
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>?
-    var onNeedReloadCategoriesList: Binding<Void>?
     let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Initializers

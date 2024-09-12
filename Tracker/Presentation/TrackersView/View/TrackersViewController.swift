@@ -228,11 +228,13 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
             let newDate = Calendar.current.date(byAdding: .day, value: 1, to: trackersChooseDatePicker.date) ?? trackersChooseDatePicker.date
             trackersChooseDatePicker.setDate(newDate, animated: true)
             datePickerValueChanged(trackersChooseDatePicker)
+            UIImpactFeedbackGenerator.initiate(style: .soft, view: self.view).impactOccurred()
         }
         if sender.direction == .right {
             let newDate = Calendar.current.date(byAdding: .day, value: -1, to: trackersChooseDatePicker.date) ?? trackersChooseDatePicker.date
             trackersChooseDatePicker.setDate(newDate, animated: true)
             datePickerValueChanged(trackersChooseDatePicker)
+            UIImpactFeedbackGenerator.initiate(style: .soft, view: self.view).impactOccurred()
         }
     }
 }
