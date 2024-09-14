@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Структура с индексами обновлённых данных в коллекции трекеров. Используется TrackerStore
 struct TrackerStoreUpdate {
     let insertedSectionIndexes: IndexSet?
     let deletedSectionIndexes: IndexSet?

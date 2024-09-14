@@ -50,7 +50,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     // MARK: - Private Properties
 
     /// Выбранная категория трекера
-    private var categoryName: String? = "Важное"
+    private var categoryName: String?
     /// Наименование трекера
     private var trackerName: String?
     /// Выбранное расписание трекера
@@ -157,11 +157,24 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         }
     }
 
+    func showCategories() {
+        guard let viewController = viewController as? UIViewController else { return }
+        let targetViewController = CategoriesScreenAssembley.build(withDelegate: self, withCategory: categoryName)
+        let router = Router(viewController: viewController, targetViewController: targetViewController)
+        router.showNext(dismissCurrent: false)
+    }
+
     func showTrackerSchedule() {
         guard let viewController = viewController as? UIViewController else { return }
         let targetViewController = ScheduleScreenAssembley.build(withDelegate: self, forSchedule: schedule)
         let router = Router(viewController: viewController, targetViewController: targetViewController)
         router.showNext(dismissCurrent: false)
+    }
+
+    func updateTrackerCategory(with categoryName: String) {
+        self.categoryName = categoryName
+        configureCreateButton()
+        viewController?.updateButtonsPanel()
     }
 
     func updateTrackerSchedule(with schedule: Week) {
@@ -172,7 +185,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     // MARK: - Private Methods
 
-    /// Используется для установки внешнего вида кнопки "Создать" в зависимости от полноти и корректности заполнения реквизитов трекера
+    /// Используется для установки внешнего вида кнопки "Создать" в зависимости от полноты и корректности заполнения реквизитов трекера
     private func configureCreateButton() {
         if canSaveTracker() {
             viewController?.setCreateButtonEnable()

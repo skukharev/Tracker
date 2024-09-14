@@ -49,7 +49,12 @@ protocol NewTrackerViewPresenterProtocol: AnyObject {
     func showColorCell(for cell: NewTrackerColorCell, at indexPath: IndexPath, withSelection selection: Bool)
     /// Отображает экран с выбором расписания повторения трекера
     func showTrackerSchedule()
+    /// Отображает экран выбора категории трекера
+    func showCategories()
     /// Обновляет расписание трекера
     /// - Parameter schedule: актуальное расписание запуска трекера
     func updateTrackerSchedule(with schedule: Week)
+    /// Обновляет категорию трекера
+    /// - Parameter category: актуальное наименование категории трекера
+    func updateTrackerCategory(with categoryName: String)
 }
