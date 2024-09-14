@@ -8,10 +8,6 @@
 import UIKit
 
 enum NewCategoryScreenAssembley {
-    /// Инициализирует вью контроллер перед отображением на экране
-    /// - Parameters:
-    ///   - withDelegate: делегат вью контроллера, который будет получать событие об успешном добавлении/редактировании категории трекера
-    /// - Returns: вью контроллер, готовый к отображению на экране
     static func build(withDelegate delegate: CategoriesViewModelProtocol?, withCategory category: NewCategoryModel? = nil) -> UIViewController {
         let newCategoryViewController = NewCategoryViewController()
         let newCategoryViewModel = NewCategoryViewModel()

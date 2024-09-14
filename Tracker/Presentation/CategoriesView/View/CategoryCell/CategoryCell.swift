@@ -27,7 +27,6 @@ final class CategoryCell: UITableViewCell {
         view.alignment = .leading
         return view
     }()
-    /// Наименование категории
     private lazy var categoryNameLabel: InsetLabel = {
         let view = InsetLabel(insets: Constants.categoryNameInsets)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -50,8 +49,6 @@ final class CategoryCell: UITableViewCell {
 
     // MARK: - Public Methods
 
-    /// Отображает содержимое модели ячейки
-    /// - Parameter model: <#model description#>
     public func configureCell(with model: CategoryCellModel) {
         categoryNameLabel.text = model.name
         if model.isSelected {
@@ -63,7 +60,6 @@ final class CategoryCell: UITableViewCell {
 
     // MARK: - Private Methods
 
-    /// Добавляет элементы управления и их констрейнты в ячейке
     private func createAndLayoutViews() {
         backgroundColor = .clear
         selectionStyle = .none
@@ -72,7 +68,6 @@ final class CategoryCell: UITableViewCell {
         setupConstraints()
     }
 
-    /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             [

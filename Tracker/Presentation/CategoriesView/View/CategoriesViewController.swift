@@ -47,9 +47,7 @@ final class CategoriesViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    /// Ассоциированная View Model
     private var viewModel: CategoriesViewModelProtocol?
-    /// Заголовок окна
     private lazy var viewTitle: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +56,6 @@ final class CategoriesViewController: UIViewController {
         view.text = Constants.viewTitleText
         return view
     }()
-    /// Табличное представление со списком категорий
     private lazy var categoriesTableView: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +68,6 @@ final class CategoriesViewController: UIViewController {
         view.estimatedRowHeight = view.rowHeight
         return view
     }()
-    /// Кнопка "Добавить категорию"
     private lazy var addCategoryButton: UIButton = {
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +82,6 @@ final class CategoriesViewController: UIViewController {
         view.addTarget(self, action: #selector(addCategoryButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
     }()
-    /// Изображение заглушки списка категорий
     private lazy var categoriesStubImage: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +93,6 @@ final class CategoriesViewController: UIViewController {
         view.contentMode = .center
         return view
     }()
-    /// Текст заглушки списка категорий
     private lazy var categoriesStubImageLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +103,6 @@ final class CategoriesViewController: UIViewController {
         view.textAlignment = .center
         return view
     }()
-    /// Переменная хранит текущее количество категорий в табличном представлении и используется для изменения высоты табличного представления со списком категорий
     private var categoriesCount: Int = 0 {
         didSet {
             if oldValue != categoriesCount {
@@ -137,8 +130,6 @@ final class CategoriesViewController: UIViewController {
 
     // MARK: - Public Methods
 
-    /// Устанавливает связь между View и View Model, настраивает binding между двумя классами
-    /// - Parameter viewModel: экземпляр View Model
     func initialize(viewModel: CategoriesViewModelProtocol) {
         self.viewModel = viewModel
         bind()
@@ -146,13 +137,10 @@ final class CategoriesViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    /// Обработчик нажатия на кнопку "Добавить категорию"
-    /// - Parameter sender: инициатор события
     @objc private func addCategoryButtonTouchUpInside(_ sender: UIButton) {
         showCategoryEditScreen()
     }
 
-    /// Создаёт биндинги между View и ViewModel
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.onCategoriesListChange = { [weak self] update in
@@ -174,8 +162,6 @@ final class CategoriesViewController: UIViewController {
         }
     }
 
-    /// Используется для подтверждения пользователем и последующего удаления категории
-    /// - Parameter categoryName: Наименование удаляемой категории
     private func confirmCategoryDelete(withCategory categoryName: String) {
         let alertView = UIAlertController(
             title: Constants.confirmCategoryDeleteAlertTitle,
@@ -194,14 +180,12 @@ final class CategoriesViewController: UIViewController {
         present(alertView, animated: true)
     }
 
-    /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
         view.addSubviews([viewTitle, categoriesTableView, addCategoryButton])
         setupConstraints()
     }
 
-    /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             [
@@ -223,23 +207,19 @@ final class CategoriesViewController: UIViewController {
         )
     }
 
-    /// Скрывает табличное представление со списком категорий
     private func hideCategoriesList() {
         categoriesTableView.isHidden = true
     }
 
-    /// Скрывает заглушку пустого списка категорий
     private func hideCategoriesListStub() {
         categoriesStubImage.isHidden = true
         categoriesStubImageLabel.isHidden = true
     }
 
-    /// Отображает табличное представление со списком категорий
     private func showCategoriesList() {
         categoriesTableView.isHidden = false
     }
 
-    /// Отображает заглушку пустого списка категорий
     private func showCategoriesListStub() {
         if !view.subviews.contains(categoriesStubImage) {
             view.addSubviews([categoriesStubImage, categoriesStubImageLabel])
@@ -260,7 +240,6 @@ final class CategoriesViewController: UIViewController {
         categoriesStubImageLabel.isHidden = false
     }
 
-    /// Отображает алерт с запретом удаления категории с подчинёнными трекерами
     private func showDeleteCategoryDenyAlert() {
         let alertView = UIAlertController(
             title: Constants.deleteCategoryDenyAlertTitle,
@@ -272,8 +251,6 @@ final class CategoriesViewController: UIViewController {
         present(alertView, animated: true)
     }
 
-    /// Отображает экран создания/редактирования категории
-    /// - Parameter category: модель с заполненными реквизитами категории. Если модель пустая, то отображается экран создания категории; в противном случае - экран редактирования категории
     private func showCategoryEditScreen(withCategory category: NewCategoryModel? = nil) {
         guard let viewModel = viewModel else { return }
         let targetViewController = NewCategoryScreenAssembley.build(withDelegate: viewModel, withCategory: category)

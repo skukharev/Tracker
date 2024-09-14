@@ -8,6 +8,5 @@
 import Foundation
 
 struct NewCategoryModel {
-    /// Наименование категории
     let name: String
 }

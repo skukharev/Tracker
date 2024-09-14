@@ -51,9 +51,6 @@ final class TrackerCategoryStore: NSObject {
 
     // MARK: - Public Methods
 
-    /// Добавляет / изменяет категорию трекеров
-    /// - Parameter categoryName: Наименование категории трекера
-    /// - Returns: Идентификатор категории трекеров в базе данных
     func addTrackerCategory(withName categoryName: String) -> NSManagedObjectID? {
         var trackerCategoryCoreData: TrackerCategoryCoreData?
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -81,11 +78,6 @@ final class TrackerCategoryStore: NSObject {
         }
     }
 
-    /// Используется для проверки допустимости создания/изменения категории трекеров с заданным наименованием
-    /// - Parameters:
-    ///   - categoryName: Проверяемое наименование категории
-    ///   - category: Текущая модель категории трекеров: при создании категории - nil, при редактировании категории - состояние категории на момент редактирования
-    /// - Returns: Возвращает Истину в случае допустимости записи категории в базу данных либо генерирует ошибку, в случае невозможности записи данных
     func checkCategory(withName categoryName: String?, withModel category: NewCategoryModel?) -> Result<Void, Error> {
         do {
             try validateOnAllowedName(categoryName)
@@ -98,9 +90,6 @@ final class TrackerCategoryStore: NSObject {
         return .success(())
     }
 
-    /// Используется для проверки возможности удаления категории трекеров
-    /// - Parameter categoryName: Наименование категории трекеров
-    /// - Returns: Возвращает Истину в случае, если у категории отсутствуют трекеры и её можно удалить из базы данных; возвращает Ложь в противном случае
     func checkCategoryDelete(withName categoryName: String) -> Bool {
         var result = true
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
@@ -121,8 +110,6 @@ final class TrackerCategoryStore: NSObject {
         return result
     }
 
-    /// Используется для удаления категории  трекеров
-    /// - Parameter categoryName: Наименование удаляемой категории трекеров
     func deleteCategory(withName categoryName: String) {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
@@ -143,11 +130,6 @@ final class TrackerCategoryStore: NSObject {
         }
     }
 
-    /// Изменяет категорию трекеров
-    /// - Parameters:
-    ///   - categoryName: Текущее наименование категории
-    ///   - newCategoryName: Новое наименование категории
-    /// - Returns: Результат операции: Истина - при успешном изменении, Ложь - в противном случае
     func editTrackerCategory(withName categoryName: String, andNewName newCategoryName: String) -> Bool {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.returnsObjectsAsFaults = false
@@ -173,16 +155,10 @@ final class TrackerCategoryStore: NSObject {
 
     // MARK: - Private Methods
 
-    /// Используется для заполнения записи в базе данных по категории трекера перед добавлением / изменением
-    /// - Parameters:
-    ///   - trackerCategoryCoreData: Ссылка на экземпляр категории трекеров в базе данных
-    ///   - name: Наименование категории трекера
     private func updateExistingCategory(_ trackerCategoryCoreData: TrackerCategoryCoreData, with name: String) {
         trackerCategoryCoreData.name = name
     }
 
-    /// Используется для проверки допустимости наименования категории трекеров
-    /// - Parameter categoryName: Тестируемое наименование категории трекеров
     private func validateOnAllowedName(_ categoryName: String?) throws {
         guard let categoryName = categoryName else {
             throw TrackerCategoryError.emptyCategoryName
@@ -192,8 +168,6 @@ final class TrackerCategoryStore: NSObject {
         }
     }
 
-    /// Используется для проверки существования в базе данных категории трекеров с заданным наименованием
-    /// - Parameter categoryName: Тестируемое наименование категории трекеров
     private func validateOnExistingCategory(_ categoryName: String?) throws {
         guard let categoryName = categoryName else { return }
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")

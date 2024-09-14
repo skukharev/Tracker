@@ -41,9 +41,7 @@ final class NewCategoryViewController: UIViewController {
 
     // MARK: - Private Properties
 
-    /// Ассоциированная View Model
     private var viewModel: NewCategoryViewModelProtocol?
-    /// Заголовок окна
     private lazy var viewTitle: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -51,7 +49,6 @@ final class NewCategoryViewController: UIViewController {
         view.textColor = Constants.viewTitleTextColor
         return view
     }()
-    /// Поле ввода "Наименование категории"
     private lazy var categoryName: UITextField = {
         let view = UITextField()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +67,6 @@ final class NewCategoryViewController: UIViewController {
         view.addTarget(self, action: #selector(categoryNameEditingDidChange(_:)), for: .editingChanged)
         return view
     }()
-    /// Предупреждение о существовании в базе данных категории с заданным наименованием
     private lazy var categoryNameWarningLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -81,7 +77,6 @@ final class NewCategoryViewController: UIViewController {
         view.isHidden = true
         return view
     }()
-    /// Кнопка записи категории трекера в базу данных
     private lazy var saveButton: UIButton = {
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -107,8 +102,6 @@ final class NewCategoryViewController: UIViewController {
 
     // MARK: - Public Methods
 
-    /// Устанавливает связь между View и View Model, настраивает binding между двумя классами
-    /// - Parameter viewModel: экземпляр View Model
     func initialize(viewModel: NewCategoryViewModelProtocol, withCategory category: NewCategoryModel?) {
         self.viewModel = viewModel
         bind()
@@ -117,14 +110,11 @@ final class NewCategoryViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    /// Используется для адаптации внешнего вида кнопки сохранения категории
-    /// - Parameter isEnabled: Истина, если кнопку необходимо разблокировать; Ложь - в противном случае
     private func adjustSaveButtonState(_ isEnabled: Bool) {
         saveButton.isUserInteractionEnabled = isEnabled
         saveButton.backgroundColor = isEnabled ? Constants.saveButtonBackgroundColorForEnabled : Constants.saveButtonBackgroundColorForDisabled
     }
 
-    /// Создаёт биндинги между View и ViewModel
     private func bind() {
         guard let viewModel = viewModel else { return }
         viewModel.onCategoryChange = { [weak self] category in
@@ -147,21 +137,16 @@ final class NewCategoryViewController: UIViewController {
         }
     }
 
-    /// Обработчик изменения значения наименования категории трекеров
-    /// - Parameter sender: Объект-инициатор события
     @objc private func categoryNameEditingDidChange(_ sender: UITextField) {
         viewModel?.didCategoryNameEnter(sender.text)
     }
 
-    /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
         view.addSubviews([viewTitle, categoryName, categoryNameWarningLabel, saveButton])
         setupConstraints()
     }
 
-    /// Обработчик нажатия на кнопку сохранения категории трекеров
-    /// - Parameter sender: Объект-инициатор события
     @objc private func saveButtonTouchUpInside(_ sender: UIButton) {
         guard let categoryName = categoryName.text else { return }
         let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
@@ -170,7 +155,6 @@ final class NewCategoryViewController: UIViewController {
         dismiss(animated: true)
     }
 
-    /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         NSLayoutConstraint.activate(
             [
@@ -196,8 +180,6 @@ final class NewCategoryViewController: UIViewController {
         )
     }
 
-    /// Используется для отображения предупреждений при сохранении категории трекеров
-    /// - Parameter errorText: Текст ошибки
     private func showError(_ errorText: String?) {
         categoryNameWarningLabel.isHidden = errorText == nil
         categoryNameWarningLabel.text = errorText
