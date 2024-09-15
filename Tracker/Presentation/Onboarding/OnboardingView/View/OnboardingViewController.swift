@@ -64,6 +64,7 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
+        delegate = self
         if let firstViewController = presenter?.pages.first {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
@@ -101,6 +102,8 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
         )
     }
 }
+
+// MARK: - UIPageViewControllerDataSource
 
 extension OnboardingViewController: UIPageViewControllerDataSource {
     /// Возвращает предыдущий вью контроллер относительно отображающегося из массива вью контроллеров UIPageViewController
@@ -151,5 +154,27 @@ extension OnboardingViewController: UIPageViewControllerDataSource {
         }
 
         return presenter.pages[safe: nextIndex]
+    }
+}
+
+// MARK: - UIPageViewControllerDelegate
+
+extension OnboardingViewController: UIPageViewControllerDelegate {
+    /// Вызывается по окончании анимации перелистывания страниц UIPageViewController, используется для изменения индекса текущего экрана онбординга в UIPageControl
+    /// - Parameters:
+    ///   - pageViewController: Объект-иницатор события
+    ///   - finished: Индикатор окончания анимации перелистывания
+    ///   - previousViewControllers: Массив вью контроллеров до перехода
+    ///   - completed: Истина, если пользователь завершил жест перелистывания; Ложь в противном случае
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        guard
+            let presenter = presenter,
+            let currentViewController = pageViewController.viewControllers?.first,
+            let viewControllerIndex = presenter.pages.firstIndex(of: currentViewController)
+        else {
+            return
+        }
+
+        pageControl.currentPage = viewControllerIndex
     }
 }
