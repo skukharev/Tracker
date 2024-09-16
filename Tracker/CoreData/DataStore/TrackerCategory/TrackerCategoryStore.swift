@@ -178,7 +178,7 @@ final class TrackerCategoryStore: NSObject {
         if
             let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
             let categoryID = categories.finalResult?.first as? NSManagedObjectID,
-            let categoryRecord = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData {
+            (try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData != nil) != nil {
             throw TrackerCategoryError.categoryNameAlreadyExists
         }
     }
