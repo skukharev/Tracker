@@ -16,12 +16,11 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         static let trackersStubImageName = "TrackersStub"
         static let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
         static let trackersChooseDatePickerCornerRadius: CGFloat = 8
-        static let trackersStubImageLabelText = "Что будем отслеживать?"
-        static let trackersSearchBarPlaceholder = "Поиск"
+        static let trackersStubImageLabelText = NSLocalizedString("trackersStubImageLabelText", comment: "")
+        static let trackersSearchBarPlaceholder = NSLocalizedString("trackersSearchBarPlaceholder", comment: "")
         static let trackersSearchBarLeadingConstraint: CGFloat = 16
         static let trackersStubImageWidthConstraint: CGFloat = 80
         static let trackersStubImageLabelTopConstraint: CGFloat = 8
-        static let navigationItemTitle = "Трекеры"
         static let trackersCollectionTopConstraint: CGFloat = 10
     }
 
@@ -183,7 +182,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let window = UIApplication.shared.windows.first { $0.isKeyWindow }
         window?.backgroundColor = .appWhite
         /// Панель навигации
-        navigationItem.title = Constants.navigationItemTitle
+        navigationItem.title = GlobalConstants.trackersTabBarItemTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)

@@ -16,16 +16,16 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     enum Constants {
         static let colorAssetsPrefix = "App Color Section "
-        static let trackerButtonCellCategoryTitle = "Категория"
-        static let trackerButtonCellScheduleTitle = "Расписание"
-        static let everyDayTitle = "Каждый день"
-        static let monadyShortening = "Пн"
-        static let tuesdayShortening = "Вт"
-        static let wednesdayShortening = "Ср"
-        static let thursdayShortening = "Чт"
-        static let fridayShortening = "Пт"
-        static let saturdayShortening = "Сб"
-        static let sundayShortening = "Вс"
+        static let trackerButtonCellCategoryTitle = NSLocalizedString("trackerButtonCellCategoryTitle", comment: "")
+        static let trackerButtonCellScheduleTitle = NSLocalizedString("trackerButtonCellScheduleTitle", comment: "")
+        static let everyDayTitle = NSLocalizedString("everyDayTitle", comment: "")
+        static let monadyShortening = NSLocalizedString("monadyShortening", comment: "")
+        static let tuesdayShortening = NSLocalizedString("tuesdayShortening", comment: "")
+        static let wednesdayShortening = NSLocalizedString("wednesdayShortening", comment: "")
+        static let thursdayShortening = NSLocalizedString("thursdayShortening", comment: "")
+        static let fridayShortening = NSLocalizedString("fridayShortening", comment: "")
+        static let saturdayShortening = NSLocalizedString("saturdayShortening", comment: "")
+        static let sundayShortening = NSLocalizedString("sundayShortening", comment: "")
     }
 
     // MARK: - Constants

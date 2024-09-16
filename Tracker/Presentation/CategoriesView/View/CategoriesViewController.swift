@@ -15,17 +15,17 @@ final class CategoriesViewController: UIViewController {
         static let categoriesStubImageName = "TrackersStub"
         static let viewTitleFont = GlobalConstants.ypMedium16
         static let viewTitleTextColor = UIColor.appBlack
-        static let viewTitleText = "Категория"
+        static let cvcViewTitleText = NSLocalizedString("cvcViewTitleText", comment: "")
         static let viewTitleTopConstraint: CGFloat = 27
         static let categoriesTableViewTopConstraint: CGFloat = 38
         static let categoriesTableViewLeadingConstraint: CGFloat = 16
         static let categoriesTableViewSeparatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let categoriesTableViewCornerRadius: CGFloat = 16
         static let categoriesTableViewRowHeight: CGFloat = 75
-        static let categoriesTableViewEditActionText = "Редактировать"
-        static let categoriesTableViewDeleteActionText = "Удалить"
+        static let categoriesTableViewEditActionText = NSLocalizedString("categoriesTableViewEditActionText", comment: "")
+        static let categoriesTableViewDeleteActionText = NSLocalizedString("categoriesTableViewDeleteActionText", comment: "")
         static let addCategoryButtonTitleFont = GlobalConstants.ypMedium16
-        static let addCategoryButtonTitle = "Добавить категорию"
+        static let addCategoryButtonTitle = NSLocalizedString("addCategoryButtonTitle", comment: "")
         static let addCategoryButtonTitleColor = UIColor.appWhite
         static let addCategoryButtonBackgroundColor = UIColor.appBlack
         static let addCategoryButtonCornerRadius: CGFloat = 16
@@ -34,15 +34,16 @@ final class CategoriesViewController: UIViewController {
         static let addCategoryButtonHeightConstraint: CGFloat = 60
         static let categoriesStubImageLabelFont = GlobalConstants.ypMedium12
         static let categoriesStubImageLabelTextColor = UIColor.appBlack
-        static let categoriesStubImageLabelText = "Привычки и события можно\nобъединить по смыслу"
+        static let categoriesStubImageLabelText = NSLocalizedString("categoriesStubImageLabelText", comment: "")
         static let categoriesStubImageWidthConstraint: CGFloat = 80
         static let categoriesStubImageLabelTopConstraint: CGFloat = 8
-        static let deleteCategoryDenyAlertTitle = "Действие ограничено"
-        static let deleteCategoryDenyAlertMessage = "Для категории определены трекеры, поэтому её удаление ограничено"
-        static let confirmCategoryDeleteAlertTitle = "Подтвердите действие"
-        static let confirmCategoryDeleteAlertMessage = "Вы действительно хотите удалить категорию?"
-        static let confirmCategoryDeleteAlertYesButtonText = "Да"
-        static let confirmCategoryDeleteAlertNoButtonText = "Нет"
+        static let deleteCategoryDenyAlertTitle = NSLocalizedString("deleteCategoryDenyAlertTitle", comment: "")
+        static let deleteCategoryDenyAlertMessage = NSLocalizedString("deleteCategoryDenyAlertMessage", comment: "")
+        static let confirmCategoryDeleteAlertTitle = NSLocalizedString("confirmCategoryDeleteAlertTitle", comment: "")
+        static let confirmCategoryDeleteAlertMessage = NSLocalizedString("confirmCategoryDeleteAlertMessage", comment: "")
+        static let confirmCategoryDeleteAlertYesButtonText = NSLocalizedString("confirmCategoryDeleteAlertYesButtonText", comment: "")
+        static let confirmCategoryDeleteAlertNoButtonText = NSLocalizedString("confirmCategoryDeleteAlertNoButtonText", comment: "")
+        static let buttonOKTitle = NSLocalizedString("buttonOKTitle", comment: "")
     }
 
     // MARK: - Private Properties
@@ -53,7 +54,7 @@ final class CategoriesViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = Constants.viewTitleFont
         view.textColor = Constants.viewTitleTextColor
-        view.text = Constants.viewTitleText
+        view.text = Constants.cvcViewTitleText
         return view
     }()
     private lazy var categoriesTableView: UITableView = {
@@ -246,7 +247,7 @@ final class CategoriesViewController: UIViewController {
             message: Constants.deleteCategoryDenyAlertMessage,
             preferredStyle: .alert
         )
-        alertView.addAction(UIAlertAction(title: "OK", style: .default))
+        alertView.addAction(UIAlertAction(title: Constants.buttonOKTitle, style: .default))
         alertView.view.accessibilityIdentifier = "showDeleteCategoryDenyAlertPresenter"
         present(alertView, animated: true)
     }

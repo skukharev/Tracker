@@ -13,8 +13,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
 
     enum Constants {
         static let statisticsStubImageName = "StatisticsStub"
-        static let statisticsStubImageLabelText = "Анализировать пока нечего"
-        static let navigationItemTitle = "Статистика"
+        static let statisticsStubImageLabelText = NSLocalizedString("statisticsStubImageLabelText", comment: "")
         static let statisticsStubImageWidthConstraint: CGFloat = 80
         static let statisticsStubImageLabelTopConstraint: CGFloat = 8
     }
@@ -67,7 +66,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
         /// Панель навигации
-        navigationItem.title = Constants.navigationItemTitle
+        navigationItem.title = GlobalConstants.statisticsTabBarItemTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         /// Элементы управления
         view.addSubviews([statisticsStubImage, statisticsStubImageLabel])

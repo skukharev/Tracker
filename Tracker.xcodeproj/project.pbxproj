@@ -79,6 +79,8 @@
 		079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432D82C561F6200DDCE10 /* StatisticsViewPresenter.swift */; };
 		079432DB2C561F7C00DDCE10 /* StatisticsViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */; };
 		079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */; };
+		07A21C252C96B8EC00BEA576 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */; };
+		07A21C272C97FFFD00BEA576 /* DaysFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */; };
 		07A8C48D2C7F2816002EC584 /* TrackerStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */; };
 		07AA9E9D2C85BCC4005C3724 /* TrackerStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */; };
 		07AA9E9F2C85BD34005C3724 /* TrackerStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AA9E9E2C85BD34005C3724 /* TrackerStoreDelegate.swift */; };
@@ -179,6 +181,8 @@
 		079432D82C561F6200DDCE10 /* StatisticsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenter.swift; sourceTree = "<group>"; };
 		079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewProtocol.swift; sourceTree = "<group>"; };
 		079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenterDelegate.swift; sourceTree = "<group>"; };
+		07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysFormatter.swift; sourceTree = "<group>"; };
 		07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreProtocol.swift; sourceTree = "<group>"; };
 		07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreUpdate.swift; sourceTree = "<group>"; };
 		07AA9E9E2C85BD34005C3724 /* TrackerStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreDelegate.swift; sourceTree = "<group>"; };
@@ -665,6 +669,7 @@
 				079432AF2C54D55B00DDCE10 /* Assets.xcassets */,
 				079432B42C54D55B00DDCE10 /* Info.plist */,
 				079432B12C54D55B00DDCE10 /* LaunchScreen.storyboard */,
+				07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -673,6 +678,7 @@
 			isa = PBXGroup;
 			children = (
 				0700E1992C70B7EB00DAA89C /* Router.swift */,
+				07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -845,6 +851,7 @@
 			files = (
 				079432B02C54D55B00DDCE10 /* Assets.xcassets in Resources */,
 				079432B32C54D55B00DDCE10 /* Base in Resources */,
+				07A21C252C96B8EC00BEA576 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -956,6 +963,7 @@
 				073C8C322C6D0C29006D8E7D /* TrackerButtonsCell.swift in Sources */,
 				0726980D2C91872C00386B3F /* NewCategoryScreenAssembley.swift in Sources */,
 				07AA9E9D2C85BCC4005C3724 /* TrackerStoreUpdate.swift in Sources */,
+				07A21C272C97FFFD00BEA576 /* DaysFormatter.swift in Sources */,
 				072697FE2C90725D00386B3F /* CategoryCell.swift in Sources */,
 				079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */,
 				07D989762C68FC6400CF9B3E /* AddTrackerViewPresenter.swift in Sources */,

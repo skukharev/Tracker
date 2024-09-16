@@ -21,8 +21,8 @@ enum GlobalConstants {
     static let plusButton = UIImage(systemName: "plus") ?? UIImage()
     static let onboardingPage1Image = UIImage(named: "OnboardingPage1") ?? UIImage()
     static let onboardingPage2Image = UIImage(named: "OnboardingPage2") ?? UIImage()
-    static let trackersTabBarItemTitle = "Трекеры"
+    static let trackersTabBarItemTitle = NSLocalizedString("trackersTabBarItemTitle", comment: "")
     static let trackersTabBarImageName = "TrackersTabBarImage"
     static let statisticsTabBarImageName = "StatisticsTabBarImage"
-    static let statisticsTabBarItemTitle = "Статистика"
+    static let statisticsTabBarItemTitle = NSLocalizedString("statisticsTabBarItemTitle", comment: "")
 }

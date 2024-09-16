@@ -11,14 +11,14 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
     // MARK: - Types
 
     enum Constants {
-        static let viewTitleText = "Расписание"
+        static let svcViewTitleText = NSLocalizedString("svcViewTitleText", comment: "")
         static let scheduleTableViewSeparatorInsetsTop: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsLeft: CGFloat = 16
         static let scheduleTableViewSeparatorInsetsBottom: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsRight: CGFloat = 16
         static let scheduleTableViewCornerRadius: CGFloat = 16
         static let scheduleTableViewRowHeight: CGFloat = 75
-        static let readyButtonTitle = "Готово"
+        static let readyButtonTitle = NSLocalizedString("readyButtonTitle", comment: "")
         static let readyButtonCornerRadius: CGFloat = 16
         static let viewTitleTopConstraint: CGFloat = 27
         static let scheduleTableViewTopConstraint: CGFloat = 30
@@ -42,7 +42,7 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypMedium16
         view.textColor = .appBlack
-        view.text = Constants.viewTitleText
+        view.text = Constants.svcViewTitleText
         return view
     }()
     /// Расписание трекера

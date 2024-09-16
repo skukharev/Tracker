@@ -13,10 +13,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     enum Constants {
         static let trackerNameContainerSpacing: CGFloat = 8
         static let trackerNameContainerLeadingConstraint: CGFloat = 16
-        static let trackerNamePlaceholderTitle = "Введите название трекера"
+        static let trackerNamePlaceholderTitle = NSLocalizedString("trackerNamePlaceholderTitle", comment: "")
         static let trackerNameCornerRadius: CGFloat = 16
         static let trackerNameLeftViewFrame = CGRect(x: 0, y: 0, width: 16, height: 10)
-        static let trackerNameWarningLabelText = "Ограничение 38 символов"
+        static let trackerNameWarningLabelText = NSLocalizedString("trackerNameWarningLabelText", comment: "")
         static let trackerNameHeightConstraint: CGFloat = 75
         static let trackerButtonsTableViewSeparatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let trackerButtonsTableViewCornerRadius: CGFloat = 16
@@ -25,22 +25,22 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         static let trackerButtonsTableViewLeadingConstraint: CGFloat = 16
         static let trackerButtonsTableViewHeightForHabit: CGFloat = 150
         static let trackerButtonsTableViewHeightForEvent: CGFloat = 75
-        static let emojiLabelText = "Emoji"
+        static let emojiLabelText = NSLocalizedString("emojiLabelText", comment: "")
         static let emojiLabelTopConstraint: CGFloat = 32
         static let emojiLabelLeadingConstraint: CGFloat = 28
-        static let colorsLabelText = "Цвет"
+        static let colorsLabelText = NSLocalizedString("colorsLabelText", comment: "")
         static let colorsLabelTopConstraint: CGFloat = 16
         static let colorsLabelLeadingConstraint: CGFloat = 28
         static let buttonsContainerSpacing: CGFloat = 8
         static let buttonsContainerLeadingConstraint: CGFloat = 20
         static let buttonsContainerHeightConstraint: CGFloat = 60
-        static let cancelButtonTitle = "Отменить"
+        static let cancelButtonTitle = NSLocalizedString("cancelButtonTitle", comment: "")
         static let cancelButtonCornerRadius: CGFloat = 16
         static let cancelButtonBorderWidth: CGFloat = 1
-        static let createButtonTitle = "Создать"
+        static let createButtonTitle = NSLocalizedString("createButtonTitle", comment: "")
         static let createButtonCornerRadius: CGFloat = 16
-        static let viewTitleForHabitText = "Новая привычка"
-        static let viewTitleForEventText = "Новое нерегулярное событие"
+        static let viewTitleForHabitText = NSLocalizedString("viewTitleForHabitText", comment: "")
+        static let viewTitleForEventText = NSLocalizedString("viewTitleForEventText", comment: "")
         static let viewTitleTopConstraint: CGFloat = 27
         static let controlsScrollViewTopConstraint: CGFloat = 38
     }
@@ -330,7 +330,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             controlsScrollView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor),
             /// Панель для наименования трекера
             trackerNameContainer.topAnchor.constraint(equalTo: controlsScrollView.topAnchor),
-            trackerNameContainer.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: Constants.trackerNameContainerLeadingConstraint),
+            trackerNameContainer.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.trackerNameContainerLeadingConstraint),
             trackerNameContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.trackerNameContainerLeadingConstraint),
             /// Поле ввода "Наименование трекера"
             trackerName.topAnchor.constraint(equalTo: trackerNameContainer.topAnchor),
@@ -342,27 +342,27 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             trackerNameWarningLabel.trailingAnchor.constraint(equalTo: trackerNameContainer.trailingAnchor),
             /// Кнопки "Категория" и "Расписание"
             trackerButtonsTableView.topAnchor.constraint(equalTo: trackerNameContainer.bottomAnchor, constant: Constants.trackerButtonsTableViewTopConstraint),
-            trackerButtonsTableView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: Constants.trackerButtonsTableViewLeadingConstraint),
+            trackerButtonsTableView.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.trackerButtonsTableViewLeadingConstraint),
             trackerButtonsTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.trackerButtonsTableViewLeadingConstraint),
             /// Заголовок коллекции Emoji
             emojiLabel.topAnchor.constraint(equalTo: trackerButtonsTableView.bottomAnchor, constant: Constants.emojiLabelTopConstraint),
-            emojiLabel.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: Constants.emojiLabelLeadingConstraint),
+            emojiLabel.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.emojiLabelLeadingConstraint),
             /// Коллекция Emoji
             emojiCollectionView.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor),
-            emojiCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor),
+            emojiCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor),
             emojiCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             emojiCollectionView.heightAnchor.constraint(equalToConstant: geometricParams.collectionViewHeight),
             /// Заголовок коллекции с цветами
             colorsLabel.topAnchor.constraint(equalTo: emojiCollectionView.bottomAnchor, constant: Constants.colorsLabelTopConstraint),
-            colorsLabel.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: Constants.colorsLabelLeadingConstraint),
+            colorsLabel.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.colorsLabelLeadingConstraint),
             /// Коллекция с цветами трекера
             colorsCollectionView.topAnchor.constraint(equalTo: colorsLabel.bottomAnchor),
-            colorsCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor),
+            colorsCollectionView.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor),
             colorsCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             colorsCollectionView.heightAnchor.constraint(equalToConstant: geometricParams.collectionViewHeight),
             /// Контейнер для кнопок
             buttonsContainer.topAnchor.constraint(equalTo: colorsCollectionView.bottomAnchor),
-            buttonsContainer.leadingAnchor.constraint(equalTo: controlsScrollView.leadingAnchor, constant: Constants.buttonsContainerLeadingConstraint),
+            buttonsContainer.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.buttonsContainerLeadingConstraint),
             buttonsContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.buttonsContainerLeadingConstraint),
             buttonsContainer.heightAnchor.constraint(equalToConstant: Constants.buttonsContainerHeightConstraint),
             /// Без этого констрейнта ниже отображение элементов скролл-вью будет некорректным
