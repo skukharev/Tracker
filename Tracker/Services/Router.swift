@@ -39,6 +39,7 @@ final class Router {
                 viewController.dismiss(animated: animatedDismissCurrent)
                 window.rootViewController?.present(targetViewController, animated: animatedShowTarget)
             } else {
+                window.rootViewController?.dismiss(animated: true)
                 window.rootViewController = targetViewController
             }
         } else {
