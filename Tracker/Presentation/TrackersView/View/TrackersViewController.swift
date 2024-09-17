@@ -285,21 +285,22 @@ extension TrackersViewController: UICollectionViewDataSource {
     ///   - indexPath: Индекс заголовка секции в коллекции
     /// - Returns: Сконфигурированная и готовый к отображению заголовок коллекции трекеров
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id: String
-
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            id = TrackersCollectionHeaderView.Constants.identifier
+            guard let view = collectionView.dequeueReusableSupplementaryView(
+                ofKind: UICollectionView.elementKindSectionHeader,
+                withReuseIdentifier: TrackersCollectionHeaderView.Constants.identifier,
+                for: indexPath
+            ) as? TrackersCollectionHeaderView else {
+                assertionFailure("Элемент управления заголовком секции трекеров не найден")
+                return UICollectionReusableView()
+            }
+            presenter?.showHeader(for: view, with: indexPath)
+            return view
         default:
-            id = ""
+            break
         }
-
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? TrackersCollectionHeaderView else {
-            assertionFailure("Элемент управления заголовком секции трекеров не найден")
-            return UICollectionReusableView()
-        }
-        presenter?.showHeader(for: view, with: indexPath)
-        return view
+        return UICollectionReusableView()
     }
 
     /// Используется для визуального оформления ячейки коллекции
@@ -374,7 +375,8 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
 
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        let headerView = TrackersCollectionHeaderView()
+        presenter?.showHeader(for: headerView, with: indexPath)
 
         let headerSize = headerView.systemLayoutSizeFitting(
             CGSize(width: collectionView.frame.width, height: 30),
