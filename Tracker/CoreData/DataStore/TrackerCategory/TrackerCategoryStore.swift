@@ -175,11 +175,11 @@ final class TrackerCategoryStore: NSObject {
         request.resultType = .managedObjectIDResultType
         request.fetchLimit = 1
         request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
-        if
+        guard
             let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
-            let categoryID = categories.finalResult?.first as? NSManagedObjectID {
-            throw TrackerCategoryError.categoryNameAlreadyExists
-        }
+            categories.finalResult?.first != nil
+        else { return }
+        throw TrackerCategoryError.categoryNameAlreadyExists
     }
 }
 
