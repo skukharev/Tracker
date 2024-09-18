@@ -13,10 +13,10 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     enum Constants {
         static let trackerNameContainerSpacing: CGFloat = 8
         static let trackerNameContainerLeadingConstraint: CGFloat = 16
-        static let trackerNamePlaceholderTitle = NSLocalizedString("trackerNamePlaceholderTitle", comment: "")
+        static let trackerNamePlaceholderTitle = L10n.trackerNamePlaceholderTitle
         static let trackerNameCornerRadius: CGFloat = 16
         static let trackerNameLeftViewFrame = CGRect(x: 0, y: 0, width: 16, height: 10)
-        static let trackerNameWarningLabelText = NSLocalizedString("trackerNameWarningLabelText", comment: "")
+        static let trackerNameWarningLabelText = L10n.trackerNameWarningLabelText
         static let trackerNameHeightConstraint: CGFloat = 75
         static let trackerButtonsTableViewSeparatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let trackerButtonsTableViewCornerRadius: CGFloat = 16
@@ -25,22 +25,22 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         static let trackerButtonsTableViewLeadingConstraint: CGFloat = 16
         static let trackerButtonsTableViewHeightForHabit: CGFloat = 150
         static let trackerButtonsTableViewHeightForEvent: CGFloat = 75
-        static let emojiLabelText = NSLocalizedString("emojiLabelText", comment: "")
+        static let emojiLabelText = L10n.emojiLabelText
         static let emojiLabelTopConstraint: CGFloat = 32
         static let emojiLabelLeadingConstraint: CGFloat = 28
-        static let colorsLabelText = NSLocalizedString("colorsLabelText", comment: "")
+        static let colorsLabelText = L10n.colorsLabelText
         static let colorsLabelTopConstraint: CGFloat = 16
         static let colorsLabelLeadingConstraint: CGFloat = 28
         static let buttonsContainerSpacing: CGFloat = 8
         static let buttonsContainerLeadingConstraint: CGFloat = 20
         static let buttonsContainerHeightConstraint: CGFloat = 60
-        static let cancelButtonTitle = NSLocalizedString("cancelButtonTitle", comment: "")
+        static let cancelButtonTitle = L10n.cancelButtonTitle
         static let cancelButtonCornerRadius: CGFloat = 16
         static let cancelButtonBorderWidth: CGFloat = 1
-        static let createButtonTitle = NSLocalizedString("createButtonTitle", comment: "")
+        static let createButtonTitle = L10n.createButtonTitle
         static let createButtonCornerRadius: CGFloat = 16
-        static let viewTitleForHabitText = NSLocalizedString("viewTitleForHabitText", comment: "")
-        static let viewTitleForEventText = NSLocalizedString("viewTitleForEventText", comment: "")
+        static let viewTitleForHabitText = L10n.viewTitleForHabitText
+        static let viewTitleForEventText = L10n.viewTitleForEventText
         static let viewTitleTopConstraint: CGFloat = 27
         static let controlsScrollViewTopConstraint: CGFloat = 38
     }

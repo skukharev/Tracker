@@ -9,23 +9,13 @@ import Foundation
 import UIKit
 
 final class SplashViewController: UIViewController {
-    // MARK: - Types
-
-    private enum Constants {
-        static let applicationLogoImageName = "AppLogo"
-    }
-
     // MARK: - Private Properties
 
     /// Логотип приложения
     private lazy var applicationLogo: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let appImage = UIImage(named: Constants.applicationLogoImageName) else {
-            assertionFailure("Ошибка загрузки логотипа приложения")
-            return image
-        }
-        image.image = appImage
+        image.image = Asset.appLogo.image
         image.contentMode = .center
         return image
     }()

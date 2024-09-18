@@ -12,12 +12,10 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     // MARK: - Types
 
     private enum Constants {
-        static let addTrackerButtonImageName = "AddTrackerImage"
-        static let trackersStubImageName = "TrackersStub"
         static let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
         static let trackersChooseDatePickerCornerRadius: CGFloat = 8
-        static let trackersStubImageLabelText = NSLocalizedString("trackersStubImageLabelText", comment: "")
-        static let trackersSearchBarPlaceholder = NSLocalizedString("trackersSearchBarPlaceholder", comment: "")
+        static let trackersStubImageLabelText = L10n.trackersStubImageLabelText
+        static let trackersSearchBarPlaceholder = L10n.trackersSearchBarPlaceholder
         static let trackersSearchBarLeadingConstraint: CGFloat = 16
         static let trackersStubImageWidthConstraint: CGFloat = 80
         static let trackersStubImageLabelTopConstraint: CGFloat = 8
@@ -31,7 +29,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: Constants.addTrackerButtonImageName), for: .normal)
+        button.setImage(Asset.Images.addTrackerImage.image, for: .normal)
         button.tintColor = .appBlack
         button.addTarget(self, action: #selector(addTrackerTouchUpInside(_:)), for: .touchUpInside)
         button.accessibilityIdentifier = "AddTracker"
@@ -61,11 +59,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var trackersStubImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let stubImage = UIImage(named: Constants.trackersStubImageName) else {
-            assertionFailure("Ошибка загрузки логотипа заглушки")
-            return image
-        }
-        image.image = stubImage
+        image.image = Asset.Images.trackersStub.image
         image.contentMode = .center
         return image
     }()
@@ -182,7 +176,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let window = UIApplication.shared.windows.first { $0.isKeyWindow }
         window?.backgroundColor = .appWhite
         /// Панель навигации
-        navigationItem.title = GlobalConstants.trackersTabBarItemTitle
+        navigationItem.title = L10n.trackersTabBarItemTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)

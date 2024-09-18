@@ -17,12 +17,8 @@ enum GlobalConstants {
     static let ypMedium16 = UIFont.systemFont(ofSize: 16, weight: .medium)
     static let ypMedium12 = UIFont.systemFont(ofSize: 12, weight: .medium)
     static let ypMedium10 = UIFont.systemFont(ofSize: 10, weight: .medium)
-    static let doneButton = UIImage(named: "DoneButton") ?? UIImage()
+    static let doneButton = Asset.doneButton.image
     static let plusButton = UIImage(systemName: "plus") ?? UIImage()
-    static let onboardingPage1Image = UIImage(named: "OnboardingPage1") ?? UIImage()
-    static let onboardingPage2Image = UIImage(named: "OnboardingPage2") ?? UIImage()
-    static let trackersTabBarItemTitle = NSLocalizedString("trackersTabBarItemTitle", comment: "")
-    static let trackersTabBarImageName = "TrackersTabBarImage"
-    static let statisticsTabBarImageName = "StatisticsTabBarImage"
-    static let statisticsTabBarItemTitle = NSLocalizedString("statisticsTabBarItemTitle", comment: "")
+    static let onboardingPage1Image = Asset.Images.onboardingPage1.image
+    static let onboardingPage2Image = Asset.Images.onboardingPage2.image
 }

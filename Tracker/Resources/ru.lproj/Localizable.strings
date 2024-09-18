@@ -1,0 +1,60 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Сергей Кухарев on 18.09.2024.
+  
+*/
+"addCategoryButtonTitle" = "Добавить категорию";
+"addEventButtonTitle" = "Нерегулярное событие";
+"addHabitButtonTitle" = "Привычка";
+"buttonOKTitle" = "OK";
+"cancelButtonTitle" = "Отменить";
+"categoriesStubImageLabelText" = "Привычки и события можно\\nобъединить по смыслу";
+"categoriesTableViewDeleteActionText" = "Удалить";
+"categoriesTableViewEditActionText" = "Редактировать";
+"categoryNamePlaceholder" = "Введите название категории";
+"colorsLabelText" = "Цвет";
+"confirmCategoryDeleteAlertMessage" = "Эта категория точно не нужна?";
+"confirmCategoryDeleteAlertNoButtonText" = "Отменить";
+"confirmCategoryDeleteAlertYesButtonText" = "Удалить";
+"createButtonTitle" = "Создать";
+"cvcViewTitleText" = "Категория";
+"deleteCategoryDenyAlertMessage" = "Для категории определены трекеры, поэтому её удаление ограничено";
+"deleteCategoryDenyAlertTitle" = "Действие ограничено";
+"emojiLabelText" = "Emoji";
+"everyDayTitle" = "Каждый день";
+"fridayShortening" = "Пт";
+"fridayTitle" = "Пятница";
+"launchApplicationButtonTitle" = "Вот это технологии!";
+"monadyShortening" = "Пн";
+"mondayTitle" = "Понедельник";
+"onboardingPage1Title" = "Отслеживайте только то, что хотите";
+"onboardingPage2Title" = "Даже если это не литры воды и йога";
+"readyButtonTitle" = "Готово";
+"saturdayShortening" = "Сб";
+"saturdayTitle" = "Суббота";
+"saveButtonTitle" = "Готово";
+"statisticsStubImageLabelText" = "Анализировать пока нечего";
+"statisticsTabBarItemTitle" = "Статистика";
+"sundayShortening" = "Вс";
+"sundayTitle" = "Воскресенье";
+"svcViewTitleText" = "Расписание";
+"thursdayShortening" = "Чт";
+"thursdayTitle" = "Четверг";
+"trackerButtonCellCategoryTitle" = "Категория";
+"trackerButtonCellScheduleTitle" = "Расписание";
+"trackerNamePlaceholderTitle" = "Введите название трекера";
+"trackerNameWarningLabelText" = "Ограничение 38 символов";
+"trackersSearchBarPlaceholder" = "Поиск";
+"trackersStubImageLabelText" = "Что будем отслеживать?";
+"trackersTabBarItemTitle" = "Трекеры";
+"tuesdayShortening" = "Вт";
+"tuesdayTitle" = "Вторник";
+"viewTitleForEventText" = "Новое нерегулярное событие";
+"viewTitleForHabitText" = "Новая привычка";
+"viewTitleText" = "Создание трекера";
+"viewTitleTextForEditCategory" = "Редактирование категории";
+"viewTitleTextForNewCategory" = "Новая категория";
+"wednesdayShortening" = "Ср";
+"wednesdayTitle" = "Среда";

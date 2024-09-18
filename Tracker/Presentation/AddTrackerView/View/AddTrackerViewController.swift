@@ -11,11 +11,11 @@ final class AddTrackerViewController: UIViewController, AddTrackerViewController
     // MARK: - Types
 
     enum Constants {
-        static let viewTitleText = NSLocalizedString("viewTitleText", comment: "")
+        static let viewTitleText = L10n.viewTitleText
         static let viewTitleTopConstraint: CGFloat = 27
-        static let addHabitButtonTitle = NSLocalizedString("addHabitButtonTitle", comment: "")
+        static let addHabitButtonTitle = L10n.addHabitButtonTitle
         static let addHabitButtonCornerRadius: CGFloat = 16
-        static let addEventButtonTitle = NSLocalizedString("addEventButtonTitle", comment: "")
+        static let addEventButtonTitle = L10n.addEventButtonTitle
         static let addEventButtonCornerRadius: CGFloat = 16
         static let buttonsContainerLeadingConstraint: CGFloat = 20
         static let buttonsContainerHeightConstraint: CGFloat = 136

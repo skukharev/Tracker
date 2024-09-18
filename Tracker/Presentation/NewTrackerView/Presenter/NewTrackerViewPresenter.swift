@@ -15,17 +15,16 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     }
 
     enum Constants {
-        static let colorAssetsPrefix = "App Color Section "
-        static let trackerButtonCellCategoryTitle = NSLocalizedString("trackerButtonCellCategoryTitle", comment: "")
-        static let trackerButtonCellScheduleTitle = NSLocalizedString("trackerButtonCellScheduleTitle", comment: "")
-        static let everyDayTitle = NSLocalizedString("everyDayTitle", comment: "")
-        static let monadyShortening = NSLocalizedString("monadyShortening", comment: "")
-        static let tuesdayShortening = NSLocalizedString("tuesdayShortening", comment: "")
-        static let wednesdayShortening = NSLocalizedString("wednesdayShortening", comment: "")
-        static let thursdayShortening = NSLocalizedString("thursdayShortening", comment: "")
-        static let fridayShortening = NSLocalizedString("fridayShortening", comment: "")
-        static let saturdayShortening = NSLocalizedString("saturdayShortening", comment: "")
-        static let sundayShortening = NSLocalizedString("sundayShortening", comment: "")
+        static let trackerButtonCellCategoryTitle = L10n.trackerButtonCellCategoryTitle
+        static let trackerButtonCellScheduleTitle = L10n.trackerButtonCellScheduleTitle
+        static let everyDayTitle = L10n.everyDayTitle
+        static let monadyShortening = L10n.monadyShortening
+        static let tuesdayShortening = L10n.tuesdayShortening
+        static let wednesdayShortening = L10n.wednesdayShortening
+        static let thursdayShortening = L10n.thursdayShortening
+        static let fridayShortening = L10n.fridayShortening
+        static let saturdayShortening = L10n.saturdayShortening
+        static let sundayShortening = L10n.sundayShortening
     }
 
     // MARK: - Constants
@@ -35,9 +34,24 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     let colors = {
         var colors: [UIColor] = []
-        for i in 1...18 {
-            colors.append(UIColor(named: Constants.colorAssetsPrefix + i.intToString) ?? .appColorSection1)
-        }
+        colors.append(Asset.Colors.ColorSections.appColorSection1.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection2.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection3.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection4.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection5.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection6.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection7.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection8.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection9.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection10.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection11.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection12.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection13.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection14.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection15.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection16.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection17.color)
+        colors.append(Asset.Colors.ColorSections.appColorSection18.color)
         return colors
     }()
 

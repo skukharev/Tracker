@@ -17,7 +17,7 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
         /// Параметры кнопки "Вот это технологии!"
         static let launchApplicationButtonFont = GlobalConstants.ypMedium16
         static let launchApplicationButtonTitleColor: UIColor = .white
-        static let launchApplicationButtonTitle = NSLocalizedString("launchApplicationButtonTitle", comment: "")
+        static let launchApplicationButtonTitle = L10n.launchApplicationButtonTitle
         static let launchApplicationButtonCornerRadius: CGFloat = 16
         static let launchApplicationButtonBackgroundColor: UIColor = .appBlackUniversal
         static let launchApplicationButtonBottomConstraint: CGFloat = 50

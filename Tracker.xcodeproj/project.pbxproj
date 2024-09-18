@@ -31,6 +31,8 @@
 		0726980D2C91872C00386B3F /* NewCategoryScreenAssembley.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0726980C2C91872C00386B3F /* NewCategoryScreenAssembley.swift */; };
 		0726980F2C91882C00386B3F /* NewCategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0726980E2C91882C00386B3F /* NewCategoryModel.swift */; };
 		072698132C91AAD700386B3F /* TrackerCategoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072698122C91AAD700386B3F /* TrackerCategoryError.swift */; };
+		072C09782C9ACE3000273BFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 072C09762C9ACE3000273BFB /* Localizable.strings */; };
+		072C097C2C9AD3E700273BFB /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C097B2C9AD3E700273BFB /* Strings+Generated.swift */; };
 		073C8C232C6A2F10006D8E7D /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */; };
 		073C8C252C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */; };
 		073C8C272C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */; };
@@ -79,7 +81,7 @@
 		079432D92C561F6200DDCE10 /* StatisticsViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432D82C561F6200DDCE10 /* StatisticsViewPresenter.swift */; };
 		079432DB2C561F7C00DDCE10 /* StatisticsViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */; };
 		079432DD2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */; };
-		07A21C252C96B8EC00BEA576 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */; };
+		079486622C99A83D00E875A1 /* XCAssets+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079486612C99A83D00E875A1 /* XCAssets+Generated.swift */; };
 		07A21C272C97FFFD00BEA576 /* DaysFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */; };
 		07A8C48D2C7F2816002EC584 /* TrackerStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */; };
 		07AA9E9D2C85BCC4005C3724 /* TrackerStoreUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */; };
@@ -131,6 +133,9 @@
 		0726980C2C91872C00386B3F /* NewCategoryScreenAssembley.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryScreenAssembley.swift; sourceTree = "<group>"; };
 		0726980E2C91882C00386B3F /* NewCategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCategoryModel.swift; sourceTree = "<group>"; };
 		072698122C91AAD700386B3F /* TrackerCategoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryError.swift; sourceTree = "<group>"; };
+		072C09772C9ACE3000273BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		072C097A2C9ACE8600273BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		072C097B2C9AD3E700273BFB /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
 		073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
 		073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenter.swift; sourceTree = "<group>"; };
 		073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -181,7 +186,7 @@
 		079432D82C561F6200DDCE10 /* StatisticsViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenter.swift; sourceTree = "<group>"; };
 		079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewProtocol.swift; sourceTree = "<group>"; };
 		079432DC2C561F8F00DDCE10 /* StatisticsViewPresenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewPresenterDelegate.swift; sourceTree = "<group>"; };
-		07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		079486612C99A83D00E875A1 /* XCAssets+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCAssets+Generated.swift"; sourceTree = "<group>"; };
 		07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysFormatter.swift; sourceTree = "<group>"; };
 		07A8C48C2C7F2816002EC584 /* TrackerStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreProtocol.swift; sourceTree = "<group>"; };
 		07AA9E9C2C85BCC4005C3724 /* TrackerStoreUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStoreUpdate.swift; sourceTree = "<group>"; };
@@ -189,7 +194,6 @@
 		07ADBA872C67D62B000BC87F /* UIImpactFeedbackGenerator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImpactFeedbackGenerator+Extensions.swift"; sourceTree = "<group>"; };
 		07ADBA892C67F822000BC87F /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		07C20A912C6E569D00463177 /* UITabBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Extensions.swift"; sourceTree = "<group>"; };
-		07D1B1ED2C612331003BCD19 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		07D1B20F2C627B5F003BCD19 /* Weekday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weekday.swift; sourceTree = "<group>"; };
 		07D1B2112C63A637003BCD19 /* TrackersCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersCollectionViewCell.swift; sourceTree = "<group>"; };
 		07D1B2132C63C544003BCD19 /* UICollectionViewCellGeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewCellGeometricParams.swift; sourceTree = "<group>"; };
@@ -612,6 +616,7 @@
 				079432BC2C54EA1C00DDCE10 /* Presentation */,
 				079432BD2C54EA5C00DDCE10 /* Resources */,
 				079432BE2C54EB9300DDCE10 /* Services */,
+				079486632C99A84A00E875A1 /* Swiftgen */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -669,7 +674,7 @@
 				079432AF2C54D55B00DDCE10 /* Assets.xcassets */,
 				079432B42C54D55B00DDCE10 /* Info.plist */,
 				079432B12C54D55B00DDCE10 /* LaunchScreen.storyboard */,
-				07A21C242C96B8EC00BEA576 /* Localizable.xcstrings */,
+				072C09762C9ACE3000273BFB /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -729,6 +734,15 @@
 				079432DA2C561F7C00DDCE10 /* StatisticsViewProtocol.swift */,
 			);
 			path = Presenter;
+			sourceTree = "<group>";
+		};
+		079486632C99A84A00E875A1 /* Swiftgen */ = {
+			isa = PBXGroup;
+			children = (
+				072C097B2C9AD3E700273BFB /* Strings+Generated.swift */,
+				079486612C99A83D00E875A1 /* XCAssets+Generated.swift */,
+			);
+			path = Swiftgen;
 			sourceTree = "<group>";
 		};
 		07A8C4862C7D9A58002EC584 /* Model */ = {
@@ -799,6 +813,7 @@
 				0794329F2C54D55900DDCE10 /* Sources */,
 				079432A02C54D55900DDCE10 /* Frameworks */,
 				079432A12C54D55900DDCE10 /* Resources */,
+				079486602C99A25D00E875A1 /* Swiftgen */,
 				079432BF2C54EEDB00DDCE10 /* Swiftlint */,
 			);
 			buildRules = (
@@ -830,9 +845,9 @@
 			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				ru,
+				en,
 			);
 			mainGroup = 0794329A2C54D55900DDCE10;
 			productRefGroup = 079432A42C54D55900DDCE10 /* Products */;
@@ -850,8 +865,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				079432B02C54D55B00DDCE10 /* Assets.xcassets in Resources */,
+				072C09782C9ACE3000273BFB /* Localizable.strings in Resources */,
 				079432B32C54D55B00DDCE10 /* Base in Resources */,
-				07A21C252C96B8EC00BEA576 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -875,7 +890,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\nif which swiftlint > /dev/null; then\n    if [ -e \"$HOME/Library/Mobile Documents/com~apple~CloudDocs/Projects/swift-style-guide/com.raywenderlich.swiftlint.yml\" ]; then\n        swiftlint --no-cache --config \"$HOME/Library/Mobile Documents/com~apple~CloudDocs/Projects/swift-style-guide/com.raywenderlich.swiftlint.yml\"\n    else  \n        swiftlint\n    fi\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\nif which swiftlint > /dev/null; then\n    if [ -e \".swiftlint.yml\" ]; then\n        swiftlint --no-cache --config \".swiftlint.yml\"\n    else  \n        swiftlint\n    fi\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		079486602C99A25D00E875A1 /* Swiftgen */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftgen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:$PATH\"\nif which swiftgen >/dev/null; then\n  swiftgen\nelse\n  echo \"warning: SwiftGen not installed, download it from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -914,6 +948,7 @@
 				0772CAE92C74EFA400EDC654 /* NewTrackerEmojiCell.swift in Sources */,
 				07D989782C69018C00CF9B3E /* AddTrackerViewPresenterProtocol.swift in Sources */,
 				072697E82C8F3CFB00386B3F /* CategoriesViewController.swift in Sources */,
+				079486622C99A83D00E875A1 /* XCAssets+Generated.swift in Sources */,
 				07D989742C68FB6D00CF9B3E /* AddTrackerViewController.swift in Sources */,
 				07D1B2182C63D671003BCD19 /* TrackersCellViewModel.swift in Sources */,
 				07D989722C68764500CF9B3E /* TrackersCollectionHeaderView.swift in Sources */,
@@ -969,6 +1004,7 @@
 				07D989762C68FC6400CF9B3E /* AddTrackerViewPresenter.swift in Sources */,
 				072698092C9185E100386B3F /* NewCategoryViewModel.swift in Sources */,
 				0772CAEB2C75E5C100EDC654 /* NewTrackerViewController+Extensions.swift in Sources */,
+				072C097C2C9AD3E700273BFB /* Strings+Generated.swift in Sources */,
 				07612F6E2C8E268D00B4B563 /* OnboardingViewPresenter.swift in Sources */,
 				079432CD2C5614D500DDCE10 /* TrackersViewController.swift in Sources */,
 				079432CF2C56159400DDCE10 /* StatisticsViewController.swift in Sources */,
@@ -984,11 +1020,19 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		072C09762C9ACE3000273BFB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				072C09772C9ACE3000273BFB /* ru */,
+				072C097A2C9ACE8600273BFB /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		079432B12C54D55B00DDCE10 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				079432B22C54D55B00DDCE10 /* Base */,
-				07D1B1ED2C612331003BCD19 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

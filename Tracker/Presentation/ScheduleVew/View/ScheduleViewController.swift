@@ -11,14 +11,14 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
     // MARK: - Types
 
     enum Constants {
-        static let svcViewTitleText = NSLocalizedString("svcViewTitleText", comment: "")
+        static let svcViewTitleText = L10n.svcViewTitleText
         static let scheduleTableViewSeparatorInsetsTop: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsLeft: CGFloat = 16
         static let scheduleTableViewSeparatorInsetsBottom: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsRight: CGFloat = 16
         static let scheduleTableViewCornerRadius: CGFloat = 16
         static let scheduleTableViewRowHeight: CGFloat = 75
-        static let readyButtonTitle = NSLocalizedString("readyButtonTitle", comment: "")
+        static let readyButtonTitle = L10n.readyButtonTitle
         static let readyButtonCornerRadius: CGFloat = 16
         static let viewTitleTopConstraint: CGFloat = 27
         static let scheduleTableViewTopConstraint: CGFloat = 30

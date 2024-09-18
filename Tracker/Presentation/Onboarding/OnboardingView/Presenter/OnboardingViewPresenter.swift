@@ -11,8 +11,8 @@ final class OnboardingViewPresenter: OnboardingViewPresenterProtocol {
     // MARK: - Types
 
     enum Constants {
-        static let onboardingPage1Title = NSLocalizedString("onboardingPage1Title", comment: "")
-        static let onboardingPage2Title = NSLocalizedString("onboardingPage2Title", comment: "")
+        static let onboardingPage1Title = L10n.onboardingPage1Title
+        static let onboardingPage2Title = L10n.onboardingPage2Title
     }
 
     // MARK: - Public Properties

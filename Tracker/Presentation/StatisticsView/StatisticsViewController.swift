@@ -12,8 +12,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
     // MARK: - Types
 
     enum Constants {
-        static let statisticsStubImageName = "StatisticsStub"
-        static let statisticsStubImageLabelText = NSLocalizedString("statisticsStubImageLabelText", comment: "")
+        static let statisticsStubImageLabelText = L10n.statisticsStubImageLabelText
         static let statisticsStubImageWidthConstraint: CGFloat = 80
         static let statisticsStubImageLabelTopConstraint: CGFloat = 8
     }
@@ -26,11 +25,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
     private lazy var statisticsStubImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let stubImage = UIImage(named: Constants.statisticsStubImageName) else {
-            assertionFailure("Ошибка загрузки логотипа заглушки")
-            return image
-        }
-        image.image = stubImage
+        image.image = Asset.Images.statisticsStub.image
         image.contentMode = .center
         return image
     }()
@@ -66,7 +61,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
         /// Панель навигации
-        navigationItem.title = GlobalConstants.statisticsTabBarItemTitle
+        navigationItem.title = L10n.statisticsTabBarItemTitle
         navigationController?.navigationBar.prefersLargeTitles = true
         /// Элементы управления
         view.addSubviews([statisticsStubImage, statisticsStubImageLabel])
