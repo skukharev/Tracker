@@ -132,11 +132,13 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         }
         trackersStubImage.isHidden = false
         trackersStubImageLabel.isHidden = false
+        trackersCollection.isHidden = true
     }
 
     func showTrackersList() {
         hideTrackersListStub()
         trackersCollection.reloadData()
+        trackersCollection.isHidden = false
     }
 
     func updateTrackersCollection(at indexPaths: TrackerStoreUpdate) {
