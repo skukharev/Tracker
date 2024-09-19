@@ -21,4 +21,5 @@ enum GlobalConstants {
     static let plusButton = UIImage(systemName: "plus") ?? UIImage()
     static let onboardingPage1Image = Asset.Images.onboardingPage1.image
     static let onboardingPage2Image = Asset.Images.onboardingPage2.image
+    static let yandexMetrikaApi = "fa4a8538-f2c7-4ddf-a421-b371bc8b1cd4"
 }

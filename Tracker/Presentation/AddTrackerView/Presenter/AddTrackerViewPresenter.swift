@@ -16,10 +16,14 @@ final class AddTrackerViewPresenter: AddTrackerViewPresenterProtocol {
     // MARK: - Public Methods
 
     func addHabit() {
+        let params: AnalyticsEventParam = ["tracker_type": "habit"]
+        AnalyticsService.report(event: "AddTracker", params: params)
         showNewTrackerViewController(withTrackerType: .habit)
     }
 
     func addEvent() {
+        let params: AnalyticsEventParam = ["tracker_type": "event"]
+        AnalyticsService.report(event: "AddTracker", params: params)
         showNewTrackerViewController(withTrackerType: .event)
     }
 

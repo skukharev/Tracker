@@ -55,6 +55,8 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     // MARK: - Public Methods
 
     func addTracker() {
+        let params: AnalyticsEventParam = ["tracker_type": "init"]
+        AnalyticsService.report(event: "AddTracker", params: params)
         guard let viewController = viewController as? UIViewController else { return }
         let targetViewController = AddTrackerScreenAssembley.build(withDelegate: self)
         let router = Router(viewController: viewController, targetViewController: targetViewController)
@@ -141,6 +143,8 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
     func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
         if let categoryID = trackerCategoryStore.addTrackerCategory(withName: trackerCategory) {
             _ = trackerStore.addTracker(tracker, withCategoryID: categoryID)
+            let params: AnalyticsEventParam = ["tracker_type": "success"]
+            AnalyticsService.report(event: "AddTracker", params: params)
         }
     }
 }

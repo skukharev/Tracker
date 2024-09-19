@@ -33,6 +33,11 @@
 		072698132C91AAD700386B3F /* TrackerCategoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072698122C91AAD700386B3F /* TrackerCategoryError.swift */; };
 		072C09782C9ACE3000273BFB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 072C09762C9ACE3000273BFB /* Localizable.strings */; };
 		072C097C2C9AD3E700273BFB /* Strings+Generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C097B2C9AD3E700273BFB /* Strings+Generated.swift */; };
+		072C09AC2C9C51A200273BFB /* AppMetricaAdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09AB2C9C51A200273BFB /* AppMetricaAdSupport */; };
+		072C09AE2C9C51A200273BFB /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09AD2C9C51A200273BFB /* AppMetricaCore */; };
+		072C09B02C9C51A200273BFB /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09AF2C9C51A200273BFB /* AppMetricaCrashes */; };
+		072C09B22C9C51A200273BFB /* AppMetricaLibraryAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09B12C9C51A200273BFB /* AppMetricaLibraryAdapter */; };
+		072C09B42C9C542C00273BFB /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C09B32C9C542C00273BFB /* AnalyticsService.swift */; };
 		073C8C232C6A2F10006D8E7D /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */; };
 		073C8C252C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */; };
 		073C8C272C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */; };
@@ -136,6 +141,7 @@
 		072C09772C9ACE3000273BFB /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		072C097A2C9ACE8600273BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		072C097B2C9AD3E700273BFB /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
+		072C09B32C9C542C00273BFB /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
 		073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenter.swift; sourceTree = "<group>"; };
 		073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -218,6 +224,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				072C09B22C9C51A200273BFB /* AppMetricaLibraryAdapter in Frameworks */,
+				072C09B02C9C51A200273BFB /* AppMetricaCrashes in Frameworks */,
+				072C09AC2C9C51A200273BFB /* AppMetricaAdSupport in Frameworks */,
+				072C09AE2C9C51A200273BFB /* AppMetricaCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -684,6 +694,7 @@
 			children = (
 				0700E1992C70B7EB00DAA89C /* Router.swift */,
 				07A21C262C97FFFD00BEA576 /* DaysFormatter.swift */,
+				072C09B32C9C542C00273BFB /* AnalyticsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -850,6 +861,9 @@
 				en,
 			);
 			mainGroup = 0794329A2C54D55900DDCE10;
+			packageReferences = (
+				072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
+			);
 			productRefGroup = 079432A42C54D55900DDCE10 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -962,6 +976,7 @@
 				079432D42C56183000DDCE10 /* TrackersViewPresenterDelegate.swift in Sources */,
 				07EA45A92C661D500074306C /* Int+Extensions.swift in Sources */,
 				079432C92C560F5300DDCE10 /* Constants.swift in Sources */,
+				072C09B42C9C542C00273BFB /* AnalyticsService.swift in Sources */,
 				079432A72C54D55900DDCE10 /* AppDelegate.swift in Sources */,
 				073C8C342C6D11F7006D8E7D /* UITableView+Extensions.swift in Sources */,
 				07612F722C8E290A00B4B563 /* OnboardingViewPresenterDelegate.swift in Sources */,
@@ -1251,6 +1266,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		072C09AB2C9C51A200273BFB /* AppMetricaAdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaAdSupport;
+		};
+		072C09AD2C9C51A200273BFB /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
+		072C09AF2C9C51A200273BFB /* AppMetricaCrashes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCrashes;
+		};
+		072C09B12C9C51A200273BFB /* AppMetricaLibraryAdapter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 072C09AA2C9C51A200273BFB /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaLibraryAdapter;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		0772CB1F2C77179F00EDC654 /* Database.xcdatamodeld */ = {

@@ -13,6 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         /// Регистрация трансформеров нестандартных типов данных Core Data
         UIColorToDataTransformer.register()
         _ = Database.shared.persistentContainer.viewContext
+        /// Подключение Yandex.Metrica
+        AnalyticsService.activate()
         return true
     }
 
