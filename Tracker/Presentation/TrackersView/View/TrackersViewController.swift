@@ -184,6 +184,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)
         /// Элементы управления
         view.addSubviews([trackersSearchBar, trackersCollection])
+        trackersSearchBar.delegate = self
         trackersCollection.register(TrackersCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackersCollectionHeaderView.Constants.identifier)
         trackersCollection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.Constants.identifier)
         trackersCollection.dataSource = self
@@ -380,5 +381,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
             verticalFittingPriority: .fittingSizeLevel
         )
         return headerSize
+    }
+}
+
+// MARK: - UISearchBarDelegate
+
+extension TrackersViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        presenter?.trackersFilter = searchText
     }
 }

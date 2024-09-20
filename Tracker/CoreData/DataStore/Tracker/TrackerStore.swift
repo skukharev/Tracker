@@ -161,7 +161,7 @@ extension TrackerStore: TrackerStoreProtocol {
         return fetchedResultsController.sections?[safe: section]?.name ?? ""
     }
 
-    func loadData(atDate currentDate: Date) {
+    func loadData(atDate currentDate: Date, withTrackerFilter filter: String?) {
         guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: currentDate) else {
             assertionFailure("Ошибка определения дня недели на основании текущей даты")
             return
@@ -170,9 +170,15 @@ extension TrackerStore: TrackerStoreProtocol {
         let scheduledTrackers = NSPredicate(format: "%K CONTAINS[c] %@", scheduleKeyPath, dayOfTheWeek.rawValue.intToString)
         let nonscheduledTrackers = NSPredicate(format: "%K = %@ AND SUBQUERY(%K, $X, $X.trackerId = SELF.id).@count = 0", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates))
         let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K = %@ AND ANY %K = %@", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
+        var compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
+        if
+            let filter = filter,
+            !filter.isEmpty {
+            let filteredTrackers = NSPredicate(format: "%K CONTAINS[c] %@", trackerNameKeyPath, filter)
+            let filteredCompoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, filteredTrackers])
+            compoundPredicate = filteredCompoundPredicate
+        }
         fetchedResultsController.fetchRequest.predicate = compoundPredicate
-
         do {
             try fetchedResultsController.performFetch()
         } catch {

@@ -13,6 +13,8 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var viewController: TrackersViewPresenterDelegate? { get set }
     /// Текущая дата трекеров
     var currentDate: Date { get set }
+    /// Текущий фильтр по трекерам
+    var trackersFilter: String? { get set }
     /// Запускает функционал по добавлению трекера
     func addTracker()
     /// В случае если трекер на текущую дату не выполнялся, то производит фиксацию выполнения трекера; и удаляет фиксацию выполнения трекера в противном случае

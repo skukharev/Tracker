@@ -19,13 +19,17 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     weak var viewController: TrackersViewPresenterDelegate?
 
-    /// Дата, на которую отображается коллекция трекеров
     public var currentDate: Date {
         get {
             return trackersDate
         }
         set {
             trackersDate = newValue.removeTimeStamp
+            loadTrackers()
+        }
+    }
+    public var trackersFilter: String? {
+        didSet {
             loadTrackers()
         }
     }
@@ -73,7 +77,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
             return
         }
         trackerRecordStore.processTracker(TrackerRecord(trackerId: trackerRecord.id, recordDate: currentDate))
-        trackerStore.loadData(atDate: currentDate)
+        loadTrackers()
         completion(.success(()))
     }
 
@@ -121,7 +125,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     /// Загружает трекеры из базы данных
     private func loadTrackers() {
-        trackerStore.loadData(atDate: currentDate)
+        trackerStore.loadData(atDate: currentDate, withTrackerFilter: trackersFilter)
         if trackerStore.numberOfCategories() == 0 {
             viewController?.showTrackersListStub()
         } else {
