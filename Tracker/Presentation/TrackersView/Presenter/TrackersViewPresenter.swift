@@ -30,6 +30,8 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
     public var trackersFilter: String? {
         didSet {
+            let params: AnalyticsEventParam = ["searchTracker": trackersFilter ?? ""]
+            AnalyticsService.report(event: "SearchTracker", params: params)
             loadTrackers()
         }
     }
