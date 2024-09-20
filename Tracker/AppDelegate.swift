@@ -10,10 +10,8 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        /// Регистрация трансформеров нестандартных типов данных Core Data
         UIColorToDataTransformer.register()
         _ = Database.shared.persistentContainer.viewContext
-        /// Подключение Yandex.Metrica
         AnalyticsService.activate()
         return true
     }
