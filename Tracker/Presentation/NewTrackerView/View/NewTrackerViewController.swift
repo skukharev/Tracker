@@ -7,10 +7,17 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterDelegate { // swiftlint:disable:this type_body_length
+// swiftlint:disable:next type_body_length
+final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterDelegate {
     // MARK: - Types
 
     enum Constants {
+        static let viewTitleFont = GlobalConstants.ypMedium16
+        static let viewTitleTextColor = UIColor.appBlack
+        static let trackerRepeatsTitleFont = GlobalConstants.ypBold32
+        static let trackerRepeatsTitleTextColor = UIColor.appBlack
+        static let trackerRepeatsTitleHeightConstraint: CGFloat = 38
+        static let trackerRepeatsFooterHeightConstraint: CGFloat = 24
         static let trackerNameContainerSpacing: CGFloat = 8
         static let trackerNameContainerLeadingConstraint: CGFloat = 16
         static let trackerNamePlaceholderTitle = L10n.trackerNamePlaceholderTitle
@@ -37,10 +44,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         static let cancelButtonTitle = L10n.cancelButtonTitle
         static let cancelButtonCornerRadius: CGFloat = 16
         static let cancelButtonBorderWidth: CGFloat = 1
-        static let createButtonTitle = L10n.createButtonTitle
-        static let createButtonCornerRadius: CGFloat = 16
-        static let viewTitleForHabitText = L10n.viewTitleForHabitText
-        static let viewTitleForEventText = L10n.viewTitleForEventText
+        static let saveButtonCornerRadius: CGFloat = 16
         static let viewTitleTopConstraint: CGFloat = 27
         static let controlsScrollViewTopConstraint: CGFloat = 38
     }
@@ -49,17 +53,14 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     var presenter: NewTrackerViewPresenterProtocol?
 
-    private(set) var trackerType: TrackerType?
-
     // MARK: - Private Properties
 
     /// Заголовок окна
     private lazy var viewTitle: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.font = GlobalConstants.ypMedium16
-        view.textColor = .appBlack
-        view.text = ""
+        view.font = Constants.viewTitleFont
+        view.textColor = Constants.viewTitleTextColor
         return view
     }()
     /// Панель с основными элементами управления
@@ -77,6 +78,24 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         view.axis = .vertical
         view.spacing = Constants.trackerNameContainerSpacing
         view.distribution = .fill
+        return view
+    }()
+    /// Заголовок с количеством повторений трекера (для привычек)
+    private lazy var trackerRepeatsTitle: UILabel = {
+        let view = UILabel()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.font = Constants.trackerRepeatsTitleFont
+        view.textColor = Constants.trackerRepeatsTitleTextColor
+        view.textAlignment = .center
+        view.isHidden = true
+        return view
+    }()
+    /// Подвал для заголовка с количеством повторений трекера (для привычек)
+    private lazy var trackerRepeatsFooter: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        view.isHidden = true
         return view
     }()
     /// Поле ввода "Наименование трекера"
@@ -185,16 +204,15 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         return view
     }()
     /// Кнопка "Создать"
-    private lazy var createButton: UIButton = {
+    private lazy var saveButton: UIButton = {
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setTitle(Constants.createButtonTitle, for: .normal)
         view.titleLabel?.font = GlobalConstants.ypMedium16
         view.contentVerticalAlignment = .center
         view.contentHorizontalAlignment = .center
-        view.layer.cornerRadius = Constants.createButtonCornerRadius
+        view.layer.cornerRadius = Constants.saveButtonCornerRadius
         view.layer.masksToBounds = true
-        view.addTarget(self, action: #selector(createButtonTouchUpInside(_:)), for: .touchUpInside)
+        view.addTarget(self, action: #selector(saveButtonTouchUpInside(_:)), for: .touchUpInside)
         return view
     }()
     /// Параметры отображения элементов управления в зависимости от типа устройства, на котором запущено приложение
@@ -211,6 +229,8 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             )
         }
     }
+    private var emojiIndexPath: IndexPath?
+    private var colorIndexPath: IndexPath?
 
     // MARK: - Initializers
 
@@ -232,6 +252,22 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         createAndLayoutViews()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if let emojiIndexPath = emojiIndexPath {
+            emojiCollectionView.performBatchUpdates(nil) { _ in
+                self.emojiCollectionView.selectItem(at: emojiIndexPath, animated: false, scrollPosition: .centeredVertically)
+                self.emojiCollectionView.delegate?.collectionView?(self.emojiCollectionView, didSelectItemAt: emojiIndexPath)
+            }
+        }
+        if let colorIndexPath = colorIndexPath {
+            colorsCollectionView.performBatchUpdates(nil) { _ in
+                self.colorsCollectionView.selectItem(at: colorIndexPath, animated: false, scrollPosition: .centeredVertically)
+                self.colorsCollectionView.delegate?.collectionView?(self.colorsCollectionView, didSelectItemAt: colorIndexPath)
+            }
+        }
+    }
+
     // MARK: - Public Methods
 
     func showTrackersNameViolation() {
@@ -243,26 +279,46 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     }
 
     func setCreateButtonEnable() {
-        createButton.backgroundColor = .appEnabledCreateButtonBackground
-        createButton.setTitleColor(.appEnabledCreateButtonText, for: .normal)
+        saveButton.backgroundColor = .appEnabledCreateButtonBackground
+        saveButton.setTitleColor(.appEnabledCreateButtonText, for: .normal)
     }
 
     func setCreateButtonDisable() {
-        createButton.backgroundColor = .appGray
-        createButton.setTitleColor(.white, for: .normal)
+        saveButton.backgroundColor = .appGray
+        saveButton.setTitleColor(.white, for: .normal)
     }
 
-    /// Конфигурирует представление в зависимости от типа добавляемого трекера
-    /// - Parameter trackerType: Тип трекера
-    func setupViewsWithTrackerType(trackerType: TrackerType) {
-        self.trackerType = trackerType
+    func setColor(at indexPath: IndexPath) {
+        colorIndexPath = indexPath
+    }
 
+    func setEmoji(at indexPath: IndexPath) {
+        emojiIndexPath = indexPath
+    }
+
+    func setSaveButtonTitle(_ title: String) {
+        saveButton.setTitle(title, for: .normal)
+    }
+
+    func setTrackerName(_ text: String) {
+        trackerName.text = text
+    }
+
+    func setTrackerRepeatsCountTitle(_ title: String) {
+        trackerRepeatsTitle.text = title
+        trackerRepeatsTitle.isHidden = false
+        trackerRepeatsFooter.isHidden = false
+    }
+
+    func setViewControllerTitle(_ title: String) {
+        viewTitle.text = title
+    }
+
+    func setupViewsWithTrackerType(trackerType: TrackerType) {
         switch trackerType {
         case .habit:
-            viewTitle.text = Constants.viewTitleForHabitText
             trackerButtonsTableView.heightAnchor.constraint(equalToConstant: Constants.trackerButtonsTableViewHeightForHabit).isActive = true
         case .event:
-            viewTitle.text = Constants.viewTitleForEventText
             trackerButtonsTableView.heightAnchor.constraint(equalToConstant: Constants.trackerButtonsTableViewHeightForEvent).isActive = true
         }
     }
@@ -270,7 +326,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     func updateButtonsPanel() {
         let categoryButtonPath = IndexPath(row: 0, section: 0)
         var buttonsPath = [categoryButtonPath]
-        if trackerType == .habit {
+        if presenter?.trackerType == .habit {
             let scheduleButtonPath = IndexPath(row: 1, section: 0)
             buttonsPath.append(scheduleButtonPath)
         }
@@ -282,10 +338,12 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     /// Создаёт и размещает элементы управления во вью контроллере
     private func createAndLayoutViews() {
         view.backgroundColor = .appWhite
+        trackerNameContainer.addArrangedSubview(trackerRepeatsTitle)
+        trackerNameContainer.addArrangedSubview(trackerRepeatsFooter)
         trackerNameContainer.addArrangedSubview(trackerName)
         trackerNameContainer.addArrangedSubview(trackerNameWarningLabel)
         buttonsContainer.addArrangedSubview(cancelButton)
-        buttonsContainer.addArrangedSubview(createButton)
+        buttonsContainer.addArrangedSubview(saveButton)
         controlsScrollView.addSubviews([trackerNameContainer, trackerButtonsTableView, emojiLabel, emojiCollectionView, colorsLabel, colorsCollectionView, buttonsContainer])
         view.addSubviews([viewTitle, controlsScrollView])
         setupConstraints()
@@ -302,7 +360,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     /// Обработчик нажатия кнопки "Создать"
     /// - Parameter sender: объект, инициирующий событие
-    @objc private func createButtonTouchUpInside(_ sender: UIButton) {
+    @objc private func saveButtonTouchUpInside(_ sender: UIButton) {
         let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
         impact.impactOccurred()
         presenter?.saveTracker { [weak self] result in
@@ -332,8 +390,16 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
             trackerNameContainer.topAnchor.constraint(equalTo: controlsScrollView.topAnchor),
             trackerNameContainer.leadingAnchor.constraint(equalTo: controlsScrollView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.trackerNameContainerLeadingConstraint),
             trackerNameContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.trackerNameContainerLeadingConstraint),
+            /// Заголовок с количеством повторений трекера
+            trackerRepeatsTitle.topAnchor.constraint(equalTo: trackerNameContainer.topAnchor),
+            trackerRepeatsTitle.leadingAnchor.constraint(equalTo: trackerNameContainer.leadingAnchor),
+            trackerRepeatsTitle.trailingAnchor.constraint(equalTo: trackerNameContainer.trailingAnchor),
+            trackerRepeatsTitle.heightAnchor.constraint(equalToConstant: Constants.trackerRepeatsTitleHeightConstraint),
+            /// Подвал заголовка с количеством повторений трекера
+            trackerRepeatsFooter.leadingAnchor.constraint(equalTo: trackerNameContainer.leadingAnchor),
+            trackerRepeatsFooter.trailingAnchor.constraint(equalTo: trackerNameContainer.trailingAnchor),
+            trackerRepeatsFooter.heightAnchor.constraint(equalToConstant: Constants.trackerRepeatsTitleHeightConstraint),
             /// Поле ввода "Наименование трекера"
-            trackerName.topAnchor.constraint(equalTo: trackerNameContainer.topAnchor),
             trackerName.leadingAnchor.constraint(equalTo: trackerNameContainer.leadingAnchor),
             trackerName.trailingAnchor.constraint(equalTo: trackerNameContainer.trailingAnchor),
             trackerName.heightAnchor.constraint(equalToConstant: Constants.trackerNameHeightConstraint),
@@ -374,6 +440,6 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     /// Обработчик изменения значения текстового поля ввода "Наименование трекера"
     /// - Parameter sender: объект, инициировавший событие
     @objc private func trackerNameEditingDidChange(_ sender: UITextField) {
-        presenter?.processTrackersName(sender.text)
+        presenter?.processName(sender.text)
     }
-}
+} // swiftlint:disable:this file_length

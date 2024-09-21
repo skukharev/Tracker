@@ -15,7 +15,6 @@ final class TrackerCategoryStore: NSObject {
     private let trackerCategoryNameKeyPath = #keyPath(TrackerCategoryCoreData.name)
     static let shared = TrackerCategoryStore()
 
-
     // MARK: - Public Properties
 
     weak var delegate: TrackerCategoryStoreDelegate?

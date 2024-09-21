@@ -19,7 +19,7 @@ final class ScheduleViewPresenter: NSObject, ScheduleViewPresenterProtocol {
     // MARK: - Public Methods
 
     func needSaveSchedule() {
-        delegate?.updateTrackerSchedule(with: schedule)
+        delegate?.processSchedule(schedule)
     }
 
     func configureScheduleCell(for cell: ScheduleCell, with indexPath: IndexPath) {

@@ -16,9 +16,8 @@ extension NewTrackerViewController: UITableViewDataSource {
     ///   - section: индекс секции, для которой запрашивается количество кнопок
     /// - Returns: Количество кнопок на панели
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let trackerType = presenter?.trackerType else { return 0 }
         switch trackerType {
-        case .none:
-            return 0
         case .habit:
             return 2
         case .event:

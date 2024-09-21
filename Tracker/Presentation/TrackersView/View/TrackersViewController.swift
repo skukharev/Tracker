@@ -5,13 +5,12 @@
 //  Created by Сергей Кухарев on 28.07.2024.
 //
 
-import Foundation
 import UIKit
 
 final class TrackersViewController: UIViewController, TrackersViewPresenterDelegate {
     // MARK: - Types
 
-    private enum Constants {
+    internal enum Constants {
         static let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
         static let trackersChooseDatePickerCornerRadius: CGFloat = 8
         static let trackersStubImageLabelText = L10n.trackersStubImageLabelText
@@ -20,6 +19,9 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         static let trackersStubImageWidthConstraint: CGFloat = 80
         static let trackersStubImageLabelTopConstraint: CGFloat = 8
         static let trackersCollectionTopConstraint: CGFloat = 10
+        static let confirmTrackerDeleteAlertMessage = L10n.confirmTrackerDeleteAlertMessage
+        static let confirmTrackerDeleteAlertNoButtonText = L10n.confirmTrackerDeleteAlertNoButtonText
+        static let confirmTrackerDeleteAlertYesButtonText = L10n.confirmTrackerDeleteAlertYesButtonText
     }
 
     // MARK: - Private Properties
@@ -81,7 +83,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         return view
     }()
     /// Коллекция трекеров
-    private lazy var trackersCollection: UICollectionView = {
+    internal lazy var trackersCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -98,8 +100,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         presenter?.currentDate = Date()
     }
 
-    /// Используется для связи вью контроллера с презентером
-    /// - Parameter presenter: презентер вью контроллера
     func configure(_ presenter: TrackersViewPresenterProtocol) {
         self.presenter = presenter
         presenter.viewController = self
@@ -143,17 +143,28 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     func updateTrackersCollection(at indexPaths: TrackerStoreUpdate) {
         trackersCollection.performBatchUpdates {
-            if let insertedSectionIndexes = indexPaths.insertedSectionIndexes {
-                trackersCollection.insertSections(insertedSectionIndexes)
-            }
-            if let deletedSectionIndexes = indexPaths.deletedSectionIndexes {
+            if let deletedSectionIndexes = indexPaths.deletedSectionIndexes, !deletedSectionIndexes.isEmpty {
                 trackersCollection.deleteSections(deletedSectionIndexes)
+            }
+            if !indexPaths.deletedPaths.isEmpty {
+                trackersCollection.deleteItems(at: indexPaths.deletedPaths)
+            }
+            if !indexPaths.movedPaths.isEmpty {
+                indexPaths.movedPaths.forEach {
+                    if $0.0 != $0.1 {
+                        trackersCollection.moveItem(at: $0.0, to: $0.1)
+                    }
+                    trackersCollection.reloadItems(at: [$0.1])
+                }
+            }
+            if let insertedSectionIndexes = indexPaths.insertedSectionIndexes, !insertedSectionIndexes.isEmpty {
+                trackersCollection.insertSections(insertedSectionIndexes)
             }
             if !indexPaths.insertedPaths.isEmpty {
                 trackersCollection.insertItems(at: indexPaths.insertedPaths)
             }
-            if !indexPaths.deletedPaths.isEmpty {
-                trackersCollection.deleteItems(at: indexPaths.deletedPaths)
+            if !indexPaths.updatedPaths.isEmpty {
+                trackersCollection.reloadItems(at: indexPaths.updatedPaths)
             }
         }
     }
@@ -164,6 +175,23 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     /// - Parameter sender: объект-инициатор события
     @objc private func addTrackerTouchUpInside(_ sender: UIButton) {
         presenter?.addTracker()
+    }
+
+    internal func confirmTrackerDelete(at indexPath: IndexPath) {
+        let alertView = UIAlertController(
+            title: nil,
+            message: Constants.confirmTrackerDeleteAlertMessage,
+            preferredStyle: .actionSheet
+        )
+        alertView.addAction(UIAlertAction(title: Constants.confirmTrackerDeleteAlertNoButtonText, style: .cancel))
+        alertView.addAction(
+            UIAlertAction(
+                title: Constants.confirmTrackerDeleteAlertYesButtonText,
+                style: .destructive) { [weak self] _ in
+                    self?.presenter?.deleteTracker(at: indexPath) { _ in }
+            }
+        )
+        present(alertView, animated: true)
     }
 
     ///  Обработчик изменения значения элемента управления датами
@@ -261,7 +289,10 @@ extension TrackersViewController: UICollectionViewDataSource {
     /// - Parameter collectionView: Элемент управления
     /// - Returns: Количество секций (категорий трекеров)
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let presenter = presenter else { return 0 }
+        guard let presenter = presenter else {
+            assertionFailure("Ошибка инициализации ассоциированного презентера")
+            return 0
+        }
         return presenter.trackerCategoriesCount()
     }
 
@@ -384,10 +415,26 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+
+extension TrackersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let editAction = UIAction(title: L10n.trackersCollectionMenuEditTitle) { [weak self] _ in
+                self?.presenter?.editTracker(at: indexPath) { _ in }
+            }
+            let deleteAction = UIAction(title: L10n.trackersCollectionMenuDeleteTitle, attributes: .destructive) { [weak self] _ in
+                self?.confirmTrackerDelete(at: indexPath)
+            }
+            return UIMenu(title: "", children: [editAction, deleteAction])
+        }
+    }
+}
+
 // MARK: - UISearchBarDelegate
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         presenter?.trackersFilter = searchText
     }
-}
+} // swiftlint:disable:this file_length

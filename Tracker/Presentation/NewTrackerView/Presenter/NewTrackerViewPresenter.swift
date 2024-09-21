@@ -12,6 +12,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     enum NewTrackerErrors: Error {
         case canNotSaveTracker
+        case trackerTypeNotDefined
     }
 
     enum Constants {
@@ -54,6 +55,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         colors.append(Asset.Colors.ColorSections.appColorSection18.color)
         return colors
     }()
+    let trackerRecordStore = TrackerRecordStore.shared
 
     // MARK: - Public Properties
 
@@ -62,9 +64,20 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     weak var delegate: AddTrackerViewPresenterDelegate?
 
     // MARK: - Private Properties
-
+    /// Тип трекера
+    private(set) var trackerType: TrackerType? {
+        didSet {
+            guard
+                let trackerType = trackerType,
+                let viewController = viewController
+            else { return }
+            viewController.setupViewsWithTrackerType(trackerType: trackerType)
+        }
+    }
     /// Выбранная категория трекера
     private var categoryName: String?
+    /// Идентификатор трекера
+    private var trackerId: UUID?
     /// Наименование трекера
     private var trackerName: String?
     /// Выбранное расписание трекера
@@ -78,7 +91,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
 
     func canSaveTracker() -> Bool {
         guard
-            let trackerType = viewController?.trackerType,
+            let trackerType = trackerType,
             let categoryName = categoryName,
             let trackerName = trackerName,
             let emoji = emoji,
@@ -113,6 +126,12 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         }
     }
 
+    func processCategory(_ categoryName: String) {
+        self.categoryName = categoryName
+        configureCreateButton()
+        viewController?.updateButtonsPanel()
+    }
+
     func processColor(_ color: UIColor) {
         self.color = color
         configureCreateButton()
@@ -123,7 +142,7 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         configureCreateButton()
     }
 
-    func processTrackersName(_ trackerName: String?) {
+    func processName(_ trackerName: String?) {
         self.trackerName = trackerName
         guard let textLength = trackerName?.count else { return }
         if textLength > 38 {
@@ -132,6 +151,12 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
             viewController?.hideTrackersNameViolation()
         }
         configureCreateButton()
+    }
+
+    func processSchedule(_ schedule: Week) {
+        self.schedule = schedule
+        configureCreateButton()
+        viewController?.updateButtonsPanel()
     }
 
     func showColorCell(for cell: NewTrackerColorCell, at indexPath: IndexPath, withSelection selection: Bool) {
@@ -157,11 +182,16 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         if !canSaveTracker() {
             completion(.failure(NewTrackerErrors.canNotSaveTracker))
         } else {
+            guard let trackerType = trackerType else {
+                completion(.failure(NewTrackerErrors.trackerTypeNotDefined))
+                return
+            }
             completion(.success(()))
             delegate?.trackerDidRecorded(
-                trackerCategory: categoryName ?? "",
                 tracker: Tracker(
-                    id: UUID(),
+                    trackerType: trackerType,
+                    categoryName: categoryName ?? "",
+                    id: trackerId ?? UUID(),
                     name: trackerName ?? "",
                     color: color ?? UIColor(),
                     emoji: emoji ?? "",
@@ -185,16 +215,49 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
         router.showNext(dismissCurrent: false)
     }
 
-    func updateTrackerCategory(with categoryName: String) {
-        self.categoryName = categoryName
-        configureCreateButton()
-        viewController?.updateButtonsPanel()
+    func startCreating(trackerType: TrackerType) {
+        self.trackerType = trackerType
+        switch trackerType {
+        case.habit:
+            viewController?.setViewControllerTitle(L10n.viewTitleForCreateHabit)
+        case .event:
+            viewController?.setViewControllerTitle(L10n.viewTitleForCreateEvent)
+        }
+        viewController?.setSaveButtonTitle(L10n.trackerSaveButtonForCreatingTitle)
     }
 
-    func updateTrackerSchedule(with schedule: Week) {
-        self.schedule = schedule
-        configureCreateButton()
-        viewController?.updateButtonsPanel()
+    func startEditing(tracker: Tracker) {
+        self.trackerType = tracker.trackerType
+        switch tracker.trackerType {
+        case .habit:
+            viewController?.setViewControllerTitle(L10n.viewTitleForEditHabit)
+            let trackerDaysCount = trackerRecordStore.trackersRecordCount(withId: tracker.id)
+            viewController?.setTrackerRepeatsCountTitle(DaysFormatter.shared.daysToStringWithSuffix(Double(trackerDaysCount)))
+        case .event:
+            viewController?.setViewControllerTitle(L10n.viewTitleForEditEvent)
+        }
+        viewController?.setSaveButtonTitle(L10n.trackerSaveButtonForEditingTitle)
+
+        processCategory(tracker.categoryName)
+
+        trackerId = tracker.id
+
+        viewController?.setTrackerName(tracker.name)
+        processName(tracker.name)
+
+        processSchedule(tracker.schedule)
+
+        if let emojiIndex = emojies.firstIndex(of: tracker.emoji) {
+            let indexPath = IndexPath(row: emojiIndex, section: 0)
+            viewController?.setEmoji(at: indexPath)
+            processEmoji(tracker.emoji)
+        }
+
+        if let colorIndex = colors.firstIndex(of: tracker.color) {
+            let indexPath = IndexPath(row: colorIndex, section: 0)
+            viewController?.setColor(at: indexPath)
+            processColor(tracker.color)
+        }
     }
 
     // MARK: - Private Methods

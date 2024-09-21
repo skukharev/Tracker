@@ -19,7 +19,7 @@ enum NewTrackerScreenAssembley {
         newTrackerViewPresenter.delegate = delegate
         newTrackerViewController.presenter = newTrackerViewPresenter
         newTrackerViewPresenter.viewController = newTrackerViewController
-        newTrackerViewController.setupViewsWithTrackerType(trackerType: trackerType)
+        newTrackerViewPresenter.startCreating(trackerType: trackerType)
         return newTrackerViewController
     }
 }

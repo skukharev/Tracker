@@ -15,6 +15,11 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         case trackerCompletionInTheFutureIsProhibited
     }
 
+    // MARK: - Constants
+
+    /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
+    let trackerCategoryStore = TrackerCategoryStore.shared
+
     // MARK: - Public Properties
 
     weak var viewController: TrackersViewPresenterDelegate?
@@ -40,12 +45,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     /// Переменная для хранения значения currentDate
     private var trackersDate = Date()
-
-    /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
-    private lazy var trackerCategoryStore: TrackerCategoryStore = {
-        let store = TrackerCategoryStore()
-        return store
-    }()
     /// Ссылка на экземпляр Store-класса для работы с трекерами
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
@@ -69,6 +68,29 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         router.showNext(dismissCurrent: false)
     }
 
+    func deleteTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        trackerStore.deleteTracker(at: indexPath) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+
+    func editTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, any Error>) -> Void) {
+        guard
+            let viewController = viewController as? UIViewController,
+            let tracker = trackerStore.tracker(at: indexPath)
+        else {
+            return
+        }
+        let targetViewController = EditTrackerScreenAssembley.build(withDelegate: self, tracker: tracker)
+        let router = Router(viewController: viewController, targetViewController: targetViewController)
+        router.showNext(dismissCurrent: false)
+    }
+
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
         if currentDate > Date().removeTimeStamp {
             completion(.failure(TrackersViewPresenterErrors.trackerCompletionInTheFutureIsProhibited))
@@ -79,7 +101,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
             return
         }
         trackerRecordStore.processTracker(TrackerRecord(trackerId: trackerRecord.id, recordDate: currentDate))
-        loadTrackers()
         completion(.success(()))
     }
 
@@ -107,7 +128,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         if numberOfCategories == 0 {
             viewController?.showTrackersListStub()
         } else {
-            viewController?.hideTrackersListStub()
+            viewController?.showTrackersList()
         }
         return trackerStore.numberOfCategories()
     }
@@ -146,9 +167,9 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 // MARK: - AddTrackerViewPresenterDelegate
 
 extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
-    func trackerDidRecorded(trackerCategory: String, tracker: Tracker) {
-        if let categoryID = trackerCategoryStore.addTrackerCategory(withName: trackerCategory) {
-            _ = trackerStore.addTracker(tracker, withCategoryID: categoryID)
+    func trackerDidRecorded(tracker: Tracker) {
+        if let categoryID = trackerCategoryStore.addTrackerCategory(withName: tracker.categoryName) {
+            _ = trackerStore.saveTracker(tracker, withCategoryID: categoryID)
             let params: AnalyticsEventParam = ["tracker_type": "success"]
             AnalyticsService.report(event: "AddTracker", params: params)
         }

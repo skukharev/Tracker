@@ -25,9 +25,12 @@ final class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
-        switchToOnboardingScreen()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        switchToOnboardingScreen()
+    }
     // MARK: - Private Methods
 
     /// Создаёт и размещает элементы управления во вью контроллере

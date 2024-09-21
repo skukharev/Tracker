@@ -40,8 +40,11 @@ final class TrackerStore: NSObject {
     }()
     private var insertedPaths: [IndexPath] = []
     private var deletedPaths: [IndexPath] = []
+    private var movedPaths: [(IndexPath, IndexPath)] = []
+    private var updatedPaths: [IndexPath] = []
     private var insertedSectionIndexes: IndexSet?
     private var deletedSectionIndexes: IndexSet?
+
     // MARK: - Initializers
 
     override convenience init() {
@@ -59,13 +62,11 @@ final class TrackerStore: NSObject {
     ///   - tracker: данные атрибутов трекера
     ///   - categoryID: идентификатор категории трекера в базе данных
     /// - Returns: идентификатор трекера в базе данных
-    public func addTracker(_ tracker: Tracker, withCategoryID categoryID: NSManagedObjectID) -> NSManagedObjectID? {
-        /// Получение ссылки на запись БД с категорией трекера
+    public func saveTracker(_ tracker: Tracker, withCategoryID categoryID: NSManagedObjectID) -> NSManagedObjectID? {
         guard let category = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData else {
             assertionFailure("В базе данных не найдена категория с идентификатором \(categoryID)")
             return nil
         }
-        /// Инициализация ссылки на запись БД с трекером
         let trackerCoreData = getTrackerCoreData(withId: tracker.id.uuidString) ?? TrackerCoreData(context: context)
         updateExistingTracker(trackerCoreData, withCategory: category, withTracker: tracker)
         do {
@@ -116,6 +117,22 @@ final class TrackerStore: NSObject {
             }
         }
         return result
+    }
+
+    /// Удаляет трекер на основании его индекса в отображаемой коллекции
+    /// - Parameter indexPath: Индекс трекера в отображаемой коллекции
+    /// - Parameter completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент удаления
+    func deleteTracker(at indexPath: IndexPath, _ completion: ((Result<Void, Error>) -> Void)? = nil) {
+        let record = fetchedResultsController.object(at: indexPath)
+        do {
+            context.delete(record)
+            try context.save()
+            completion?(.success(()))
+        } catch let error {
+            context.rollback()
+            completion?(.failure(error))
+            assertionFailure("При удалении трекера произошла ошибка \(error.localizedDescription)")
+        }
     }
 
     /// Возвращает ссылку на объект трекера в базе данных по заданному идентификатору трекера
@@ -200,12 +217,14 @@ extension TrackerStore: TrackerStoreProtocol {
             let id = record.id,
             let name = record.name,
             let color = record.color as? UIColor,
-            let emoji = record.emoji
+            let emoji = record.emoji,
+            let categoryName = record.category?.name
         else {
             return nil
         }
         let schedule = convertStringToSchedule(record.schedule ?? "")
-        return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+        let trackerType = schedule.isEmpty ? TrackerType.event : TrackerType.habit
+        return Tracker(trackerType: trackerType, categoryName: categoryName, id: id, name: name, color: color, emoji: emoji, schedule: schedule)
     }
 }
 
@@ -218,6 +237,8 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         deletedSectionIndexes = IndexSet()
         insertedPaths = []
         deletedPaths = []
+        movedPaths = []
+        updatedPaths = []
     }
 
     /// Метод controllerDidChangeContent срабатывает после добавления или удаления объектов. В нём мы передаём индексы изменённых объектов в класс MainViewController и очищаем до следующего изменения переменные, которые содержат индексы.
@@ -227,13 +248,17 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
                 insertedSectionIndexes: insertedSectionIndexes,
                 deletedSectionIndexes: deletedSectionIndexes,
                 insertedPaths: insertedPaths,
-                deletedPaths: deletedPaths
+                deletedPaths: deletedPaths,
+                movedPaths: movedPaths,
+                updatedPaths: updatedPaths
             )
         )
         insertedSectionIndexes = nil
         deletedSectionIndexes = nil
         insertedPaths = []
         deletedPaths = []
+        movedPaths = []
+        updatedPaths = []
     }
 
     /// Метод controller(_: didChange anObject) срабатывает после того как изменится состояние конкретного объекта. Мы добавляем индекс изменённого объекта в соответствующий набор индексов: deletedIndexes — для удалённых объектов, insertedIndexes — для добавленных.
@@ -248,11 +273,15 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
                 deletedPaths.append(indexPath)
             }
         case .move:
-            break
+            if let oldIndexPath = indexPath, let newIndexPath = newIndexPath {
+                movedPaths.append((oldIndexPath, newIndexPath))
+            }
         case .update:
-            break
+            if let indexPath = indexPath {
+                updatedPaths.append(indexPath)
+            }
         @unknown default:
-            break
+            assertionFailure("Неизвестный тип изменения секции в NSFetchedResultsController")
         }
     }
 
@@ -268,7 +297,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         case .update:
             break
         @unknown default:
-            break
+            assertionFailure("Неизвестный тип изменения секции в NSFetchedResultsController")
         }
     }
 }

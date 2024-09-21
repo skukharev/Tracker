@@ -38,6 +38,7 @@
 		072C09B02C9C51A200273BFB /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09AF2C9C51A200273BFB /* AppMetricaCrashes */; };
 		072C09B22C9C51A200273BFB /* AppMetricaLibraryAdapter in Frameworks */ = {isa = PBXBuildFile; productRef = 072C09B12C9C51A200273BFB /* AppMetricaLibraryAdapter */; };
 		072C09B42C9C542C00273BFB /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C09B32C9C542C00273BFB /* AnalyticsService.swift */; };
+		072C09D92C9E8B0B00273BFB /* EditTrackerScreenAssembley.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072C09D82C9E8B0B00273BFB /* EditTrackerScreenAssembley.swift */; };
 		073C8C232C6A2F10006D8E7D /* NewTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */; };
 		073C8C252C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */; };
 		073C8C272C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */; };
@@ -142,6 +143,7 @@
 		072C097A2C9ACE8600273BFB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		072C097B2C9AD3E700273BFB /* Strings+Generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Strings+Generated.swift"; sourceTree = "<group>"; };
 		072C09B32C9C542C00273BFB /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		072C09D82C9E8B0B00273BFB /* EditTrackerScreenAssembley.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackerScreenAssembley.swift; sourceTree = "<group>"; };
 		073C8C222C6A2F10006D8E7D /* NewTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewController.swift; sourceTree = "<group>"; };
 		073C8C242C6A2F1B006D8E7D /* NewTrackerViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenter.swift; sourceTree = "<group>"; };
 		073C8C262C6A2F2A006D8E7D /* NewTrackerViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrackerViewPresenterProtocol.swift; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				0700E1A12C71C88C00DAA89C /* NewTrackerScreenAssembley.swift */,
+				072C09D82C9E8B0B00273BFB /* EditTrackerScreenAssembley.swift */,
 			);
 			path = Assembley;
 			sourceTree = "<group>";
@@ -1029,6 +1032,7 @@
 				072697BF2C8F035400386B3F /* TrackersScreenAssembley.swift in Sources */,
 				072697EC2C8F418E00386B3F /* CategoriesViewModel.swift in Sources */,
 				07A8C48D2C7F2816002EC584 /* TrackerStoreProtocol.swift in Sources */,
+				072C09D92C9E8B0B00273BFB /* EditTrackerScreenAssembley.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

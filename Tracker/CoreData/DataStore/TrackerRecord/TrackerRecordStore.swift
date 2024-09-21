@@ -12,6 +12,7 @@ final class TrackerRecordStore {
     // MARK: - Constants
 
     private let context: NSManagedObjectContext
+    static let shared = TrackerRecordStore()
 
     // MARK: - Private Properties
 

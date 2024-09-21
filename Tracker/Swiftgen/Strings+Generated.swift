@@ -40,8 +40,12 @@ internal enum L10n {
   internal static let confirmCategoryDeleteAlertNoButtonText = L10n.tr("Localizable", "confirmCategoryDeleteAlertNoButtonText", fallback: "Отменить")
   /// Удалить
   internal static let confirmCategoryDeleteAlertYesButtonText = L10n.tr("Localizable", "confirmCategoryDeleteAlertYesButtonText", fallback: "Удалить")
-  /// Создать
-  internal static let createButtonTitle = L10n.tr("Localizable", "createButtonTitle", fallback: "Создать")
+  /// Уверены что хотите удалить трекер?
+  internal static let confirmTrackerDeleteAlertMessage = L10n.tr("Localizable", "confirmTrackerDeleteAlertMessage", fallback: "Уверены что хотите удалить трекер?")
+  /// Отменить
+  internal static let confirmTrackerDeleteAlertNoButtonText = L10n.tr("Localizable", "confirmTrackerDeleteAlertNoButtonText", fallback: "Отменить")
+  /// Удалить
+  internal static let confirmTrackerDeleteAlertYesButtonText = L10n.tr("Localizable", "confirmTrackerDeleteAlertYesButtonText", fallback: "Удалить")
   /// Категория
   internal static let cvcViewTitleText = L10n.tr("Localizable", "cvcViewTitleText", fallback: "Категория")
   /// Для категории определены трекеры, поэтому её удаление ограничено
@@ -96,6 +100,18 @@ internal enum L10n {
   internal static let trackerNamePlaceholderTitle = L10n.tr("Localizable", "trackerNamePlaceholderTitle", fallback: "Введите название трекера")
   /// Ограничение 38 символов
   internal static let trackerNameWarningLabelText = L10n.tr("Localizable", "trackerNameWarningLabelText", fallback: "Ограничение 38 символов")
+  /// Создать
+  internal static let trackerSaveButtonForCreatingTitle = L10n.tr("Localizable", "trackerSaveButtonForCreatingTitle", fallback: "Создать")
+  /// Сохранить
+  internal static let trackerSaveButtonForEditingTitle = L10n.tr("Localizable", "trackerSaveButtonForEditingTitle", fallback: "Сохранить")
+  /// Удалить
+  internal static let trackersCollectionMenuDeleteTitle = L10n.tr("Localizable", "trackersCollectionMenuDeleteTitle", fallback: "Удалить")
+  /// Редактировать
+  internal static let trackersCollectionMenuEditTitle = L10n.tr("Localizable", "trackersCollectionMenuEditTitle", fallback: "Редактировать")
+  /// Открепить
+  internal static let trackersCollectionMenuPinOffTitle = L10n.tr("Localizable", "trackersCollectionMenuPinOffTitle", fallback: "Открепить")
+  /// Закрепить
+  internal static let trackersCollectionMenuPinOnTitle = L10n.tr("Localizable", "trackersCollectionMenuPinOnTitle", fallback: "Закрепить")
   /// Поиск
   internal static let trackersSearchBarPlaceholder = L10n.tr("Localizable", "trackersSearchBarPlaceholder", fallback: "Поиск")
   /// Что будем отслеживать?
@@ -107,9 +123,13 @@ internal enum L10n {
   /// Вторник
   internal static let tuesdayTitle = L10n.tr("Localizable", "tuesdayTitle", fallback: "Вторник")
   /// Новое нерегулярное событие
-  internal static let viewTitleForEventText = L10n.tr("Localizable", "viewTitleForEventText", fallback: "Новое нерегулярное событие")
+  internal static let viewTitleForCreateEvent = L10n.tr("Localizable", "viewTitleForCreateEvent", fallback: "Новое нерегулярное событие")
   /// Новая привычка
-  internal static let viewTitleForHabitText = L10n.tr("Localizable", "viewTitleForHabitText", fallback: "Новая привычка")
+  internal static let viewTitleForCreateHabit = L10n.tr("Localizable", "viewTitleForCreateHabit", fallback: "Новая привычка")
+  /// Редактирование нерегулярного события
+  internal static let viewTitleForEditEvent = L10n.tr("Localizable", "viewTitleForEditEvent", fallback: "Редактирование нерегулярного события")
+  /// Редактирование привычки
+  internal static let viewTitleForEditHabit = L10n.tr("Localizable", "viewTitleForEditHabit", fallback: "Редактирование привычки")
   /// Создание трекера
   internal static let viewTitleText = L10n.tr("Localizable", "viewTitleText", fallback: "Создание трекера")
   /// Редактирование категории

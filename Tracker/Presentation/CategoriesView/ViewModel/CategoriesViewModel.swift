@@ -46,7 +46,7 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
             assertionFailure("Категория с заданным индексом не найдена в базе данных")
             return
         }
-        delegate?.updateTrackerCategory(with: category)
+        delegate?.processCategory(category)
     }
 }
 

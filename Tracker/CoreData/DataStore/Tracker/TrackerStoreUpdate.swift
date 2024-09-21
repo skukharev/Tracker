@@ -13,4 +13,6 @@ struct TrackerStoreUpdate {
     let deletedSectionIndexes: IndexSet?
     let insertedPaths: [IndexPath]
     let deletedPaths: [IndexPath]
+    let movedPaths: [(IndexPath, IndexPath)]
+    let updatedPaths: [IndexPath]
 }
