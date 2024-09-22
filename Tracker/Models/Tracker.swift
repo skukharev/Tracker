@@ -23,4 +23,6 @@ public struct Tracker {
     let emoji: String
     /// Расписание трекера
     let schedule: Week
+    /// Признак закреплённого трекера
+    let isFixed: Bool
 }

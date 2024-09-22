@@ -18,7 +18,9 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     // MARK: - Constants
 
     /// Ссылка на экземпляр Store-класса для работы с категориями трекеров
-    let trackerCategoryStore = TrackerCategoryStore.shared
+    private let trackerCategoryStore = TrackerCategoryStore.shared
+    /// Ссылка на экземпляр Store-класса для работы с записями событий трекеров
+    private let trackerRecordStore = TrackerRecordStore.shared
 
     // MARK: - Public Properties
 
@@ -49,11 +51,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     private lazy var trackerStore: TrackerStore = {
         let store = TrackerStore()
         store.delegate = self
-        return store
-    }()
-    /// Ссылка на экземпляр Store-класса для работы с записями событий трекеров
-    private lazy var trackerRecordStore: TrackerRecordStore = {
-        let store = TrackerRecordStore()
         return store
     }()
 
@@ -91,6 +88,18 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         router.showNext(dismissCurrent: false)
     }
 
+    func getPinnedTrackerMenuText(at indexPath: IndexPath) -> String {
+        guard let trackerRecord = trackerStore.tracker(at: indexPath) else {
+            assertionFailure("В базе данных не найден трекер с индексом \(indexPath)")
+            return ""
+        }
+        if trackerRecord.isFixed {
+            return L10n.trackersCollectionMenuPinOffTitle
+        } else {
+            return L10n.trackersCollectionMenuPinOnTitle
+        }
+    }
+
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
         if currentDate > Date().removeTimeStamp {
             completion(.failure(TrackersViewPresenterErrors.trackerCompletionInTheFutureIsProhibited))
@@ -121,6 +130,17 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath) {
         header.setSectionHeaderTitle(trackerStore.categoryName(indexPath.section))
+    }
+
+    func toggleFixTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        trackerStore.toggleFixTracker(at: indexPath) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 
     func trackerCategoriesCount() -> Int {
@@ -179,7 +199,7 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
 // MARK: - TrackerStoreDelegate
 
 extension TrackersViewPresenter: TrackerStoreDelegate {
-    func didUpdate(_ update: TrackerStoreUpdate) {
-        viewController?.updateTrackersCollection(at: update)
+    func didUpdate() {
+        viewController?.updateTrackersCollection()
     }
 }

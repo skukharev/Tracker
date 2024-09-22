@@ -27,6 +27,10 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     ///   - indexPath: Индекс трекера в коллекции трекеров
     ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи трекера в базу данных
     func editTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
+    /// Возвращает текст элемента меню управления закреплением/откреплением трекеров
+    /// - Parameter indexPath: Индекс трекера в коллекции трекеров
+    /// - Returns: Возвращает текст элемента меню
+    func getPinnedTrackerMenuText(at indexPath: IndexPath) -> String
     /// В случае если трекер на текущую дату не выполнялся, то производит фиксацию выполнения трекера; и удаляет фиксацию выполнения трекера в противном случае
     /// - Parameters:
     ///   - for: Индекс трекера в коллекции трекеров
@@ -46,6 +50,11 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     ///   - header: Объект-заголовок
     ///   - indexPath: ИНдекс заголовка внутри коллекции
     func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath)
+    /// Включает/исключает трекер из списка закреплённых трекеров
+    /// - Parameters
+    ///   - indexPath: Индекс трекера в коллекции трекеров
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи
+    func toggleFixTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
     /// Возвращает количество категорий трекеров на текущую дату
     /// - Returns: количество категорий трекеров
     func trackerCategoriesCount() -> Int

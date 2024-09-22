@@ -15,7 +15,6 @@ protocol TrackersViewPresenterDelegate: AnyObject {
     func hideTrackersListStub()
     /// Используется для отображения списка трекеров на заданную дату
     func showTrackersList()
-    /// Обновляет коллекцию трекеров на основании массивов добавленных/удалённых индексов изменившихся данных в коллекции
-    /// - Parameter indexPaths: Структура с массивами индексов добавленных / удалённых данных
-    func updateTrackersCollection(at indexPaths: TrackerStoreUpdate)
+    /// Обновляет коллекцию трекеров
+    func updateTrackersCollection()
 }

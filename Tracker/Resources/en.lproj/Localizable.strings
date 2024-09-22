@@ -26,6 +26,7 @@
 "deleteCategoryDenyAlertTitle" = "The action is restricted";
 "emojiLabelText" = "Emoji";
 "everyDayTitle" = "Every day";
+"fixedTrackersSectionTitle" = "Fixed";
 "fridayShortening" = "Fri";
 "fridayTitle" = "Friday";
 "launchApplicationButtonTitle" = "These are the technologies!";

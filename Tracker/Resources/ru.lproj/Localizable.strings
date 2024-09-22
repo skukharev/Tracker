@@ -26,6 +26,7 @@
 "deleteCategoryDenyAlertTitle" = "Действие ограничено";
 "emojiLabelText" = "Emoji";
 "everyDayTitle" = "Каждый день";
+"fixedTrackersSectionTitle" = "Закреплённые";
 "fridayShortening" = "Пт";
 "fridayTitle" = "Пятница";
 "launchApplicationButtonTitle" = "Вот это технологии!";

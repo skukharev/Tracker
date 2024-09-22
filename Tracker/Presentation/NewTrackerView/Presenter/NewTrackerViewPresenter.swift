@@ -86,6 +86,8 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
     private var emoji: String?
     /// Выбранный цвет трекера
     private var color: UIColor?
+    /// Признак закреплённого трекера
+    private var isFixed: Bool = false
 
     // MARK: - Public Methods
 
@@ -195,7 +197,8 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
                     name: trackerName ?? "",
                     color: color ?? UIColor(),
                     emoji: emoji ?? "",
-                    schedule: schedule
+                    schedule: schedule,
+                    isFixed: isFixed
                 )
             )
         }
@@ -258,6 +261,8 @@ final class NewTrackerViewPresenter: NewTrackerViewPresenterProtocol {
             viewController?.setColor(at: indexPath)
             processColor(tracker.color)
         }
+
+        isFixed = tracker.isFixed
     }
 
     // MARK: - Private Methods

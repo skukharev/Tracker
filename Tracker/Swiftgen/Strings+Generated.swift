@@ -56,6 +56,8 @@ internal enum L10n {
   internal static let emojiLabelText = L10n.tr("Localizable", "emojiLabelText", fallback: "Emoji")
   /// Каждый день
   internal static let everyDayTitle = L10n.tr("Localizable", "everyDayTitle", fallback: "Каждый день")
+  /// Закреплённые
+  internal static let fixedTrackersSectionTitle = L10n.tr("Localizable", "fixedTrackersSectionTitle", fallback: "Закреплённые")
   /// Пт
   internal static let fridayShortening = L10n.tr("Localizable", "fridayShortening", fallback: "Пт")
   /// Пятница

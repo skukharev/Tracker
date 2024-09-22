@@ -141,30 +141,8 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         trackersCollection.isHidden = false
     }
 
-    func updateTrackersCollection(at indexPaths: TrackerStoreUpdate) {
-        trackersCollection.performBatchUpdates {
-            if let deletedSectionIndexes = indexPaths.deletedSectionIndexes, !deletedSectionIndexes.isEmpty {
-                trackersCollection.deleteSections(deletedSectionIndexes)
-            }
-            if !indexPaths.deletedPaths.isEmpty {
-                trackersCollection.deleteItems(at: indexPaths.deletedPaths)
-            }
-            if let insertedSectionIndexes = indexPaths.insertedSectionIndexes, !insertedSectionIndexes.isEmpty {
-                trackersCollection.insertSections(insertedSectionIndexes)
-            }
-            if !indexPaths.movedPaths.isEmpty {
-                indexPaths.movedPaths.forEach {
-                    trackersCollection.deleteItems(at: [$0.0])
-                    trackersCollection.insertItems(at: [$0.1])
-                }
-            }
-            if !indexPaths.insertedPaths.isEmpty {
-                trackersCollection.insertItems(at: indexPaths.insertedPaths)
-            }
-            if !indexPaths.updatedPaths.isEmpty {
-                trackersCollection.reloadItems(at: indexPaths.updatedPaths)
-            }
-        }
+    func updateTrackersCollection() {
+        trackersCollection.reloadData()
     }
 
     // MARK: - Private Methods
@@ -417,14 +395,18 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let editAction = UIAction(title: L10n.trackersCollectionMenuEditTitle) { [weak self] _ in
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
+            let pinActionTitle = self?.presenter?.getPinnedTrackerMenuText(at: indexPath) ?? ""
+            let pinAction = UIAction(title: pinActionTitle) { _ in
+                self?.presenter?.toggleFixTracker(at: indexPath) { _ in }
+            }
+            let editAction = UIAction(title: L10n.trackersCollectionMenuEditTitle) { _ in
                 self?.presenter?.editTracker(at: indexPath) { _ in }
             }
-            let deleteAction = UIAction(title: L10n.trackersCollectionMenuDeleteTitle, attributes: .destructive) { [weak self] _ in
+            let deleteAction = UIAction(title: L10n.trackersCollectionMenuDeleteTitle, attributes: .destructive) { _ in
                 self?.confirmTrackerDelete(at: indexPath)
             }
-            return UIMenu(title: "", children: [editAction, deleteAction])
+            return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
         }
     }
 }
