@@ -149,16 +149,14 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
             if !indexPaths.deletedPaths.isEmpty {
                 trackersCollection.deleteItems(at: indexPaths.deletedPaths)
             }
-            if !indexPaths.movedPaths.isEmpty {
-                indexPaths.movedPaths.forEach {
-                    if $0.0 != $0.1 {
-                        trackersCollection.moveItem(at: $0.0, to: $0.1)
-                    }
-                    trackersCollection.reloadItems(at: [$0.1])
-                }
-            }
             if let insertedSectionIndexes = indexPaths.insertedSectionIndexes, !insertedSectionIndexes.isEmpty {
                 trackersCollection.insertSections(insertedSectionIndexes)
+            }
+            if !indexPaths.movedPaths.isEmpty {
+                indexPaths.movedPaths.forEach {
+                    trackersCollection.deleteItems(at: [$0.0])
+                    trackersCollection.insertItems(at: [$0.1])
+                }
             }
             if !indexPaths.insertedPaths.isEmpty {
                 trackersCollection.insertItems(at: indexPaths.insertedPaths)
