@@ -25,5 +25,5 @@ protocol TrackerStoreProtocol: AnyObject {
     func categoryName(_ section: Int) -> String
     /// Загружает список трекеров на заданную дату из базы данных
     /// - Parameter atDate: Дата, на которую необходимо вернуть список трекеров
-    func loadData(atDate currentDate: Date, withTrackerFilter filter: String?)
+    func loadData(atDate currentDate: Date, withTrackerSearchFilter filter: String?, withTrackersFilter trackersFilter: TrackersFilter)
 }

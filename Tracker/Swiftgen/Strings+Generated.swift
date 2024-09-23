@@ -56,6 +56,8 @@ internal enum L10n {
   internal static let emojiLabelText = L10n.tr("Localizable", "emojiLabelText", fallback: "Emoji")
   /// Каждый день
   internal static let everyDayTitle = L10n.tr("Localizable", "everyDayTitle", fallback: "Каждый день")
+  /// Фильтры
+  internal static let filterButtonTitle = L10n.tr("Localizable", "filterButtonTitle", fallback: "Фильтры")
   /// Закреплённые
   internal static let fixedTrackersSectionTitle = L10n.tr("Localizable", "fixedTrackersSectionTitle", fallback: "Закреплённые")
   /// Пт
@@ -98,6 +100,8 @@ internal enum L10n {
   internal static let trackerButtonCellCategoryTitle = L10n.tr("Localizable", "trackerButtonCellCategoryTitle", fallback: "Категория")
   /// Расписание
   internal static let trackerButtonCellScheduleTitle = L10n.tr("Localizable", "trackerButtonCellScheduleTitle", fallback: "Расписание")
+  /// Фильтры
+  internal static let trackerFiltersViewControllerTitle = L10n.tr("Localizable", "trackerFiltersViewControllerTitle", fallback: "Фильтры")
   /// Введите название трекера
   internal static let trackerNamePlaceholderTitle = L10n.tr("Localizable", "trackerNamePlaceholderTitle", fallback: "Введите название трекера")
   /// Ограничение 38 символов
@@ -114,6 +118,14 @@ internal enum L10n {
   internal static let trackersCollectionMenuPinOffTitle = L10n.tr("Localizable", "trackersCollectionMenuPinOffTitle", fallback: "Открепить")
   /// Закрепить
   internal static let trackersCollectionMenuPinOnTitle = L10n.tr("Localizable", "trackersCollectionMenuPinOnTitle", fallback: "Закрепить")
+  /// Все трекеры
+  internal static let trackersFilterTitleForAllTrackers = L10n.tr("Localizable", "trackersFilterTitleForAllTrackers", fallback: "Все трекеры")
+  /// Завершённые
+  internal static let trackersFilterTitleForComplitedTrackers = L10n.tr("Localizable", "trackersFilterTitleForComplitedTrackers", fallback: "Завершённые")
+  /// Трекеры на сегодня
+  internal static let trackersFilterTitleForCurrentDayTrackers = L10n.tr("Localizable", "trackersFilterTitleForCurrentDayTrackers", fallback: "Трекеры на сегодня")
+  /// Не завершённые
+  internal static let trackersFilterTitleForRunningTrackers = L10n.tr("Localizable", "trackersFilterTitleForRunningTrackers", fallback: "Не завершённые")
   /// Поиск
   internal static let trackersSearchBarPlaceholder = L10n.tr("Localizable", "trackersSearchBarPlaceholder", fallback: "Поиск")
   /// Что будем отслеживать?

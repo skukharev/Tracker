@@ -19,9 +19,18 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         static let trackersStubImageWidthConstraint: CGFloat = 80
         static let trackersStubImageLabelTopConstraint: CGFloat = 8
         static let trackersCollectionTopConstraint: CGFloat = 10
+        static let trackersCollectionBottomInset: CGFloat = 50
         static let confirmTrackerDeleteAlertMessage = L10n.confirmTrackerDeleteAlertMessage
         static let confirmTrackerDeleteAlertNoButtonText = L10n.confirmTrackerDeleteAlertNoButtonText
         static let confirmTrackerDeleteAlertYesButtonText = L10n.confirmTrackerDeleteAlertYesButtonText
+        static let filterButtonTitle = L10n.filterButtonTitle
+        static let filterButtonFont = GlobalConstants.ypRegular17
+        static let filterButtonBackgroundColor = UIColor.appBlue
+        static let filterButtonTextColor = UIColor.white
+        static let filterButtonWidthConstraint: CGFloat = 114
+        static let filterButtonHeightConstraint: CGFloat = 50
+        static let filterButtonBottomConstraint: CGFloat = 16
+        static let filterButtonCornerRadius: CGFloat = 16
     }
 
     // MARK: - Private Properties
@@ -88,7 +97,22 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .appWhite
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.trackersCollectionBottomInset, right: 0)
         return collectionView
+    }()
+    /// Кнопка с фильтром
+    private lazy var filterButton: UIButton = {
+        let view = UIButton(type: .system)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle(Constants.filterButtonTitle, for: .normal)
+        view.titleLabel?.font = Constants.filterButtonFont
+        view.setTitleColor(Constants.filterButtonTextColor, for: .normal)
+        view.backgroundColor = Constants.filterButtonBackgroundColor
+        view.contentHorizontalAlignment = .center
+        view.contentVerticalAlignment = .center
+        view.layer.cornerRadius = Constants.filterButtonCornerRadius
+        view.addTarget(self, action: #selector(filterButtonTouchUpInside(_:)), for: .touchUpInside)
+        return view
     }()
 
     // MARK: - Public Methods
@@ -187,7 +211,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: addTrackerButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: trackersChooseDatePicker)
         /// Элементы управления
-        view.addSubviews([trackersSearchBar, trackersCollection])
+        view.addSubviews([trackersSearchBar, trackersCollection, filterButton])
         trackersSearchBar.delegate = self
         trackersCollection.register(TrackersCollectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrackersCollectionHeaderView.Constants.identifier)
         trackersCollection.register(TrackersCollectionViewCell.self, forCellWithReuseIdentifier: TrackersCollectionViewCell.Constants.identifier)
@@ -204,6 +228,11 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         view.addGestureRecognizer(rightSwipe)
     }
 
+    @objc private func filterButtonTouchUpInside(_ sender: UIButton) {
+        UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view).impactOccurred()
+        presenter?.showTrackersFilters()
+    }
+
     /// Создаёт констрейнты для элементов управления
     private func setupConstraints() {
         NSLayoutConstraint.activate(
@@ -216,7 +245,12 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 trackersCollection.topAnchor.constraint(equalTo: trackersSearchBar.bottomAnchor, constant: Constants.trackersCollectionTopConstraint),
                 trackersCollection.leadingAnchor.constraint(equalTo: trackersSearchBar.leadingAnchor),
                 trackersCollection.trailingAnchor.constraint(equalTo: trackersSearchBar.trailingAnchor),
-                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+                trackersCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                /// Кнопка с фильтром трекеров
+                filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+                filterButton.widthAnchor.constraint(equalToConstant: Constants.filterButtonWidthConstraint),
+                filterButton.heightAnchor.constraint(equalToConstant: Constants.filterButtonHeightConstraint),
+                filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.filterButtonBottomConstraint)
             ]
         )
     }
@@ -415,6 +449,6 @@ extension TrackersViewController: UICollectionViewDelegate {
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        presenter?.trackersFilter = searchText
+        presenter?.trackersSearchFilter = searchText
     }
 } // swiftlint:disable:this file_length

@@ -26,6 +26,7 @@
 "deleteCategoryDenyAlertTitle" = "The action is restricted";
 "emojiLabelText" = "Emoji";
 "everyDayTitle" = "Every day";
+"filterButtonTitle" = "Filters";
 "fixedTrackersSectionTitle" = "Fixed";
 "fridayShortening" = "Fri";
 "fridayTitle" = "Friday";
@@ -48,13 +49,18 @@
 "thursdayShortening" = "Thu";
 "thursdayTitle" = "Thursday";
 "trackerButtonCellCategoryTitle" = "Category";
-"trackerButtonCellScheduleTitle" = "Расписание";
+"trackerButtonCellScheduleTitle" = "Schedule";
+"trackerFiltersViewControllerTitle" = "Filters";
 "trackerNamePlaceholderTitle" = "Enter trackers name";
 "trackerNameWarningLabelText" = "The limit is 38 characters";
 "trackersCollectionMenuPinOnTitle" = "Pin";
 "trackersCollectionMenuPinOffTitle" = "Unpin";
 "trackersCollectionMenuEditTitle" = "Edit";
 "trackersCollectionMenuDeleteTitle" = "Delete";
+"trackersFilterTitleForAllTrackers" = "All trackers";
+"trackersFilterTitleForCurrentDayTrackers" = "Trackers for today";
+"trackersFilterTitleForComplitedTrackers" = "Complited trackers";
+"trackersFilterTitleForRunningTrackers" = "Not complited trackers";
 "trackersSearchBarPlaceholder" = "Search";
 "trackersStubImageLabelText" = "What are we going to track?";
 "trackersTabBarItemTitle" = "Trackers";
@@ -66,7 +72,6 @@
 "viewTitleForEditHabit" = "Edit habit";
 "viewTitleText" = "Create tracker";
 "viewTitleTextForEditCategory" = "Edit category";
-"viewTitleTextForEditCategory" = "Редактирование категории";
 "viewTitleTextForNewCategory" = "New category";
 "wednesdayShortening" = "Wed";
 "wednesdayTitle" = "Wednesday";

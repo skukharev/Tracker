@@ -13,8 +13,10 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var viewController: TrackersViewPresenterDelegate? { get set }
     /// Текущая дата трекеров
     var currentDate: Date { get set }
-    /// Текущий фильтр по трекерам
-    var trackersFilter: String? { get set }
+    /// Текущий фильтр поиска  по трекерам
+    var trackersSearchFilter: String? { get set }
+    /// Текущий фильтр списка трекеров
+    var trackersFilter: TrackersFilter { get set }
     /// Запускает функционал по добавлению трекера
     func addTracker()
     /// Удаляет трекер из базы данных
@@ -50,6 +52,8 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     ///   - header: Объект-заголовок
     ///   - indexPath: ИНдекс заголовка внутри коллекции
     func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath)
+    /// Отображает экран выбора предопределённых фильтров списка трекеров
+    func showTrackersFilters()
     /// Включает/исключает трекер из списка закреплённых трекеров
     /// - Parameters
     ///   - indexPath: Индекс трекера в коллекции трекеров

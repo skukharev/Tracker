@@ -35,10 +35,15 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
             loadTrackers()
         }
     }
-    public var trackersFilter: String? {
+    public var trackersSearchFilter: String? {
         didSet {
-            let params: AnalyticsEventParam = ["searchTracker": trackersFilter ?? ""]
+            let params: AnalyticsEventParam = ["searchTracker": trackersSearchFilter ?? ""]
             AnalyticsService.report(event: "SearchTracker", params: params)
+            loadTrackers()
+        }
+    }
+    public var trackersFilter: TrackersFilter = .allTrackers {
+        didSet {
             loadTrackers()
         }
     }
@@ -59,6 +64,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     func addTracker() {
         let params: AnalyticsEventParam = ["tracker_type": "init"]
         AnalyticsService.report(event: "AddTracker", params: params)
+
         guard let viewController = viewController as? UIViewController else { return }
         let targetViewController = AddTrackerScreenAssembley.build(withDelegate: self)
         let router = Router(viewController: viewController, targetViewController: targetViewController)
@@ -132,6 +138,13 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         header.setSectionHeaderTitle(trackerStore.categoryName(indexPath.section))
     }
 
+    func showTrackersFilters() {
+        guard let viewController = viewController as? UIViewController else { return }
+        let targetviewController = TrackersFilterScreenAssembley.build(withDelegate: self, withCurrentFilter: trackersFilter)
+        let router = Router(viewController: viewController, targetViewController: targetviewController)
+        router.showNext(dismissCurrent: false)
+    }
+
     func toggleFixTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
         trackerStore.toggleFixTracker(at: indexPath) { result in
             switch result {
@@ -168,7 +181,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
 
     /// Загружает трекеры из базы данных
     private func loadTrackers() {
-        trackerStore.loadData(atDate: currentDate, withTrackerFilter: trackersFilter)
+        trackerStore.loadData(atDate: currentDate, withTrackerSearchFilter: trackersSearchFilter, withTrackersFilter: trackersFilter)
         if trackerStore.numberOfCategories() == 0 {
             viewController?.showTrackersListStub()
         } else {
@@ -201,5 +214,13 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
 extension TrackersViewPresenter: TrackerStoreDelegate {
     func didUpdate() {
         viewController?.updateTrackersCollection()
+    }
+}
+
+// MARK: - TrackersFilterDelegate
+
+extension TrackersViewPresenter: TrackersFilterDelegate {
+    func filterDidChange(_ filter: TrackersFilter) {
+        trackersFilter = filter
     }
 }

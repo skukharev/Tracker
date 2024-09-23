@@ -26,6 +26,7 @@
 "deleteCategoryDenyAlertTitle" = "Действие ограничено";
 "emojiLabelText" = "Emoji";
 "everyDayTitle" = "Каждый день";
+"filterButtonTitle" = "Фильтры";
 "fixedTrackersSectionTitle" = "Закреплённые";
 "fridayShortening" = "Пт";
 "fridayTitle" = "Пятница";
@@ -49,12 +50,17 @@
 "thursdayTitle" = "Четверг";
 "trackerButtonCellCategoryTitle" = "Категория";
 "trackerButtonCellScheduleTitle" = "Расписание";
+"trackerFiltersViewControllerTitle" = "Фильтры";
 "trackerNamePlaceholderTitle" = "Введите название трекера";
 "trackerNameWarningLabelText" = "Ограничение 38 символов";
 "trackersCollectionMenuPinOnTitle" = "Закрепить";
 "trackersCollectionMenuPinOffTitle" = "Открепить";
 "trackersCollectionMenuEditTitle" = "Редактировать";
 "trackersCollectionMenuDeleteTitle" = "Удалить";
+"trackersFilterTitleForAllTrackers" = "Все трекеры";
+"trackersFilterTitleForCurrentDayTrackers" = "Трекеры на сегодня";
+"trackersFilterTitleForComplitedTrackers" = "Завершённые";
+"trackersFilterTitleForRunningTrackers" = "Не завершённые";
 "trackersSearchBarPlaceholder" = "Поиск";
 "trackersStubImageLabelText" = "Что будем отслеживать?";
 "trackersTabBarItemTitle" = "Трекеры";
