@@ -14,6 +14,8 @@ final class TrackerRecordStore {
     static let shared = TrackerRecordStore()
     private let context: NSManagedObjectContext
     private let trackerStore = TrackerStore.shared
+    private let recordDateKeyPath = #keyPath(TrackerRecordCoreData.recordDate)
+    private let trackerIdKeyPath = #keyPath(TrackerRecordCoreData.trackerId)
 
     // MARK: - Initializers
 
@@ -27,6 +29,8 @@ final class TrackerRecordStore {
 
     // MARK: - Public Methods
 
+    /// Используется на экране статистики - вычисляет общее количество выполненных трекеров
+    /// - Returns: результат вычислений
     public func getCompletedTrackerCount() -> Int {
         let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
         request.resultType = .countResultType
@@ -37,6 +41,38 @@ final class TrackerRecordStore {
             return 0
         }
         return recordsCount
+    }
+
+    /// Используется на экране статистики - вычиляет среднее количество трекеров, выполняемых в день
+    /// - Returns: результат вычислений
+    public func getAverageTrackersCompletionPerDay() -> Int {
+        let dateDescription = NSExpressionDescription()
+        dateDescription.name = "date"
+        dateDescription.expression = NSExpression(forKeyPath: "recordDate")
+        dateDescription.expressionResultType = .dateAttributeType
+
+        let countDescription = NSExpressionDescription()
+        countDescription.name = "trackersCount"
+        countDescription.expression = NSExpression(forFunction: "count:", arguments: [NSExpression(forKeyPath: "trackerId")])
+        countDescription.expressionResultType = .integer64AttributeType
+
+        let completedTrackersCountRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
+        completedTrackersCountRequest.propertiesToFetch = [dateDescription, countDescription]
+        completedTrackersCountRequest.propertiesToGroupBy = [dateDescription]
+        completedTrackersCountRequest.resultType = .dictionaryResultType
+
+        guard let results = try? context.fetch(completedTrackersCountRequest) as? [[String: Any]] else {
+            return 0
+        }
+        var datesCount = 0
+        var totalTrackersCount = 0
+        for result in results {
+            if let trackersCount = result["trackersCount"] as? Int {
+                totalTrackersCount += trackersCount
+                datesCount += 1
+            }
+        }
+        return Int(datesCount > 0 ? Double(totalTrackersCount) / Double(datesCount) : 0)
     }
 
     /// Производит обработку выполнения трекера:

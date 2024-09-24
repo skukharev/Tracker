@@ -25,8 +25,14 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
 
     func calculateStatistics() {
         statistics = [
-            StatisticsElement(type: .completedTrackers, value: trackerRecordStore.getCompletedTrackerCount()),
-            StatisticsElement(type: .averageTrackers, value: 4),
+            StatisticsElement(
+                type: .completedTrackers,
+                value: trackerRecordStore.getCompletedTrackerCount()
+            ),
+            StatisticsElement(
+                type: .averageTrackers,
+                value: trackerRecordStore.getAverageTrackersCompletionPerDay()
+            ),
             StatisticsElement(type: .idealDaysCount, value: 2)
         ]
 
@@ -39,7 +45,7 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
 
     func showCell(for cell: StatisticsCollectionViewCell, with indexPath: IndexPath) {
         guard let statisticsItem = statistics[safe: indexPath.row] else {
-            assertionFailure("В базе данных не найдена запись статистики с индексом \(indexPath)")
+            assertionFailure("Не найдена запись статистики с индексом \(indexPath)")
             return
         }
         let cellViewModel = StatisticsCellViewModel(
