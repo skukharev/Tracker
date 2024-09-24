@@ -10,6 +10,11 @@ import UIKit
 final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     // MARK: - Types
 
+    enum Constants {
+        static let trackersStubImageLabelText = L10n.trackersStubImageLabelText
+        static let trackersStubEmptyFilterLabelText = L10n.trackersStubEmptyFilterLabelText
+    }
+
     enum TrackersViewPresenterErrors: Error {
         case trackerNotFound
         case trackerCompletionInTheFutureIsProhibited
@@ -44,7 +49,7 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
     public var trackersFilter: TrackersFilter = .allTrackers {
         didSet {
-            loadTrackers()
+            processTrackersFilter()
         }
     }
 
@@ -157,12 +162,6 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     func trackerCategoriesCount() -> Int {
-        let numberOfCategories = trackerStore.numberOfCategories()
-        if numberOfCategories == 0 {
-            viewController?.showTrackersListStub()
-        } else {
-            viewController?.showTrackersList()
-        }
         return trackerStore.numberOfCategories()
     }
 
@@ -171,6 +170,11 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     // MARK: - Private Methods
+
+    private func adjustTrackersFilterButton() {
+        let buttonBackgroundColor = trackersFilter == .allTrackers || trackersFilter == .currentDayTrackers ? TrackersViewController.Constants.filterButtonDefaultBackgroundColor : TrackersViewController.Constants.filterButtonSelectedBackgroundColor
+        viewController?.setTrackersFilterButtonBackgroundColor(buttonBackgroundColor)
+    }
 
     /// Используется для определения факта выполнения заданного трекера на текущую дату
     /// - Parameter id: Идентификатор трекера
@@ -182,10 +186,15 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     /// Загружает трекеры из базы данных
     private func loadTrackers() {
         trackerStore.loadData(atDate: currentDate, withTrackerSearchFilter: trackersSearchFilter, withTrackersFilter: trackersFilter)
-        if trackerStore.numberOfCategories() == 0 {
-            viewController?.showTrackersListStub()
+    }
+
+    private func processTrackersFilter() {
+        adjustTrackersFilterButton()
+        if trackersFilter == .currentDayTrackers {
+            currentDate = Date()
+            viewController?.setCurrentDate(currentDate)
         } else {
-            viewController?.showTrackersList()
+            loadTrackers()
         }
     }
 
@@ -203,8 +212,21 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
     func trackerDidRecorded(tracker: Tracker) {
         if let categoryID = trackerCategoryStore.addTrackerCategory(withName: tracker.categoryName) {
             _ = trackerStore.saveTracker(tracker, withCategoryID: categoryID)
+
             let params: AnalyticsEventParam = ["tracker_type": "success"]
             AnalyticsService.report(event: "AddTracker", params: params)
+
+            if trackerCategoriesCount() == 0 {
+                viewController?.showTrackersListStub(
+                    with: TrackersListStubModel(
+                        stubImage: Asset.Images.trackersStub.image,
+                        stubTitle: Constants.trackersStubImageLabelText,
+                        isFilterButtonHidden: true
+                    )
+                )
+            } else {
+                viewController?.showTrackersList()
+            }
         }
     }
 }
@@ -212,6 +234,30 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
 // MARK: - TrackerStoreDelegate
 
 extension TrackersViewPresenter: TrackerStoreDelegate {
+    func didUpdate(recordCounts: RecordCounts) {
+        if recordCounts.allRecordsCount == 0 {
+            viewController?.showTrackersListStub(
+                with: TrackersListStubModel(
+                    stubImage: Asset.Images.trackersStub.image,
+                    stubTitle: Constants.trackersStubImageLabelText,
+                    isFilterButtonHidden: true
+                )
+            )
+        } else {
+            if recordCounts.filteredRecordsCount == 0 {
+                viewController?.showTrackersListStub(
+                    with: TrackersListStubModel(
+                        stubImage: Asset.Images.statisticsStub.image,
+                        stubTitle: Constants.trackersStubEmptyFilterLabelText,
+                        isFilterButtonHidden: false
+                    )
+                )
+            } else {
+                viewController?.showTrackersList()
+            }
+        }
+    }
+
     func didUpdate() {
         viewController?.updateTrackersCollection()
     }

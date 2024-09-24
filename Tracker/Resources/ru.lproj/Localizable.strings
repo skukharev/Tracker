@@ -63,6 +63,7 @@
 "trackersFilterTitleForRunningTrackers" = "Не завершённые";
 "trackersSearchBarPlaceholder" = "Поиск";
 "trackersStubImageLabelText" = "Что будем отслеживать?";
+"trackersStubEmptyFilterLabelText" = "Ничего не найдено";
 "trackersTabBarItemTitle" = "Трекеры";
 "tuesdayShortening" = "Вт";
 "tuesdayTitle" = "Вторник";

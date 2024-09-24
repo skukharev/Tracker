@@ -237,11 +237,29 @@ extension TrackerStore: TrackerStoreProtocol {
         compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, nonFixedTrackers])
         fetchedResultsController.fetchRequest.predicate = compoundPredicate
 
-        fixedFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "%K = true", isFixedKeyPath)
+        let fixedCompoundPredicate = NSPredicate(format: "%K = true", isFixedKeyPath)
+        fixedFetchedResultsController.fetchRequest.predicate = fixedCompoundPredicate
 
         do {
             try fetchedResultsController.performFetch()
             try fixedFetchedResultsController.performFetch()
+            let allRecordsCount = (fetchedResultsController.fetchedObjects?.count ?? 0) + (fixedFetchedResultsController.fetchedObjects?.count ?? 0)
+            if trackersFilter == .complitedTrackers {
+                let complitedTrackers = NSPredicate(format: "ANY %K = %@", #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
+                fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, complitedTrackers])
+                fixedFetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fixedCompoundPredicate, complitedTrackers])
+                try fetchedResultsController.performFetch()
+                try fixedFetchedResultsController.performFetch()
+            }
+            if trackersFilter == .notComplitedTrackers {
+                let complitedTrackers = NSPredicate(format: "SUBQUERY(%K, $X, $X.recordDate = %@).@count = 0", #keyPath(TrackerCoreData.dates), currentDate as NSDate)
+                fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, complitedTrackers])
+                fixedFetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fixedCompoundPredicate, complitedTrackers])
+                try fetchedResultsController.performFetch()
+                try fixedFetchedResultsController.performFetch()
+            }
+            let allFilteredRecordsCount = (fetchedResultsController.fetchedObjects?.count ?? 0) + (fixedFetchedResultsController.fetchedObjects?.count ?? 0)
+            delegate?.didUpdate(recordCounts: RecordCounts(allRecordsCount: allRecordsCount, filteredRecordsCount: allFilteredRecordsCount))
         } catch {
             assertionFailure("Произошла ошибка при выполнении запроса к базе данных: \(error)")
         }

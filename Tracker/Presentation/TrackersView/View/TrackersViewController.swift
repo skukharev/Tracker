@@ -13,19 +13,19 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     internal enum Constants {
         static let trackersCellParams = UICollectionViewCellGeometricParams(cellCount: 2, topInset: 0, leftInset: 0, rightInset: 0, bottomInset: 0, cellSpacing: 9, lineSpacing: 10, cellHeight: 148)
         static let trackersChooseDatePickerCornerRadius: CGFloat = 8
-        static let trackersStubImageLabelText = L10n.trackersStubImageLabelText
         static let trackersSearchBarPlaceholder = L10n.trackersSearchBarPlaceholder
         static let trackersSearchBarLeadingConstraint: CGFloat = 16
         static let trackersStubImageWidthConstraint: CGFloat = 80
         static let trackersStubImageLabelTopConstraint: CGFloat = 8
         static let trackersCollectionTopConstraint: CGFloat = 10
-        static let trackersCollectionBottomInset: CGFloat = 50
+        static let trackersCollectionBottomInset: CGFloat = 66
         static let confirmTrackerDeleteAlertMessage = L10n.confirmTrackerDeleteAlertMessage
         static let confirmTrackerDeleteAlertNoButtonText = L10n.confirmTrackerDeleteAlertNoButtonText
         static let confirmTrackerDeleteAlertYesButtonText = L10n.confirmTrackerDeleteAlertYesButtonText
         static let filterButtonTitle = L10n.filterButtonTitle
         static let filterButtonFont = GlobalConstants.ypRegular17
-        static let filterButtonBackgroundColor = UIColor.appBlue
+        static let filterButtonDefaultBackgroundColor = UIColor.appBlue
+        static let filterButtonSelectedBackgroundColor = UIColor.appRed
         static let filterButtonTextColor = UIColor.white
         static let filterButtonWidthConstraint: CGFloat = 114
         static let filterButtonHeightConstraint: CGFloat = 50
@@ -70,7 +70,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     private lazy var trackersStubImage: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = Asset.Images.trackersStub.image
         image.contentMode = .center
         return image
     }()
@@ -80,7 +79,6 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = GlobalConstants.ypMedium12
         label.textColor = .appBlack
-        label.text = Constants.trackersStubImageLabelText
         return label
     }()
     /// Панель поиска  трекеров
@@ -100,14 +98,14 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Constants.trackersCollectionBottomInset, right: 0)
         return collectionView
     }()
-    /// Кнопка с фильтром
+    /// Кнопка с фильтром списка трекеров
     private lazy var filterButton: UIButton = {
         let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.setTitle(Constants.filterButtonTitle, for: .normal)
         view.titleLabel?.font = Constants.filterButtonFont
         view.setTitleColor(Constants.filterButtonTextColor, for: .normal)
-        view.backgroundColor = Constants.filterButtonBackgroundColor
+        view.backgroundColor = Constants.filterButtonDefaultBackgroundColor
         view.contentHorizontalAlignment = .center
         view.contentVerticalAlignment = .center
         view.layer.cornerRadius = Constants.filterButtonCornerRadius
@@ -138,7 +136,15 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         }
     }
 
-    func showTrackersListStub() {
+    func setCurrentDate(_ date: Date) {
+        trackersChooseDatePicker.date = date
+    }
+
+    func setTrackersFilterButtonBackgroundColor(_ color: UIColor) {
+        filterButton.backgroundColor = color
+    }
+
+    func showTrackersListStub(with model: TrackersListStubModel) {
         if !view.subviews.contains(trackersStubImage) {
             view.addSubviews([trackersStubImage, trackersStubImageLabel])
             NSLayoutConstraint.activate(
@@ -154,15 +160,19 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
                 ]
             )
         }
+        trackersStubImage.image = model.stubImage
         trackersStubImage.isHidden = false
+        trackersStubImageLabel.text = model.stubTitle
         trackersStubImageLabel.isHidden = false
         trackersCollection.isHidden = true
+        filterButton.isHidden = model.isFilterButtonHidden == true
     }
 
     func showTrackersList() {
         hideTrackersListStub()
         trackersCollection.reloadData()
         trackersCollection.isHidden = false
+        filterButton.isHidden = false
     }
 
     func updateTrackersCollection() {

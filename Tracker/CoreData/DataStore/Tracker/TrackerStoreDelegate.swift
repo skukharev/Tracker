@@ -10,4 +10,6 @@ import Foundation
 protocol TrackerStoreDelegate: AnyObject {
     /// Обраотчик, вызываемый Store-классом при изменении данных в трекерах
     func didUpdate()
+    /// Обработчик, вызываемый Store-классом после обновления выборки данных о трекерах
+    func didUpdate(recordCounts: RecordCounts)
 }

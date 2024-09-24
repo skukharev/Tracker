@@ -63,6 +63,7 @@
 "trackersFilterTitleForRunningTrackers" = "Not complited trackers";
 "trackersSearchBarPlaceholder" = "Search";
 "trackersStubImageLabelText" = "What are we going to track?";
+"trackersStubEmptyFilterLabelText" = "Nothing was found";
 "trackersTabBarItemTitle" = "Trackers";
 "tuesdayShortening" = "Tue";
 "tuesdayTitle" = "Tuesday";

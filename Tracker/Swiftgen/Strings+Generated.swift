@@ -128,6 +128,8 @@ internal enum L10n {
   internal static let trackersFilterTitleForRunningTrackers = L10n.tr("Localizable", "trackersFilterTitleForRunningTrackers", fallback: "Не завершённые")
   /// Поиск
   internal static let trackersSearchBarPlaceholder = L10n.tr("Localizable", "trackersSearchBarPlaceholder", fallback: "Поиск")
+  /// Ничего не найдено
+  internal static let trackersStubEmptyFilterLabelText = L10n.tr("Localizable", "trackersStubEmptyFilterLabelText", fallback: "Ничего не найдено")
   /// Что будем отслеживать?
   internal static let trackersStubImageLabelText = L10n.tr("Localizable", "trackersStubImageLabelText", fallback: "Что будем отслеживать?")
   /// Трекеры
