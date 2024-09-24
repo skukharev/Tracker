@@ -67,8 +67,9 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     // MARK: - Public Methods
 
     func addTracker() {
-        let params: AnalyticsEventParam = ["tracker_type": "init"]
-        AnalyticsService.report(event: "AddTracker", params: params)
+        let params: AnalyticsEventParam = ["screen": "Main", "item": "add_track"]
+        AnalyticsService.report(event: "click", params: params)
+        print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
 
         guard let viewController = viewController as? UIViewController else { return }
         let targetViewController = AddTrackerScreenAssembley.build(withDelegate: self)
@@ -112,6 +113,10 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        let params: AnalyticsEventParam = ["screen": "Main", "item": "track"]
+        AnalyticsService.report(event: "click", params: params)
+        print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
+
         if currentDate > Date().removeTimeStamp {
             completion(.failure(TrackersViewPresenterErrors.trackerCompletionInTheFutureIsProhibited))
             return
@@ -144,6 +149,10 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
     }
 
     func showTrackersFilters() {
+        let params: AnalyticsEventParam = ["screen": "Main", "item": "filter"]
+        AnalyticsService.report(event: "click", params: params)
+        print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
+
         guard let viewController = viewController as? UIViewController else { return }
         let targetviewController = TrackersFilterScreenAssembley.build(withDelegate: self, withCurrentFilter: trackersFilter)
         let router = Router(viewController: viewController, targetViewController: targetviewController)

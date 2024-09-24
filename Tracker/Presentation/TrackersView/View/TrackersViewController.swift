@@ -122,6 +122,20 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         presenter?.currentDate = Date()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let params: AnalyticsEventParam = ["screen": "Main"]
+        AnalyticsService.report(event: "open", params: params)
+        print("Зарегистрировано событие аналитики 'open' c параметрами \(params)")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let params: AnalyticsEventParam = ["screen": "Main"]
+        AnalyticsService.report(event: "close", params: params)
+        print("Зарегистрировано событие аналитики 'close' с параметрами \(params)")
+    }
+
     func configure(_ presenter: TrackersViewPresenterProtocol) {
         self.presenter = presenter
         presenter.viewController = self
@@ -445,9 +459,17 @@ extension TrackersViewController: UICollectionViewDelegate {
                 self?.presenter?.toggleFixTracker(at: indexPath) { _ in }
             }
             let editAction = UIAction(title: L10n.trackersCollectionMenuEditTitle) { _ in
+                let params: AnalyticsEventParam = ["screen": "Main", "item": "edit"]
+                AnalyticsService.report(event: "click", params: params)
+                print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
+
                 self?.presenter?.editTracker(at: indexPath) { _ in }
             }
             let deleteAction = UIAction(title: L10n.trackersCollectionMenuDeleteTitle, attributes: .destructive) { _ in
+                let params: AnalyticsEventParam = ["screen": "Main", "item": "delete"]
+                AnalyticsService.report(event: "click", params: params)
+                print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
+
                 self?.confirmTrackerDelete(at: indexPath)
             }
             return UIMenu(title: "", children: [pinAction, editAction, deleteAction])
