@@ -8,9 +8,10 @@
 import Foundation
 
 final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
-    // MARK: - Types
-
     // MARK: - Constants
+
+    private let trackerStore = TrackerStore.shared
+    private let trackerRecordStore = TrackerRecordStore.shared
 
     // MARK: - Public Properties
 
@@ -20,13 +21,11 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
 
     private var statistics: [StatisticsElement] = []
 
-    // MARK: - Initializers
-
     // MARK: - Public Methods
 
     func calculateStatistics() {
         statistics = [
-            StatisticsElement(type: .completedTrackers, value: 5),
+            StatisticsElement(type: .completedTrackers, value: trackerRecordStore.getCompletedTrackerCount()),
             StatisticsElement(type: .averageTrackers, value: 4),
             StatisticsElement(type: .idealDaysCount, value: 2)
         ]
@@ -51,9 +50,10 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
     }
 
     func statisticsCount() -> Int {
-        return statistics.filter { $0.value > 0 }.count
+        if statistics.filter({ $0.value > 0 }).isEmpty {
+            return 0
+        } else {
+            return statistics.count
+        }
     }
-
-    // MARK: - Private Methods
-
 }

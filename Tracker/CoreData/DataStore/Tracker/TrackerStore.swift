@@ -12,6 +12,7 @@ import UIKit
 final class TrackerStore: NSObject {
     // MARK: - Constants
 
+    static let shared = TrackerStore()
     private let context: NSManagedObjectContext
     private let scheduleKeyPath = #keyPath(TrackerCoreData.schedule)
     private let trackerCategoryNameKeyPath = #keyPath(TrackerCoreData.category.name)

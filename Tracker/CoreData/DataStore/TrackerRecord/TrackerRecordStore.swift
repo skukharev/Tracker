@@ -11,16 +11,9 @@ import CoreData
 final class TrackerRecordStore {
     // MARK: - Constants
 
-    private let context: NSManagedObjectContext
     static let shared = TrackerRecordStore()
-
-    // MARK: - Private Properties
-
-    /// Ссылка на экземпляр Store-класса для работы с трекерами
-    private lazy var trackerStore: TrackerStore = {
-        let store = TrackerStore()
-        return store
-    }()
+    private let context: NSManagedObjectContext
+    private let trackerStore = TrackerStore.shared
 
     // MARK: - Initializers
 
@@ -33,6 +26,18 @@ final class TrackerRecordStore {
     }
 
     // MARK: - Public Methods
+
+    public func getCompletedTrackerCount() -> Int {
+        let request = NSFetchRequest<TrackerRecordCoreData>(entityName: "TrackerRecordCoreData")
+        request.resultType = .countResultType
+        guard
+            let records = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let recordsCount = records.finalResult?.first as? Int
+        else {
+            return 0
+        }
+        return recordsCount
+    }
 
     /// Производит обработку выполнения трекера:
     ///  - при отсутствии события выполнения на заданную дату записывает факт выполнения трекера
