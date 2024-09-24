@@ -43,6 +43,9 @@
 "saveButtonTitle" = "Ready";
 "statisticsStubImageLabelText" = "There is nothing to analyze yet";
 "statisticsTabBarItemTitle" = "Statistics";
+"statisticsTypeCompleted" = "Trackers completed";
+"statisticsTypeAverage" = "The average value";
+"statisticsTypeIdealDaysCount" = "Ideal days";
 "sundayShortening" = "Sun";
 "sundayTitle" = "Sunday";
 "svcViewTitleText" = "Schedule";

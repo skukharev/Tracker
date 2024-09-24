@@ -43,6 +43,9 @@
 "saveButtonTitle" = "Готово";
 "statisticsStubImageLabelText" = "Анализировать пока нечего";
 "statisticsTabBarItemTitle" = "Статистика";
+"statisticsTypeCompleted" = "Трекеров завершено";
+"statisticsTypeAverage" = "Среднее значение";
+"statisticsTypeIdealDaysCount" = "Идеальные дни";
 "sundayShortening" = "Вс";
 "sundayTitle" = "Воскресенье";
 "svcViewTitleText" = "Расписание";

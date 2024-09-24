@@ -8,4 +8,6 @@
 import Foundation
 
 protocol StatisticsViewPresenterDelegate: AnyObject {
+    func showStatisticsStub()
+    func hideStatisticsStub()
 }

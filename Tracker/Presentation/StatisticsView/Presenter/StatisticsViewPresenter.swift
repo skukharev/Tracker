@@ -13,19 +13,46 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
     // MARK: - Constants
 
     // MARK: - Public Properties
-    weak var viewController: (any StatisticsViewPresenterDelegate)?
 
-    // MARK: - IBOutlet
+    weak var viewController: (any StatisticsViewPresenterDelegate)?
 
     // MARK: - Private Properties
 
-    // MARK: - Initializers
+    private var statistics: [StatisticsElement] = []
 
-    // MARK: - UIViewController(\*)
+    // MARK: - Initializers
 
     // MARK: - Public Methods
 
-    // MARK: - IBAction
+    func calculateStatistics() {
+        statistics = [
+            StatisticsElement(type: .completedTrackers, value: 5),
+            StatisticsElement(type: .averageTrackers, value: 4),
+            StatisticsElement(type: .idealDaysCount, value: 2)
+        ]
+
+        if statistics.filter({ $0.value > 0 }).isEmpty {
+            viewController?.showStatisticsStub()
+        } else {
+            viewController?.hideStatisticsStub()
+        }
+    }
+
+    func showCell(for cell: StatisticsCollectionViewCell, with indexPath: IndexPath) {
+        guard let statisticsItem = statistics[safe: indexPath.row] else {
+            assertionFailure("В базе данных не найдена запись статистики с индексом \(indexPath)")
+            return
+        }
+        let cellViewModel = StatisticsCellViewModel(
+            title: statisticsItem.type.description,
+            value: statisticsItem.value
+        )
+        cell.showCellViewModel(cellViewModel)
+    }
+
+    func statisticsCount() -> Int {
+        return statistics.filter { $0.value > 0 }.count
+    }
 
     // MARK: - Private Methods
 

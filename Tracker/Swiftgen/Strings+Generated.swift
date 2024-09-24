@@ -86,6 +86,12 @@ internal enum L10n {
   internal static let statisticsStubImageLabelText = L10n.tr("Localizable", "statisticsStubImageLabelText", fallback: "Анализировать пока нечего")
   /// Статистика
   internal static let statisticsTabBarItemTitle = L10n.tr("Localizable", "statisticsTabBarItemTitle", fallback: "Статистика")
+  /// Среднее значение
+  internal static let statisticsTypeAverage = L10n.tr("Localizable", "statisticsTypeAverage", fallback: "Среднее значение")
+  /// Трекеров завершено
+  internal static let statisticsTypeCompleted = L10n.tr("Localizable", "statisticsTypeCompleted", fallback: "Трекеров завершено")
+  /// Идеальные дни
+  internal static let statisticsTypeIdealDaysCount = L10n.tr("Localizable", "statisticsTypeIdealDaysCount", fallback: "Идеальные дни")
   /// Вс
   internal static let sundayShortening = L10n.tr("Localizable", "sundayShortening", fallback: "Вс")
   /// Воскресенье
