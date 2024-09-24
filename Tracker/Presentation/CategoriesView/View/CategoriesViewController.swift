@@ -155,6 +155,10 @@ final class CategoriesViewController: UIViewController {
                 }
             }
         }
+        viewModel.onNeedCategoriesReload = { [weak self] _ in
+            guard let self = self else { return }
+            self.categoriesTableView.reloadData()
+        }
     }
 
     private func confirmCategoryDelete(withCategory categoryName: String) {

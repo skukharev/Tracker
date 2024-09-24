@@ -11,7 +11,7 @@ protocol NewCategoryViewModelProtocol: AnyObject {
     /// Модель данных о добавляемой/редактируемой категории
     var category: NewCategoryModel? { get set }
     /// Делегат, получающий уведомление о добавлении/изменении категории трекера
-//    var delegate: CategoriesViewModelProtocol? { get set }
+    var delegate: CategoriesViewModelProtocol? { get set }
     /// Событие, генерируемое при изменении модели данных о добавляемой/редактируемой категории
     var onCategoryChange: Binding<NewCategoryModel?>? { get set }
     /// Событие, генерируемое при возникновении ошибок проверки допустимости записи категории с заданным наименованием

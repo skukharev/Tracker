@@ -15,7 +15,7 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
             onCategoryChange?(category)
         }
     }
-    var delegate: (any CategoriesViewModelProtocol)?
+    weak var delegate: (any CategoriesViewModelProtocol)?
     var onCategoryChange: Binding<NewCategoryModel?>?
     var onSaveCategoryAllowedStateChange: Binding<Bool>?
     var onErrorStateChange: Binding<String?>?
@@ -45,6 +45,7 @@ final class NewCategoryViewModel: NewCategoryViewModelProtocol {
     func saveCategory(withName categoryName: String) {
         if let category = category {
             _ = trackerCategoryStore.editTrackerCategory(withName: category.name, andNewName: categoryName)
+            delegate?.didCategoryChange(with: categoryName)
         } else {
             _ = trackerCategoryStore.addTrackerCategory(withName: categoryName)
         }

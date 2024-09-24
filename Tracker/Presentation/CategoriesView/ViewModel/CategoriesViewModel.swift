@@ -13,6 +13,7 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     var categoryName: String?
     weak var delegate: NewTrackerViewPresenterProtocol?
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>?
+    var onNeedCategoriesReload: Binding<Void>?
     let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Initializers
@@ -39,6 +40,11 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
 
     func deleteCategoryRequest(withCategory categoryName: String) -> Bool {
         return trackerCategoryStore.checkCategoryDelete(withName: categoryName)
+    }
+
+    func didCategoryChange(with categoryName: String) {
+        self.categoryName = categoryName
+        onNeedCategoriesReload?(())
     }
 
     func didSelectCategory(at indexPath: IndexPath) {
