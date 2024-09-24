@@ -155,7 +155,14 @@ final class TrackerCategoryStore: NSObject {
     // MARK: - Private Methods
 
     private func updateExistingCategory(_ trackerCategoryCoreData: TrackerCategoryCoreData, with name: String) {
-        trackerCategoryCoreData.name = name
+        if trackerCategoryCoreData.name != name {
+            trackerCategoryCoreData.name = name
+            if let trackers = trackerCategoryCoreData.trackers as? Set<TrackerCoreData> {
+                trackers.forEach {
+                    $0.categotyName = name
+                }
+            }
+        }
     }
 
     private func validateOnAllowedName(_ categoryName: String?) throws {

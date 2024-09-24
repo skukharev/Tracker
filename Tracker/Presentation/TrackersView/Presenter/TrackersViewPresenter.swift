@@ -267,8 +267,8 @@ extension TrackersViewPresenter: TrackerStoreDelegate {
         }
     }
 
-    func didUpdate() {
-        viewController?.updateTrackersCollection()
+    func didUpdate(at indexPaths: TrackerStoreUpdate) {
+        viewController?.updateTrackersCollection(at: indexPaths)
     }
 }
 

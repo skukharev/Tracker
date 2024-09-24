@@ -22,5 +22,5 @@ protocol TrackersViewPresenterDelegate: AnyObject {
     /// Используется для отображения списка трекеров на заданную дату
     func showTrackersList()
     /// Обновляет коллекцию трекеров
-    func updateTrackersCollection()
+    func updateTrackersCollection(at indexPaths: TrackerStoreUpdate)
 }

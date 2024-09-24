@@ -22,4 +22,5 @@ enum GlobalConstants {
     static let onboardingPage1Image = Asset.Images.onboardingPage1.image
     static let onboardingPage2Image = Asset.Images.onboardingPage2.image
     static let yandexMetrikaApi = "fa4a8538-f2c7-4ddf-a421-b371bc8b1cd4"
+    static let fixedCategoryId = "!A599f33-5391-41ce-8140-c10ce152221c"
 }

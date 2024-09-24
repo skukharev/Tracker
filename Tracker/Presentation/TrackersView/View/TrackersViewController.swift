@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class TrackersViewController: UIViewController, TrackersViewPresenterDelegate {
+final class TrackersViewController: UIViewController, TrackersViewPresenterDelegate { // swiftlint:disable:this type_body_length
     // MARK: - Types
 
     internal enum Constants {
@@ -189,8 +189,30 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         filterButton.isHidden = false
     }
 
-    func updateTrackersCollection() {
-        trackersCollection.reloadData()
+    func updateTrackersCollection(at indexPaths: TrackerStoreUpdate) {
+        trackersCollection.performBatchUpdates(
+            {
+                if let deletedSectionIndexes = indexPaths.deletedSectionIndexes, !deletedSectionIndexes.isEmpty { trackersCollection.deleteSections(deletedSectionIndexes) }
+                if !indexPaths.deletedPaths.isEmpty {
+                    trackersCollection.deleteItems(at: indexPaths.deletedPaths)
+                }
+                if let insertedSectionIndexes = indexPaths.insertedSectionIndexes, !insertedSectionIndexes.isEmpty {
+                    trackersCollection.insertSections(insertedSectionIndexes) }
+                if !indexPaths.movedPaths.isEmpty {
+                    indexPaths.movedPaths.forEach {
+                        trackersCollection.deleteItems(at: [$0.0])
+                        trackersCollection.insertItems(at: [$0.1])
+                    }
+                }
+                if !indexPaths.insertedPaths.isEmpty {
+                    trackersCollection.insertItems(at: indexPaths.insertedPaths)
+                }
+            },
+            completion: { [weak self] _ in
+                if !indexPaths.updatedPaths.isEmpty {
+                    self?.trackersCollection.reloadItems(at: indexPaths.updatedPaths)
+                }
+            })
     }
 
     // MARK: - Private Methods
