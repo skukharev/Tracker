@@ -43,17 +43,17 @@ final class TrackerRecordStore {
         return recordsCount
     }
 
-    /// Используется на экране статистики - вычиляет среднее количество трекеров, выполняемых в день
+    /// Используется на экране статистики - вычисляет среднее количество трекеров, выполняемых в день
     /// - Returns: результат вычислений
     public func getAverageTrackersCompletionPerDay() -> Int {
         let dateDescription = NSExpressionDescription()
         dateDescription.name = "date"
-        dateDescription.expression = NSExpression(forKeyPath: "recordDate")
+        dateDescription.expression = NSExpression(forKeyPath: recordDateKeyPath)
         dateDescription.expressionResultType = .dateAttributeType
 
         let countDescription = NSExpressionDescription()
         countDescription.name = "trackersCount"
-        countDescription.expression = NSExpression(forFunction: "count:", arguments: [NSExpression(forKeyPath: "trackerId")])
+        countDescription.expression = NSExpression(forFunction: "count:", arguments: [NSExpression(forKeyPath: trackerIdKeyPath)])
         countDescription.expressionResultType = .integer64AttributeType
 
         let completedTrackersCountRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
@@ -73,6 +73,30 @@ final class TrackerRecordStore {
             }
         }
         return Int(datesCount > 0 ? Double(totalTrackersCount) / Double(datesCount) : 0)
+    }
+
+    /// Используется на экране статистики - вычисляет количество "идеальных" дней, в которые были выполнены все запланированные трекеры
+    /// - Returns: результат вычислений
+    public func getIdealCompletionDatesCount() -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackerRecordCoreData")
+        let dateExpression = NSExpression(forKeyPath: recordDateKeyPath)
+        let dateDescription = NSExpressionDescription()
+        dateDescription.name = "serviceDate"
+        dateDescription.expression = dateExpression
+        dateDescription.expressionResultType = .dateAttributeType
+        fetchRequest.propertiesToFetch = [dateDescription]
+        fetchRequest.propertiesToGroupBy = [dateDescription]
+        fetchRequest.resultType = .dictionaryResultType
+
+        guard let dates = try? context.fetch(fetchRequest) as? [[String: Any]] else {
+            return 0
+        }
+        let uniqueDates = dates.compactMap { $0["serviceDate"] as? Date }
+        var idealDaysCount = 0
+        for date in uniqueDates where trackerStore.checkScheduledTrackersForCompletion(at: date) {
+            idealDaysCount += 1
+        }
+        return idealDaysCount
     }
 
     /// Производит обработку выполнения трекера:

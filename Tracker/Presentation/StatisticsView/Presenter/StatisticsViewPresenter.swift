@@ -33,7 +33,10 @@ final class StatisticsViewPresenter: StatisticsViewPresenterProtocol {
                 type: .averageTrackers,
                 value: trackerRecordStore.getAverageTrackersCompletionPerDay()
             ),
-            StatisticsElement(type: .idealDaysCount, value: 2)
+            StatisticsElement(
+                type: .idealDaysCount,
+                value: trackerRecordStore.getIdealCompletionDatesCount()
+            )
         ]
 
         if statistics.filter({ $0.value > 0 }).isEmpty {

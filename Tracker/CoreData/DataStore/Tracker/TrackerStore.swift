@@ -70,7 +70,14 @@ final class TrackerStore: NSObject {
     ///   - indexPath: Индекс трекера в отображаемой коллекции
     ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент удаления
     public func deleteTracker(at indexPath: IndexPath, _ completion: ((Result<Void, Error>) -> Void)? = nil) {
-        let record = fetchedResultsController.object(at: indexPath)
+        var record: TrackerCoreData
+        let fixedSectionsCount = (fixedFetchedResultsController.fetchedObjects?.count ?? 0) > 0 ? 1 : 0
+        if indexPath.section == 0 && fixedSectionsCount > 0 {
+            record = fixedFetchedResultsController.object(at: indexPath)
+        } else {
+            let modifiedIndexPath = fixedSectionsCount > 0 ? IndexPath(row: indexPath.row, section: indexPath.section - 1) : indexPath
+            record = fetchedResultsController.object(at: modifiedIndexPath)
+        }
         do {
             context.delete(record)
             try context.save()
@@ -121,6 +128,33 @@ final class TrackerStore: NSObject {
             return nil
         }
         return trackerRecord
+    }
+
+    public func checkScheduledTrackersForCompletion(at date: Date) -> Bool {
+        guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: date) else {
+            assertionFailure("Ошибка определения дня недели на основании текущей даты")
+            return false
+        }
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[c] %@", scheduleKeyPath, dayOfTheWeek.rawValue.intToString)
+        guard
+            let trackers = try? context.fetch(fetchRequest)
+        else {
+            return false
+        }
+        var result: Bool
+        for tracker in trackers {
+            result = false
+            if let dates = tracker.dates as? Set<TrackerRecordCoreData> {
+                result = dates.contains { trackerDate in
+                    return trackerDate.recordDate == date
+                }
+            }
+            if !result {
+                return false
+            }
+        }
+        return true
     }
 
     /// Включает/исключает трекер из списка закреплённых трекеров
