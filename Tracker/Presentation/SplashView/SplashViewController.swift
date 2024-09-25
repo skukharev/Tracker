@@ -29,7 +29,12 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        switchToOnboardingScreen()
+        if SettingsStorage.shared.onboardingDidShow {
+            switchToMainScreen()
+        } else {
+            SettingsStorage.shared.onboardingDidShow = true
+            switchToOnboardingScreen()
+        }
     }
     // MARK: - Private Methods
 
@@ -52,6 +57,13 @@ final class SplashViewController: UIViewController {
     /// Переключает rootViewController на экран онбординга
     private func switchToOnboardingScreen() {
         let targetViewController = OnboardingScreenAssembley.build()
+        let router = Router(viewController: self, targetViewController: targetViewController)
+        router.showNext()
+    }
+
+    /// Переключает rootViewController на главный экран приложения
+    private func switchToMainScreen() {
+        let targetViewController = TrackersScreenAssembley.build()
         let router = Router(viewController: self, targetViewController: targetViewController)
         router.showNext()
     }
