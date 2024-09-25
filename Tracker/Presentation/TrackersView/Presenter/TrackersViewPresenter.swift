@@ -245,13 +245,21 @@ extension TrackersViewPresenter: AddTrackerViewPresenterDelegate {
 extension TrackersViewPresenter: TrackerStoreDelegate {
     func didUpdate(recordCounts: RecordCounts) {
         if recordCounts.allRecordsCount == 0 {
-            viewController?.showTrackersListStub(
-                with: TrackersListStubModel(
+            var trackersListStubModel: TrackersListStubModel
+            if let trackersSearchFilter = trackersSearchFilter, !trackersSearchFilter.isEmpty {
+                trackersListStubModel = TrackersListStubModel(
+                    stubImage: Asset.Images.statisticsStub.image,
+                    stubTitle: Constants.trackersStubEmptyFilterLabelText,
+                    isFilterButtonHidden: false
+                )
+            } else {
+                trackersListStubModel = TrackersListStubModel(
                     stubImage: Asset.Images.trackersStub.image,
                     stubTitle: Constants.trackersStubImageLabelText,
                     isFilterButtonHidden: true
                 )
-            )
+            }
+            viewController?.showTrackersListStub(with: trackersListStubModel)
         } else {
             if recordCounts.filteredRecordsCount == 0 {
                 viewController?.showTrackersListStub(
