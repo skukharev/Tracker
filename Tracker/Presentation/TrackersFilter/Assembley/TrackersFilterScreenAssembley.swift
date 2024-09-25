@@ -9,9 +9,8 @@ import UIKit
 
 enum TrackersFilterScreenAssembley {
     static func build(withDelegate delegate: TrackersFilterDelegate, withCurrentFilter filter: TrackersFilter) -> UIViewController {
-        let trackersFilterViewController = TrackersFilterViewController()
         let trackersFilterViewPresenter = TrackersFilterViewPresenter()
-        trackersFilterViewController.configure(trackersFilterViewPresenter)
+        let trackersFilterViewController = TrackersFilterViewController(withPresenter: trackersFilterViewPresenter)
         trackersFilterViewPresenter.delegate = delegate
         trackersFilterViewPresenter.setFilter(with: filter)
         return trackersFilterViewController

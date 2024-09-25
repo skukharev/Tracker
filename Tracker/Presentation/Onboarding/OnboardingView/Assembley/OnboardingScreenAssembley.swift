@@ -13,8 +13,7 @@ enum OnboardingScreenAssembley {
     static func build() -> UIViewController {
         let onboardingViewController = OnboardingViewController.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
         let onboardingViewPresenter = OnboardingViewPresenter()
-        onboardingViewController.presenter = onboardingViewPresenter
-        onboardingViewPresenter.viewController = onboardingViewController
+        onboardingViewController.configure(withPresenter: onboardingViewPresenter)
         return onboardingViewController
     }
 }

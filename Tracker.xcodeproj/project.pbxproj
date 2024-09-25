@@ -909,8 +909,8 @@
 		07D330AE2CA2CCBE00715D75 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				07D330B12CA2CD3600715D75 /* StatisticsCollectionViewCell.swift */,
 				079432CE2C56159400DDCE10 /* StatisticsViewController.swift */,
+				07D330B12CA2CD3600715D75 /* StatisticsCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

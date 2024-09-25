@@ -9,12 +9,10 @@ import UIKit
 
 enum ScheduleScreenAssembley {
     static func build(withDelegate delegate: NewTrackerViewPresenterProtocol?, forSchedule schedule: Week) -> UIViewController {
-        let scheduleVewController = ScheduleViewController()
         let scheduleViewPresenter = ScheduleViewPresenter()
+        let scheduleVewController = ScheduleViewController(withPresenter: scheduleViewPresenter)
         scheduleViewPresenter.schedule = schedule
         scheduleViewPresenter.delegate = delegate
-        scheduleVewController.presenter = scheduleViewPresenter
-        scheduleViewPresenter.viewController = scheduleVewController
         return scheduleVewController
     }
 }

@@ -23,9 +23,9 @@ final class TrackersFilterViewController: UIViewController, TrackersFilterViewCo
         static let filtersTableViewHeightConstraint: CGFloat = 4 * filtersTableViewRowHeight
     }
 
-    // MARK: - Public Properties
+    // MARK: - Constants
 
-    var presenter: TrackersFilterViewPresenterProtocol?
+    internal let presenter: TrackersFilterViewPresenterProtocol
 
     // MARK: - Private Properties
 
@@ -54,19 +54,22 @@ final class TrackersFilterViewController: UIViewController, TrackersFilterViewCo
 
     // MARK: - Initializers
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(withPresenter presenter: TrackersFilterViewPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+        presenter.viewController = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
         filtersTableView.register(FilterCell.classForCoder(), forCellReuseIdentifier: FilterCell.Constants.identifier)
         filtersTableView.dataSource = self
         filtersTableView.delegate = self
-    }
-
-    // MARK: - Punlic Methods
-
-    func configure(_ presenter: TrackersFilterViewPresenterProtocol) {
-        self.presenter = presenter
-        presenter.viewController = self
     }
 
     // MARK: - Private Methods
@@ -106,7 +109,7 @@ extension TrackersFilterViewController: UITableViewDataSource {
             assertionFailure("Ошибка приведения типов ячеек табличного представления со списком фильтров")
             return UITableViewCell()
         }
-        guard let filterCellModel = presenter?.trackersFilter(at: indexPath) else {
+        guard let filterCellModel = presenter.trackersFilter(at: indexPath) else {
             assertionFailure("Ошибка получения наименования фильтра трекеров по индексу \(indexPath)")
             return cell
         }
@@ -129,6 +132,6 @@ extension TrackersFilterViewController: UITableViewDelegate {
     ///   - indexPath: индекс выбранной ячейки
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true)
-        presenter?.didSelectTrackersFilter(at: indexPath)
+        presenter.didSelectTrackersFilter(at: indexPath)
     }
 }

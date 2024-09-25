@@ -37,7 +37,9 @@ final class TrackersViewPresenter: NSObject, TrackersViewPresenterProtocol {
         }
         set {
             trackersDate = newValue.removeTimeStamp
-            loadTrackers()
+            if viewController != nil {
+                loadTrackers()
+            }
         }
     }
     public var trackersSearchFilter: String? {

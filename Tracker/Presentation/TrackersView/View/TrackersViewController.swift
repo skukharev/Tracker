@@ -35,7 +35,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     // MARK: - Private Properties
 
-    private var presenter: TrackersViewPresenterProtocol?
+    private let presenter: TrackersViewPresenterProtocol
     /// Кнопка "Добавить трекер"
     private lazy var addTrackerButton: UIButton = {
         let button = UIButton(type: .system)
@@ -113,13 +113,14 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         return view
     }()
 
-    // MARK: - Public Methods
+    // MARK: - Initializers
 
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
         self.setupHideKeyboardOnTap()
-        presenter?.currentDate = Date()
+        setCurrentDate(presenter.currentDate)
+        presenter.currentDate = presenter.currentDate
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -136,10 +137,17 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         print("Зарегистрировано событие аналитики 'close' с параметрами \(params)")
     }
 
-    func configure(_ presenter: TrackersViewPresenterProtocol) {
+    init(withPresenter presenter: TrackersViewPresenterProtocol) {
         self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
         presenter.viewController = self
     }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public Methods
 
     func hideTrackersListStub() {
         if view.subviews.contains(trackersStubImage) {
@@ -220,7 +228,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     /// Обработчик нажатия кнопки "Добавить трекер"
     /// - Parameter sender: объект-инициатор события
     @objc private func addTrackerTouchUpInside(_ sender: UIButton) {
-        presenter?.addTracker()
+        presenter.addTracker()
     }
 
     private func confirmTrackerDelete(at indexPath: IndexPath) {
@@ -234,7 +242,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
             UIAlertAction(
                 title: Constants.confirmTrackerDeleteAlertYesButtonText,
                 style: .destructive) { [weak self] _ in
-                    self?.presenter?.deleteTracker(at: indexPath) { _ in }
+                    self?.presenter.deleteTracker(at: indexPath) { _ in }
             }
         )
         present(alertView, animated: true)
@@ -243,7 +251,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
     ///  Обработчик изменения значения элемента управления датами
     /// - Parameter sender: объект-инициатор события
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        presenter?.currentDate = sender.date
+        presenter.currentDate = sender.date
     }
 
     /// Создаёт и размещает элементы управления во вью контроллере
@@ -276,7 +284,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
 
     @objc private func filterButtonTouchUpInside(_ sender: UIButton) {
         UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view).impactOccurred()
-        presenter?.showTrackersFilters()
+        presenter.showTrackersFilters()
     }
 
     /// Создаёт констрейнты для элементов управления
@@ -327,10 +335,10 @@ extension TrackersViewController: TrackersCollectionViewCellDelegate {
             completion()
             return
         }
-        presenter?.recordTracker(for: indexPath) { [weak self] result in
+        presenter.recordTracker(for: indexPath) { [weak self] result in
             switch result {
             case .success:
-                self?.presenter?.showCell(for: cell, with: indexPath)
+                self?.presenter.showCell(for: cell, with: indexPath)
             default: break
             }
         }
@@ -345,10 +353,6 @@ extension TrackersViewController: UICollectionViewDataSource {
     /// - Parameter collectionView: Элемент управления
     /// - Returns: Количество секций (категорий трекеров)
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let presenter = presenter else {
-            assertionFailure("Ошибка инициализации ассоциированного презентера")
-            return 0
-        }
         return presenter.trackerCategoriesCount()
     }
 
@@ -358,7 +362,6 @@ extension TrackersViewController: UICollectionViewDataSource {
     ///   - section: Индекс секции в коллекции
     /// - Returns: Количество ячеек (трекеров) в заданной секции (категории трекеров)
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let presenter = presenter else { return 0 }
         return presenter.trackersCount(inSection: section)
     }
 
@@ -379,7 +382,7 @@ extension TrackersViewController: UICollectionViewDataSource {
                 assertionFailure("Элемент управления заголовком секции трекеров не найден")
                 return UICollectionReusableView()
             }
-            presenter?.showHeader(for: view, with: indexPath)
+            presenter.showHeader(for: view, with: indexPath)
             return view
         default:
             break
@@ -400,7 +403,7 @@ extension TrackersViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.delegate = self
-        presenter?.showCell(for: cell, with: indexPath)
+        presenter.showCell(for: cell, with: indexPath)
         return cell
     }
 }
@@ -460,7 +463,7 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         let indexPath = IndexPath(row: 0, section: section)
 
         let headerView = TrackersCollectionHeaderView()
-        presenter?.showHeader(for: headerView, with: indexPath)
+        presenter.showHeader(for: headerView, with: indexPath)
 
         let headerSize = headerView.systemLayoutSizeFitting(
             CGSize(width: collectionView.frame.width, height: 30),
@@ -476,16 +479,16 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
 extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
-            let pinActionTitle = self?.presenter?.getPinnedTrackerMenuText(at: indexPath) ?? ""
+            let pinActionTitle = self?.presenter.getPinnedTrackerMenuText(at: indexPath) ?? ""
             let pinAction = UIAction(title: pinActionTitle) { _ in
-                self?.presenter?.toggleFixTracker(at: indexPath) { _ in }
+                self?.presenter.toggleFixTracker(at: indexPath) { _ in }
             }
             let editAction = UIAction(title: L10n.trackersCollectionMenuEditTitle) { _ in
                 let params: AnalyticsEventParam = ["screen": "Main", "item": "edit"]
                 AnalyticsService.report(event: "click", params: params)
                 print("Зарегистрировано событие аналитики 'click' с параметрами \(params)")
 
-                self?.presenter?.editTracker(at: indexPath) { _ in }
+                self?.presenter.editTracker(at: indexPath) { _ in }
             }
             let deleteAction = UIAction(title: L10n.trackersCollectionMenuDeleteTitle, attributes: .destructive) { _ in
                 let params: AnalyticsEventParam = ["screen": "Main", "item": "delete"]
@@ -503,6 +506,6 @@ extension TrackersViewController: UICollectionViewDelegate {
 
 extension TrackersViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        presenter?.trackersSearchFilter = searchText
+        presenter.trackersSearchFilter = searchText
     }
 } // swiftlint:disable:this file_length

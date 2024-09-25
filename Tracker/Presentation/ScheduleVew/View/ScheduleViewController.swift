@@ -30,9 +30,9 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         static let readyButtonBottomConstraint: CGFloat = -16
     }
 
-    // MARK: - Public Properties
+    // MARK: - Constants
 
-    var presenter: ScheduleViewPresenterProtocol?
+    private let presenter: ScheduleViewPresenterProtocol
 
     // MARK: - Private Properties
 
@@ -85,6 +85,16 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
 
     // MARK: - Initializers
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(withPresenter presenter: ScheduleViewPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+        presenter.viewController = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         scheduleTableView.register(ScheduleCell.classForCoder(), forCellReuseIdentifier: ScheduleCell.Constants.identifier)
@@ -95,7 +105,7 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        presenter?.needSaveSchedule()
+        presenter.needSaveSchedule()
     }
 
     // MARK: - Private Methods
@@ -159,7 +169,7 @@ extension ScheduleViewController: UITableViewDataSource {
             print(#fileID, #function, #line, "Ошибка приведения типа ячейки TableView к ScheduleCell")
             return UITableViewCell()
         }
-        presenter?.configureScheduleCell(for: scheduleCell, with: indexPath)
+        presenter.configureScheduleCell(for: scheduleCell, with: indexPath)
         scheduleCell.delegate = presenter as? ScheduleCellDelegate
         return scheduleCell
     }

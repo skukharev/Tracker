@@ -6,6 +6,6 @@
 //
 
 protocol TrackersFilterViewControllerProtocol: AnyObject {
-    /// Ассойциированный презентер вью контроллера
-    var presenter: TrackersFilterViewPresenterProtocol? { get set }
+    /// Ассоциированный презентер вью контроллера
+    var presenter: TrackersFilterViewPresenterProtocol { get }
 }

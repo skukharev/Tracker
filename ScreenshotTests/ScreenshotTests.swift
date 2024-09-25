@@ -23,10 +23,9 @@ final class ScreenshotTests: XCTestCase {
 
 enum TrackersViewScreenAssembley {
     static func build() -> UIViewController {
-        let trackersViewController = TrackersViewController()
-        trackersViewController.tabBarItem = UITabBarItem(title: L10n.trackersTabBarItemTitle, image: Asset.Images.trackersTabBarImage.image, tag: 1)
         let trackersViewPresenter = TrackersViewPresenterSpy()
-        trackersViewController.configure(trackersViewPresenter)
+        let trackersViewController = TrackersViewController(withPresenter: trackersViewPresenter)
+        trackersViewController.tabBarItem = UITabBarItem(title: L10n.trackersTabBarItemTitle, image: Asset.Images.trackersTabBarImage.image, tag: 1)
         // Создание вью контроллера для экрана со статистикой
         let statisticsViewController = StatisticsViewController()
         statisticsViewController.tabBarItem = UITabBarItem(title: L10n.statisticsTabBarItemTitle, image: Asset.Images.statisticsTabBarImage.image, tag: 2)

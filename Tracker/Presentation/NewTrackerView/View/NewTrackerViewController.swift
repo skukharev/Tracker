@@ -49,9 +49,9 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
         static let controlsScrollViewTopConstraint: CGFloat = 38
     }
 
-    // MARK: - Public Properties
+    // MARK: - Constants
 
-    var presenter: NewTrackerViewPresenterProtocol?
+    private let presenter: NewTrackerViewPresenterProtocol
 
     // MARK: - Private Properties
 
@@ -234,6 +234,16 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
 
     // MARK: - Initializers
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(withPresenter presenter: NewTrackerViewPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+        presenter.viewController = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupHideKeyboardOnTap()
@@ -326,7 +336,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     func updateButtonsPanel() {
         let categoryButtonPath = IndexPath(row: 0, section: 0)
         var buttonsPath = [categoryButtonPath]
-        if presenter?.trackerType == .habit {
+        if presenter.trackerType == .habit {
             let scheduleButtonPath = IndexPath(row: 1, section: 0)
             buttonsPath.append(scheduleButtonPath)
         }
@@ -363,7 +373,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     @objc private func saveButtonTouchUpInside(_ sender: UIButton) {
         let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
         impact.impactOccurred()
-        presenter?.saveTracker { [weak self] result in
+        presenter.saveTracker { [weak self] result in
             switch result {
             case .success:
                 self?.dismiss(animated: true)
@@ -440,7 +450,7 @@ final class NewTrackerViewController: UIViewController, NewTrackerViewPresenterD
     /// Обработчик изменения значения текстового поля ввода "Наименование трекера"
     /// - Parameter sender: объект, инициировавший событие
     @objc private func trackerNameEditingDidChange(_ sender: UITextField) {
-        presenter?.processName(sender.text)
+        presenter.processName(sender.text)
     }
 }
 
@@ -453,7 +463,7 @@ extension NewTrackerViewController: UITableViewDataSource {
     ///   - section: индекс секции, для которой запрашивается количество кнопок
     /// - Returns: Количество кнопок на панели
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let trackerType = presenter?.trackerType else { return 0 }
+        guard let trackerType = presenter.trackerType else { return 0 }
         switch trackerType {
         case .habit:
             return 2
@@ -473,7 +483,7 @@ extension NewTrackerViewController: UITableViewDataSource {
             print(#fileID, #function, #line, "Ошибка приведения типов")
             return UITableViewCell()
         }
-        presenter?.configureTrackerButtonCell(tableView, for: buttonsCell, with: indexPath)
+        presenter.configureTrackerButtonCell(tableView, for: buttonsCell, with: indexPath)
         return buttonsCell
     }
 }
@@ -487,9 +497,9 @@ extension NewTrackerViewController: UITableViewDelegate {
     ///   - indexPath: индекс отображаемой кнопки
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 {
-            presenter?.showCategories()
+            presenter.showCategories()
         } else {
-            presenter?.showTrackerSchedule()
+            presenter.showTrackerSchedule()
         }
     }
 }
@@ -504,10 +514,10 @@ extension NewTrackerViewController: UICollectionViewDataSource {
     /// - Returns: Количество элементов коллекции
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == emojiCollectionView {
-            return presenter?.emojies.count ?? 0
+            return presenter.emojies.count
         }
         if collectionView == colorsCollectionView {
-            return presenter?.colors.count ?? 0
+            return presenter.colors.count
         }
         return 0
     }
@@ -523,7 +533,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             cell.delegate = self
-            presenter?.showEmojiCell(for: cell, at: indexPath, withSelection: false)
+            presenter.showEmojiCell(for: cell, at: indexPath, withSelection: false)
             return cell
         }
         if collectionView == colorsCollectionView {
@@ -531,7 +541,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
                 return UICollectionViewCell()
             }
             cell.delegate = self
-            presenter?.showColorCell(for: cell, at: indexPath, withSelection: false)
+            presenter.showColorCell(for: cell, at: indexPath, withSelection: false)
             return cell
         }
         return UICollectionViewCell()
@@ -543,24 +553,25 @@ extension NewTrackerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerEmojiCell else { return }
-            presenter?.showEmojiCell(for: cell, at: indexPath, withSelection: true)
+            presenter.showEmojiCell(for: cell, at: indexPath, withSelection: true)
         }
         if collectionView == colorsCollectionView {
             guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerColorCell else { return }
-            presenter?.showColorCell(for: cell, at: indexPath, withSelection: true)
+            presenter.showColorCell(for: cell, at: indexPath, withSelection: true)
         }
         let impact = UIImpactFeedbackGenerator.initiate(style: .heavy, view: self.view)
         impact.impactOccurred()
     }
+
     /// Обработчик снятия выделения с ячейки
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if collectionView == emojiCollectionView {
             guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerEmojiCell else { return }
-            presenter?.showEmojiCell(for: cell, at: indexPath, withSelection: false)
+            presenter.showEmojiCell(for: cell, at: indexPath, withSelection: false)
         }
         if collectionView == colorsCollectionView {
             guard let cell = collectionView.cellForItem(at: indexPath) as? NewTrackerColorCell else { return }
-            presenter?.showColorCell(for: cell, at: indexPath, withSelection: false)
+            presenter.showColorCell(for: cell, at: indexPath, withSelection: false)
         }
     }
 }
@@ -621,7 +632,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
 
 extension NewTrackerViewController: NewTrackerEmojiCellDelegate {
     func emojiDidChange(_ newEmoji: String) {
-        presenter?.processEmoji(newEmoji)
+        presenter.processEmoji(newEmoji)
     }
 }
 
@@ -629,7 +640,7 @@ extension NewTrackerViewController: NewTrackerEmojiCellDelegate {
 
 extension NewTrackerViewController: NewTrackerColorCellDelegate {
     func colorDidChange(_ newColor: UIColor) {
-        presenter?.processColor(newColor)
+        presenter.processColor(newColor)
     }
 }
 

@@ -20,8 +20,11 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
         static let statisticsCollectionTopConstraint: CGFloat = 69
     }
 
+    // MARK: - Constants
+
+    private let presenter: StatisticsViewPresenterProtocol
+
     // MARK: - Private Properties
-    private var presenter: StatisticsViewPresenterProtocol?
 
     private lazy var statisticsStubImage: UIImageView = {
         let image = UIImageView()
@@ -48,25 +51,28 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
 
     // MARK: - Initializers
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(withPresenter presenter: StatisticsViewPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+        presenter.viewController = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
-        presenter?.calculateStatistics()
+        presenter.calculateStatistics()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter?.calculateStatistics()
+        presenter.calculateStatistics()
     }
 
     // MARK: - Public Methods
-
-    /// Используется для связи вью контроллера с презентером
-    /// - Parameter presenter: презентер вью контроллера
-    func configure(_ presenter: StatisticsViewPresenterProtocol) {
-        self.presenter = presenter
-        presenter.viewController = self
-    }
 
     func hideStatisticsStub() {
         if view.subviews.contains(statisticsStubImage) {
@@ -134,7 +140,6 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
 
 extension StatisticsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let presenter = presenter else { return 0 }
         return presenter.statisticsCount()
     }
 
@@ -145,7 +150,7 @@ extension StatisticsViewController: UICollectionViewDataSource {
         else {
             return UICollectionViewCell()
         }
-        presenter?.showCell(for: cell, with: indexPath)
+        presenter.showCell(for: cell, with: indexPath)
         return cell
     }
 }

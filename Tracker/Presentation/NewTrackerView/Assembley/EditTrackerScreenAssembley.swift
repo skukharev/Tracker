@@ -9,11 +9,9 @@ import UIKit
 
 enum EditTrackerScreenAssembley {
     static func build(withDelegate delegate: AddTrackerViewPresenterDelegate?, tracker: Tracker) -> UIViewController {
-        let newTrackerViewController = NewTrackerViewController()
         let newTrackerViewPresenter = NewTrackerViewPresenter()
+        let newTrackerViewController = NewTrackerViewController(withPresenter: newTrackerViewPresenter)
         newTrackerViewPresenter.delegate = delegate
-        newTrackerViewController.presenter = newTrackerViewPresenter
-        newTrackerViewPresenter.viewController = newTrackerViewController
         newTrackerViewPresenter.startEditing(tracker: tracker)
         return newTrackerViewController
     }
