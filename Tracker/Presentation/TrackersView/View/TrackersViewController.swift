@@ -90,7 +90,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         return view
     }()
     /// Коллекция трекеров
-    internal lazy var trackersCollection: UICollectionView = {
+    private lazy var trackersCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -223,7 +223,7 @@ final class TrackersViewController: UIViewController, TrackersViewPresenterDeleg
         presenter?.addTracker()
     }
 
-    internal func confirmTrackerDelete(at indexPath: IndexPath) {
+    private func confirmTrackerDelete(at indexPath: IndexPath) {
         let alertView = UIAlertController(
             title: nil,
             message: Constants.confirmTrackerDeleteAlertMessage,

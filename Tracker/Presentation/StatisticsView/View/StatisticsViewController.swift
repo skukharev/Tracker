@@ -38,7 +38,7 @@ final class StatisticsViewController: UIViewController, StatisticsViewPresenterD
         label.text = Constants.statisticsStubImageLabelText
         return label
     }()
-    internal lazy var statisticsCollection: UICollectionView = {
+    private lazy var statisticsCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
