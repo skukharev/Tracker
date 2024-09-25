@@ -238,7 +238,8 @@ extension TrackerStore: TrackerStoreProtocol {
         let scheduledTrackers = NSPredicate(format: "%K CONTAINS[c] %@", scheduleKeyPath, dayOfTheWeek.rawValue.intToString)
         let nonscheduledTrackers = NSPredicate(format: "%K = %@ AND SUBQUERY(%K, $X, $X.trackerId = SELF.id).@count = 0", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates))
         let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K = %@ AND ANY %K = %@", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
-        var compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
+        let fixedTrackers = NSPredicate(format: "%K = true", isFixedKeyPath)
+        var compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers, fixedTrackers])
         if
             let searchFilter = searchFilter,
             !searchFilter.isEmpty {
