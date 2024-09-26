@@ -118,7 +118,7 @@ final class TrackersCollectionViewCell: UICollectionViewCell {
         /// Наименование трекера
         trackersName.setTitle(model.name, for: .normal)
         /// Количество повторений
-        repeatsCount.text = model.daysCount.toStringWithSuffix(suffixOne: "день", suffixTwoFour: "дня", suffixDefault: "дней")
+        repeatsCount.text = DaysFormatter.shared.daysToStringWithSuffix(Double(model.daysCount))
         /// Кнопка трекера
         recordButton.backgroundColor = model.color
         if model.isCompleted {

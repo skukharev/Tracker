@@ -12,10 +12,12 @@ import UIKit
 final class TrackerStore: NSObject {
     // MARK: - Constants
 
+    static let shared = TrackerStore()
     private let context: NSManagedObjectContext
     private let scheduleKeyPath = #keyPath(TrackerCoreData.schedule)
-    private let trackerCategoryNameKeyPath = #keyPath(TrackerCoreData.category.name)
+    private let trackerCategoryNameKeyPath = #keyPath(TrackerCoreData.categotyName)
     private let trackerNameKeyPath = #keyPath(TrackerCoreData.name)
+    private let isFixedKeyPath = #keyPath(TrackerCoreData.isFixed)
 
     // MARK: - Public Properties
 
@@ -32,16 +34,19 @@ final class TrackerStore: NSObject {
         let fetchedResultsController = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.context,
-            sectionNameKeyPath: #keyPath(TrackerCoreData.category.name),
+            sectionNameKeyPath: trackerCategoryNameKeyPath,
             cacheName: nil
         )
         fetchedResultsController.delegate = self
         return fetchedResultsController
     }()
-    private var insertedPaths: [IndexPath] = []
-    private var deletedPaths: [IndexPath] = []
     private var insertedSectionIndexes: IndexSet?
     private var deletedSectionIndexes: IndexSet?
+    private var insertedPaths: [IndexPath] = []
+    private var deletedPaths: [IndexPath] = []
+    private var movedPaths: [(IndexPath, IndexPath)] = []
+    private var updatedPaths: [IndexPath] = []
+
     // MARK: - Initializers
 
     override convenience init() {
@@ -54,18 +59,33 @@ final class TrackerStore: NSObject {
 
     // MARK: - Public Methods
 
+    /// Удаляет трекер на основании его индекса в отображаемой коллекции
+    /// - Parameters
+    ///   - indexPath: Индекс трекера в отображаемой коллекции
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент удаления
+    public func deleteTracker(at indexPath: IndexPath, _ completion: ((Result<Void, Error>) -> Void)? = nil) {
+        let record = fetchedResultsController.object(at: indexPath)
+        do {
+            context.delete(record)
+            try context.save()
+            completion?(.success(()))
+        } catch let error {
+            context.rollback()
+            completion?(.failure(error))
+            assertionFailure("При удалении трекера произошла ошибка \(error.localizedDescription)")
+        }
+    }
+
     /// Добавляет / изменяет трекер в базу данных
     /// - Parameters:
     ///   - tracker: данные атрибутов трекера
     ///   - categoryID: идентификатор категории трекера в базе данных
     /// - Returns: идентификатор трекера в базе данных
-    public func addTracker(_ tracker: Tracker, withCategoryID categoryID: NSManagedObjectID) -> NSManagedObjectID? {
-        /// Получение ссылки на запись БД с категорией трекера
+    public func saveTracker(_ tracker: Tracker, withCategoryID categoryID: NSManagedObjectID) -> NSManagedObjectID? {
         guard let category = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData else {
             assertionFailure("В базе данных не найдена категория с идентификатором \(categoryID)")
             return nil
         }
-        /// Инициализация ссылки на запись БД с трекером
         let trackerCoreData = getTrackerCoreData(withId: tracker.id.uuidString) ?? TrackerCoreData(context: context)
         updateExistingTracker(trackerCoreData, withCategory: category, withTracker: tracker)
         do {
@@ -77,6 +97,72 @@ final class TrackerStore: NSObject {
             return nil
         }
     }
+
+    /// Возвращает ссылку на объект трекера в базе данных по заданному идентификатору трекера
+    /// - Parameter id: Идентификатор трекера
+    /// - Returns: ссылка на объект трекера в базе данных
+    public func getTrackerCoreData(withId id: String) -> TrackerCoreData? {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.returnsObjectsAsFaults = false
+        request.resultType = .managedObjectIDResultType
+        request.fetchLimit = 1
+        request.predicate = NSPredicate(format: "id == %@", id)
+        guard
+            let trackers = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
+            let trackerID = trackers.finalResult?.first as? NSManagedObjectID,
+            let trackerRecord = try? context.existingObject(with: trackerID) as? TrackerCoreData
+        else {
+            return nil
+        }
+        return trackerRecord
+    }
+
+    public func checkScheduledTrackersForCompletion(at date: Date) -> Bool {
+        guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: date) else {
+            assertionFailure("Ошибка определения дня недели на основании текущей даты")
+            return false
+        }
+        let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[c] %@", scheduleKeyPath, dayOfTheWeek.rawValue.intToString)
+        guard
+            let trackers = try? context.fetch(fetchRequest)
+        else {
+            return false
+        }
+        var result: Bool
+        for tracker in trackers {
+            result = false
+            if let dates = tracker.dates as? Set<TrackerRecordCoreData> {
+                result = dates.contains { trackerDate in
+                    return trackerDate.recordDate == date
+                }
+            }
+            if !result {
+                return false
+            }
+        }
+        return true
+    }
+
+    /// Включает/исключает трекер из списка закреплённых трекеров
+    /// - Parameters
+    ///   - indexPath: Индекс трекера в отображаемой коллекции
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи
+    public func toggleFixTracker(at indexPath: IndexPath, _ completion: ((Result<Void, Error>) -> Void)? = nil) {
+        let record = fetchedResultsController.object(at: indexPath)
+        record.isFixed.toggle()
+        record.categotyName = record.isFixed ? GlobalConstants.fixedCategoryId : record.category?.name
+        do {
+            try context.save()
+            completion?(.success(()))
+        } catch let error {
+            context.rollback()
+            completion?(.failure(error))
+            assertionFailure("При записи трекера произошла ошибка \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - Private Methods
 
     /// Конвертирует дни недели трекера в строковое представление для хранения в базе данных
     /// - Parameter schedule: Дни недели повторения трекера
@@ -118,27 +204,6 @@ final class TrackerStore: NSObject {
         return result
     }
 
-    /// Возвращает ссылку на объект трекера в базе данных по заданному идентификатору трекера
-    /// - Parameter id: Идентификатор трекера
-    /// - Returns: ссылка на объект трекера в базе данных
-    public func getTrackerCoreData(withId id: String) -> TrackerCoreData? {
-        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        request.returnsObjectsAsFaults = false
-        request.resultType = .managedObjectIDResultType
-        request.fetchLimit = 1
-        request.predicate = NSPredicate(format: "id == %@", id)
-        guard
-            let trackers = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
-            let trackerID = trackers.finalResult?.first as? NSManagedObjectID,
-            let trackerRecord = try? context.existingObject(with: trackerID) as? TrackerCoreData
-        else {
-            return nil
-        }
-        return trackerRecord
-    }
-
-    // MARK: - Private Methods
-
     /// Используется для заполнения записи в базе данных по трекеру перед добавлением / изменением
     /// - Parameters:
     ///   - trackerCoreData: Ссылка на экземпляр записи сущности TrackerCoreData в базе данных
@@ -150,7 +215,9 @@ final class TrackerStore: NSObject {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.color = tracker.color
         trackerCoreData.schedule = convertScheduleToString(tracker.schedule)
+        trackerCoreData.isFixed = tracker.isFixed
         trackerCoreData.category = category
+        trackerCoreData.categotyName = category.name
     }
 }
 
@@ -158,10 +225,11 @@ final class TrackerStore: NSObject {
 
 extension TrackerStore: TrackerStoreProtocol {
     func categoryName(_ section: Int) -> String {
-        return fetchedResultsController.sections?[safe: section]?.name ?? ""
+        let categoryName = fetchedResultsController.sections?[safe: section]?.name ?? ""
+        return categoryName == GlobalConstants.fixedCategoryId ? L10n.fixedTrackersSectionTitle : categoryName
     }
 
-    func loadData(atDate currentDate: Date) {
+    func loadData(atDate currentDate: Date, withTrackerSearchFilter searchFilter: String?, withTrackersFilter trackersFilter: TrackersFilter) {
         guard let dayOfTheWeek = Weekday.dayOfTheWeek(of: currentDate) else {
             assertionFailure("Ошибка определения дня недели на основании текущей даты")
             return
@@ -170,11 +238,32 @@ extension TrackerStore: TrackerStoreProtocol {
         let scheduledTrackers = NSPredicate(format: "%K CONTAINS[c] %@", scheduleKeyPath, dayOfTheWeek.rawValue.intToString)
         let nonscheduledTrackers = NSPredicate(format: "%K = %@ AND SUBQUERY(%K, $X, $X.trackerId = SELF.id).@count = 0", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates))
         let nonscheduledAndCompletedTrackers = NSPredicate(format: "%K = %@ AND ANY %K = %@", scheduleKeyPath, "[]", #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
-        let compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers])
+        let fixedTrackers = NSPredicate(format: "%K = true", isFixedKeyPath)
+        var compoundPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [scheduledTrackers, nonscheduledTrackers, nonscheduledAndCompletedTrackers, fixedTrackers])
+        if
+            let searchFilter = searchFilter,
+            !searchFilter.isEmpty {
+            let filteredTrackers = NSPredicate(format: "%K CONTAINS[c] %@", trackerNameKeyPath, searchFilter)
+            let filteredCompoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, filteredTrackers])
+            compoundPredicate = filteredCompoundPredicate
+        }
         fetchedResultsController.fetchRequest.predicate = compoundPredicate
 
         do {
             try fetchedResultsController.performFetch()
+            let allRecordsCount = fetchedResultsController.fetchedObjects?.count ?? 0
+            if trackersFilter == .complitedTrackers {
+                let complitedTrackers = NSPredicate(format: "ANY %K = %@", #keyPath(TrackerCoreData.dates.recordDate), currentDate as NSDate)
+                fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, complitedTrackers])
+                try fetchedResultsController.performFetch()
+            }
+            if trackersFilter == .notComplitedTrackers {
+                let complitedTrackers = NSPredicate(format: "SUBQUERY(%K, $X, $X.recordDate = %@).@count = 0", #keyPath(TrackerCoreData.dates), currentDate as NSDate)
+                fetchedResultsController.fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [compoundPredicate, complitedTrackers])
+                try fetchedResultsController.performFetch()
+            }
+            let allFilteredRecordsCount = fetchedResultsController.fetchedObjects?.count ?? 0
+            delegate?.didUpdate(recordCounts: RecordCounts(allRecordsCount: allRecordsCount, filteredRecordsCount: allFilteredRecordsCount))
         } catch {
             assertionFailure("Произошла ошибка при выполнении запроса к базе данных: \(error)")
         }
@@ -194,12 +283,14 @@ extension TrackerStore: TrackerStoreProtocol {
             let id = record.id,
             let name = record.name,
             let color = record.color as? UIColor,
-            let emoji = record.emoji
+            let emoji = record.emoji,
+            let categoryName = record.category?.name
         else {
             return nil
         }
         let schedule = convertStringToSchedule(record.schedule ?? "")
-        return Tracker(id: id, name: name, color: color, emoji: emoji, schedule: schedule)
+        let trackerType = schedule.isEmpty ? TrackerType.event : TrackerType.habit
+        return Tracker(trackerType: trackerType, categoryName: categoryName, id: id, name: name, color: color, emoji: emoji, schedule: schedule, isFixed: record.isFixed)
     }
 }
 
@@ -212,22 +303,27 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         deletedSectionIndexes = IndexSet()
         insertedPaths = []
         deletedPaths = []
+        movedPaths = []
+        updatedPaths = []
     }
 
-    /// Метод controllerDidChangeContent срабатывает после добавления или удаления объектов. В нём мы передаём индексы изменённых объектов в класс MainViewController и очищаем до следующего изменения переменные, которые содержат индексы.
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         delegate?.didUpdate(
-            TrackerStoreUpdate(
+            at: TrackerStoreUpdate(
                 insertedSectionIndexes: insertedSectionIndexes,
                 deletedSectionIndexes: deletedSectionIndexes,
                 insertedPaths: insertedPaths,
-                deletedPaths: deletedPaths
+                deletedPaths: deletedPaths,
+                movedPaths: movedPaths,
+                updatedPaths: updatedPaths
             )
         )
         insertedSectionIndexes = nil
         deletedSectionIndexes = nil
         insertedPaths = []
         deletedPaths = []
+        movedPaths = []
+        updatedPaths = []
     }
 
     /// Метод controller(_: didChange anObject) срабатывает после того как изменится состояние конкретного объекта. Мы добавляем индекс изменённого объекта в соответствующий набор индексов: deletedIndexes — для удалённых объектов, insertedIndexes — для добавленных.
@@ -242,11 +338,15 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
                 deletedPaths.append(indexPath)
             }
         case .move:
-            break
+            if let oldIndexPath = indexPath, let newIndexPath = newIndexPath {
+                movedPaths.append((oldIndexPath, newIndexPath))
+            }
         case .update:
-            break
+            if let indexPath = indexPath {
+                updatedPaths.append(indexPath)
+            }
         @unknown default:
-            break
+            assertionFailure("Неизвестный тип изменения секции в NSFetchedResultsController")
         }
     }
 
@@ -262,7 +362,7 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
         case .update:
             break
         @unknown default:
-            break
+            assertionFailure("Неизвестный тип изменения секции в NSFetchedResultsController")
         }
     }
 }

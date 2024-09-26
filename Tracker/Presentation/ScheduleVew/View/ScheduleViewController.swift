@@ -11,14 +11,14 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
     // MARK: - Types
 
     enum Constants {
-        static let viewTitleText = "Расписание"
+        static let svcViewTitleText = L10n.svcViewTitleText
         static let scheduleTableViewSeparatorInsetsTop: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsLeft: CGFloat = 16
         static let scheduleTableViewSeparatorInsetsBottom: CGFloat = 0
         static let scheduleTableViewSeparatorInsetsRight: CGFloat = 16
         static let scheduleTableViewCornerRadius: CGFloat = 16
         static let scheduleTableViewRowHeight: CGFloat = 75
-        static let readyButtonTitle = "Готово"
+        static let readyButtonTitle = L10n.readyButtonTitle
         static let readyButtonCornerRadius: CGFloat = 16
         static let viewTitleTopConstraint: CGFloat = 27
         static let scheduleTableViewTopConstraint: CGFloat = 30
@@ -30,9 +30,9 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         static let readyButtonBottomConstraint: CGFloat = -16
     }
 
-    // MARK: - Public Properties
+    // MARK: - Constants
 
-    var presenter: ScheduleViewPresenterProtocol?
+    private let presenter: ScheduleViewPresenterProtocol
 
     // MARK: - Private Properties
 
@@ -42,7 +42,7 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = GlobalConstants.ypMedium16
         view.textColor = .appBlack
-        view.text = Constants.viewTitleText
+        view.text = Constants.svcViewTitleText
         return view
     }()
     /// Расписание трекера
@@ -85,6 +85,16 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
 
     // MARK: - Initializers
 
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(withPresenter presenter: ScheduleViewPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+        presenter.viewController = self
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         scheduleTableView.register(ScheduleCell.classForCoder(), forCellReuseIdentifier: ScheduleCell.Constants.identifier)
@@ -95,7 +105,7 @@ final class ScheduleViewController: UIViewController, ScheduleViewPresenterDeleg
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        presenter?.needSaveSchedule()
+        presenter.needSaveSchedule()
     }
 
     // MARK: - Private Methods
@@ -159,7 +169,7 @@ extension ScheduleViewController: UITableViewDataSource {
             print(#fileID, #function, #line, "Ошибка приведения типа ячейки TableView к ScheduleCell")
             return UITableViewCell()
         }
-        presenter?.configureScheduleCell(for: scheduleCell, with: indexPath)
+        presenter.configureScheduleCell(for: scheduleCell, with: indexPath)
         scheduleCell.delegate = presenter as? ScheduleCellDelegate
         return scheduleCell
     }

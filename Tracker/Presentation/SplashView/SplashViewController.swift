@@ -9,23 +9,13 @@ import Foundation
 import UIKit
 
 final class SplashViewController: UIViewController {
-    // MARK: - Types
-
-    private enum Constants {
-        static let applicationLogoImageName = "AppLogo"
-    }
-
     // MARK: - Private Properties
 
     /// Логотип приложения
     private lazy var applicationLogo: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
-        guard let appImage = UIImage(named: Constants.applicationLogoImageName) else {
-            assertionFailure("Ошибка загрузки логотипа приложения")
-            return image
-        }
-        image.image = appImage
+        image.image = Asset.appLogo.image
         image.contentMode = .center
         return image
     }()
@@ -35,9 +25,17 @@ final class SplashViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createAndLayoutViews()
-        switchToOnboardingScreen()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if SettingsStorage.shared.onboardingDidShow {
+            switchToMainScreen()
+        } else {
+            SettingsStorage.shared.onboardingDidShow = true
+            switchToOnboardingScreen()
+        }
+    }
     // MARK: - Private Methods
 
     /// Создаёт и размещает элементы управления во вью контроллере
@@ -59,6 +57,13 @@ final class SplashViewController: UIViewController {
     /// Переключает rootViewController на экран онбординга
     private func switchToOnboardingScreen() {
         let targetViewController = OnboardingScreenAssembley.build()
+        let router = Router(viewController: self, targetViewController: targetViewController)
+        router.showNext()
+    }
+
+    /// Переключает rootViewController на главный экран приложения
+    private func switchToMainScreen() {
+        let targetViewController = TrackersScreenAssembley.build()
         let router = Router(viewController: self, targetViewController: targetViewController)
         router.showNext()
     }

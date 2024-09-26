@@ -1,0 +1,81 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Сергей Кухарев on 18.09.2024.
+  
+*/
+"addCategoryButtonTitle" = "Добавить категорию";
+"addEventButtonTitle" = "Нерегулярное событие";
+"addHabitButtonTitle" = "Привычка";
+"buttonOKTitle" = "OK";
+"cancelButtonTitle" = "Отменить";
+"categoriesStubImageLabelText" = "Привычки и события можно\\nобъединить по смыслу";
+"categoriesTableViewDeleteActionText" = "Удалить";
+"categoriesTableViewEditActionText" = "Редактировать";
+"categoryNamePlaceholder" = "Введите название категории";
+"colorsLabelText" = "Цвет";
+"confirmCategoryDeleteAlertMessage" = "Эта категория точно не нужна?";
+"confirmCategoryDeleteAlertNoButtonText" = "Отменить";
+"confirmCategoryDeleteAlertYesButtonText" = "Удалить";
+"confirmTrackerDeleteAlertMessage" = "Уверены что хотите удалить трекер?";
+"confirmTrackerDeleteAlertNoButtonText" = "Отменить";
+"confirmTrackerDeleteAlertYesButtonText" = "Удалить";
+"cvcViewTitleText" = "Категория";
+"deleteCategoryDenyAlertMessage" = "Для категории определены трекеры, поэтому её удаление ограничено";
+"deleteCategoryDenyAlertTitle" = "Действие ограничено";
+"emojiLabelText" = "Emoji";
+"everyDayTitle" = "Каждый день";
+"filterButtonTitle" = "Фильтры";
+"fixedTrackersSectionTitle" = "Закреплённые";
+"fridayShortening" = "Пт";
+"fridayTitle" = "Пятница";
+"launchApplicationButtonTitle" = "Вот это технологии!";
+"monadyShortening" = "Пн";
+"mondayTitle" = "Понедельник";
+"trackerSaveButtonForCreatingTitle" = "Создать";
+"trackerSaveButtonForEditingTitle" = "Сохранить";
+"onboardingPage1Title" = "Отслеживайте только то, что хотите";
+"onboardingPage2Title" = "Даже если это не литры воды и йога";
+"readyButtonTitle" = "Готово";
+"saturdayShortening" = "Сб";
+"saturdayTitle" = "Суббота";
+"saveButtonTitle" = "Готово";
+"statisticsStubImageLabelText" = "Анализировать пока нечего";
+"statisticsTabBarItemTitle" = "Статистика";
+"statisticsTypeCompleted" = "Трекеров завершено";
+"statisticsTypeAverage" = "Среднее значение";
+"statisticsTypeIdealDaysCount" = "Идеальные дни";
+"sundayShortening" = "Вс";
+"sundayTitle" = "Воскресенье";
+"svcViewTitleText" = "Расписание";
+"thursdayShortening" = "Чт";
+"thursdayTitle" = "Четверг";
+"trackerButtonCellCategoryTitle" = "Категория";
+"trackerButtonCellScheduleTitle" = "Расписание";
+"trackerFiltersViewControllerTitle" = "Фильтры";
+"trackerNamePlaceholderTitle" = "Введите название трекера";
+"trackerNameWarningLabelText" = "Ограничение 38 символов";
+"trackersCollectionMenuPinOnTitle" = "Закрепить";
+"trackersCollectionMenuPinOffTitle" = "Открепить";
+"trackersCollectionMenuEditTitle" = "Редактировать";
+"trackersCollectionMenuDeleteTitle" = "Удалить";
+"trackersFilterTitleForAllTrackers" = "Все трекеры";
+"trackersFilterTitleForCurrentDayTrackers" = "Трекеры на сегодня";
+"trackersFilterTitleForComplitedTrackers" = "Завершённые";
+"trackersFilterTitleForRunningTrackers" = "Не завершённые";
+"trackersSearchBarPlaceholder" = "Поиск";
+"trackersStubImageLabelText" = "Что будем отслеживать?";
+"trackersStubEmptyFilterLabelText" = "Ничего не найдено";
+"trackersTabBarItemTitle" = "Трекеры";
+"tuesdayShortening" = "Вт";
+"tuesdayTitle" = "Вторник";
+"viewTitleForCreateEvent" = "Новое нерегулярное событие";
+"viewTitleForCreateHabit" = "Новая привычка";
+"viewTitleForEditEvent" = "Редактирование нерегулярного события";
+"viewTitleForEditHabit" = "Редактирование привычки";
+"viewTitleText" = "Создание трекера";
+"viewTitleTextForEditCategory" = "Редактирование категории";
+"viewTitleTextForNewCategory" = "Новая категория";
+"wednesdayShortening" = "Ср";
+"wednesdayTitle" = "Среда";

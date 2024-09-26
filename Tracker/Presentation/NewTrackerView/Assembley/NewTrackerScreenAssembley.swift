@@ -14,12 +14,10 @@ enum NewTrackerScreenAssembley {
     ///   - forTrackerType: тип трекера, который требуется создать
     /// - Returns: вью контроллер, готовый к отображению на экране
     static func build(withDelegate delegate: AddTrackerViewPresenterDelegate?, forTrackerType trackerType: TrackerType) -> UIViewController {
-        let newTrackerViewController = NewTrackerViewController()
         let newTrackerViewPresenter = NewTrackerViewPresenter()
+        let newTrackerViewController = NewTrackerViewController(withPresenter: newTrackerViewPresenter)
         newTrackerViewPresenter.delegate = delegate
-        newTrackerViewController.presenter = newTrackerViewPresenter
-        newTrackerViewPresenter.viewController = newTrackerViewController
-        newTrackerViewController.setupViewsWithTrackerType(trackerType: trackerType)
+        newTrackerViewPresenter.startCreating(trackerType: trackerType)
         return newTrackerViewController
     }
 }

@@ -17,19 +17,19 @@ struct ScheduleCellModel {
     var weekDayName: String {
         switch weekDay {
         case .monday:
-            return "Понедельник"
+            return L10n.mondayTitle
         case .tuesday:
-            return "Вторник"
+            return L10n.tuesdayTitle
         case .wednesday:
-            return "Среда"
+            return L10n.wednesdayTitle
         case .thursday:
-            return "Четверг"
+            return L10n.thursdayTitle
         case .friday:
-            return "Пятница"
+            return L10n.fridayTitle
         case .saturday:
-            return "Суббота"
+            return L10n.saturdayTitle
         case .sunday:
-            return "Воскресенье"
+            return L10n.sundayTitle
         }
     }
 }

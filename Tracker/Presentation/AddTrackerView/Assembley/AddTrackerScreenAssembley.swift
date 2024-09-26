@@ -12,10 +12,8 @@ enum AddTrackerScreenAssembley {
     /// - Parameter withDelegate: делегат вью контроллера, который будет получать событие об успешном добавлении трекера
     /// - Returns: вью контроллер, готовый к показу на экране
     static func build(withDelegate: AddTrackerViewPresenterDelegate) -> UIViewController {
-        let addTrackerViewController = AddTrackerViewController()
         let addTrackerViewPresenter = AddTrackerViewPresenter()
-        addTrackerViewController.presenter = addTrackerViewPresenter
-        addTrackerViewPresenter.viewController = addTrackerViewController
+        let addTrackerViewController = AddTrackerViewController(withPresenter: addTrackerViewPresenter)
         addTrackerViewPresenter.delegate = withDelegate
         return addTrackerViewController
     }

@@ -13,6 +13,7 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
     var categoryName: String?
     weak var delegate: NewTrackerViewPresenterProtocol?
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>?
+    var onNeedCategoriesReload: Binding<Void>?
     let trackerCategoryStore = TrackerCategoryStore.shared
 
     // MARK: - Initializers
@@ -41,12 +42,17 @@ final class CategoriesViewModel: CategoriesViewModelProtocol {
         return trackerCategoryStore.checkCategoryDelete(withName: categoryName)
     }
 
+    func didCategoryChange(with categoryName: String) {
+        self.categoryName = categoryName
+        onNeedCategoriesReload?(())
+    }
+
     func didSelectCategory(at indexPath: IndexPath) {
         guard let category = trackerCategoryStore.category(at: indexPath) else {
             assertionFailure("Категория с заданным индексом не найдена в базе данных")
             return
         }
-        delegate?.updateTrackerCategory(with: category)
+        delegate?.processCategory(category)
     }
 }
 

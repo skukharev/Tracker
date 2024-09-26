@@ -9,6 +9,10 @@ import UIKit
 
 /// Сущность для хранения информации про трекер (для «Привычки» или «Нерегулярного события»)
 public struct Tracker {
+    /// Тип трекера
+    let trackerType: TrackerType
+    /// Наименование категории трекера
+    let categoryName: String
     /// Идентификатор трекера
     let id: UUID
     /// Наименование трекера
@@ -19,4 +23,6 @@ public struct Tracker {
     let emoji: String
     /// Расписание трекера
     let schedule: Week
+    /// Признак закреплённого трекера
+    let isFixed: Bool
 }

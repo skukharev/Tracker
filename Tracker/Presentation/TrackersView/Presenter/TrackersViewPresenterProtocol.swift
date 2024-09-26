@@ -13,12 +13,30 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     var viewController: TrackersViewPresenterDelegate? { get set }
     /// Текущая дата трекеров
     var currentDate: Date { get set }
+    /// Текущий фильтр поиска  по трекерам
+    var trackersSearchFilter: String? { get set }
+    /// Текущий фильтр списка трекеров
+    var trackersFilter: TrackersFilter { get set }
     /// Запускает функционал по добавлению трекера
     func addTracker()
+    /// Удаляет трекер из базы данных
+    /// - Parameters:
+    ///   - indexPath: Индекс трекера в коллекции трекеров
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент удаления трекера из базы данных
+    func deleteTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
+    /// Редактирует трекер
+    /// - Parameters:
+    ///   - indexPath: Индекс трекера в коллекции трекеров
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи трекера в базу данных
+    func editTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
+    /// Возвращает текст элемента меню управления закреплением/откреплением трекеров
+    /// - Parameter indexPath: Индекс трекера в коллекции трекеров
+    /// - Returns: Возвращает текст элемента меню
+    func getPinnedTrackerMenuText(at indexPath: IndexPath) -> String
     /// В случае если трекер на текущую дату не выполнялся, то производит фиксацию выполнения трекера; и удаляет фиксацию выполнения трекера в противном случае
     /// - Parameters:
     ///   - for: Индекс трекера в коллекции трекеров
-    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, возвращает истину в случае фиксации выполнения трекера, возвращает ложь в случае если фиксация выполнения трекера была удалена, либо ошибку при возникновении ошибок работы с данными
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи
     func recordTracker(for indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
     /// Конифугрирует ячейку для её отображения в коллекции
     /// - Parameters:
@@ -34,6 +52,13 @@ protocol TrackersViewPresenterProtocol: AnyObject {
     ///   - header: Объект-заголовок
     ///   - indexPath: ИНдекс заголовка внутри коллекции
     func showHeader(for header: TrackersCollectionHeaderView, with indexPath: IndexPath)
+    /// Отображает экран выбора предопределённых фильтров списка трекеров
+    func showTrackersFilters()
+    /// Включает/исключает трекер из списка закреплённых трекеров
+    /// - Parameters
+    ///   - indexPath: Индекс трекера в коллекции трекеров
+    ///   - completion: Обработчик, вызываемый по окончании выполнения метода, который возвращает ошибку при её возникновении в момент записи
+    func toggleFixTracker(at indexPath: IndexPath, _ completion: @escaping (Result<Void, Error>) -> Void)
     /// Возвращает количество категорий трекеров на текущую дату
     /// - Returns: количество категорий трекеров
     func trackerCategoriesCount() -> Int

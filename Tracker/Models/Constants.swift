@@ -17,12 +17,10 @@ enum GlobalConstants {
     static let ypMedium16 = UIFont.systemFont(ofSize: 16, weight: .medium)
     static let ypMedium12 = UIFont.systemFont(ofSize: 12, weight: .medium)
     static let ypMedium10 = UIFont.systemFont(ofSize: 10, weight: .medium)
-    static let doneButton = UIImage(named: "DoneButton") ?? UIImage()
+    static let doneButton = Asset.doneButton.image
     static let plusButton = UIImage(systemName: "plus") ?? UIImage()
-    static let onboardingPage1Image = UIImage(named: "OnboardingPage1") ?? UIImage()
-    static let onboardingPage2Image = UIImage(named: "OnboardingPage2") ?? UIImage()
-    static let trackersTabBarItemTitle = "Трекеры"
-    static let trackersTabBarImageName = "TrackersTabBarImage"
-    static let statisticsTabBarImageName = "StatisticsTabBarImage"
-    static let statisticsTabBarItemTitle = "Статистика"
+    static let onboardingPage1Image = Asset.Images.onboardingPage1.image
+    static let onboardingPage2Image = Asset.Images.onboardingPage2.image
+    static let yandexMetrikaApi = "fa4a8538-f2c7-4ddf-a421-b371bc8b1cd4"
+    static let fixedCategoryId = "!A599f33-5391-41ce-8140-c10ce152221c"
 }

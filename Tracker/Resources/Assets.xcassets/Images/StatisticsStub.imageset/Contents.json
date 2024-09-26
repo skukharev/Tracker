@@ -2,7 +2,8 @@
   "images" : [
     {
       "filename" : "3@1x.png",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "language-direction" : "left-to-right"
     }
   ],
   "info" : {

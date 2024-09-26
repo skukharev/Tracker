@@ -1,0 +1,81 @@
+/* 
+  Localizable.strings
+  Tracker
+
+  Created by Сергей Кухарев on 18.09.2024.
+  
+*/
+"addCategoryButtonTitle" = "Add category";
+"addEventButtonTitle" = "One-time event";
+"addHabitButtonTitle" = "Habit";
+"buttonOKTitle" = "OK";
+"cancelButtonTitle" = "Cancel";
+"categoriesStubImageLabelText" = "Habits and events can be\\n combined in a meaningful wa";
+"categoriesTableViewDeleteActionText" = "Delete";
+"categoriesTableViewEditActionText" = "Edit";
+"categoryNamePlaceholder" = "Enter category name";
+"colorsLabelText" = "Color";
+"confirmCategoryDeleteAlertMessage" = "Are you sure you don't need this category?";
+"confirmCategoryDeleteAlertNoButtonText" = "Cancel";
+"confirmCategoryDeleteAlertYesButtonText" = "Delete";
+"confirmTrackerDeleteAlertMessage" = "Are you sure you want to delete the tracker?";
+"confirmTrackerDeleteAlertNoButtonText" = "Cancel";
+"confirmTrackerDeleteAlertYesButtonText" = "Delete";
+"cvcViewTitleText" = "Category";
+"deleteCategoryDenyAlertMessage" = "Trackers are defined for the category, so its removal is limited";
+"deleteCategoryDenyAlertTitle" = "The action is restricted";
+"emojiLabelText" = "Emoji";
+"everyDayTitle" = "Every day";
+"filterButtonTitle" = "Filters";
+"fixedTrackersSectionTitle" = "Fixed";
+"fridayShortening" = "Fri";
+"fridayTitle" = "Friday";
+"launchApplicationButtonTitle" = "These are the technologies!";
+"monadyShortening" = "Mon";
+"mondayTitle" = "Monday";
+"trackerSaveButtonForCreatingTitle" = "Create";
+"trackerSaveButtonForEditingTitle" = "Save";
+"onboardingPage1Title" = "Track only what you want";
+"onboardingPage2Title" = "Even if it's not liters of water and yoga";
+"readyButtonTitle" = "Ready";
+"saturdayShortening" = "Sat";
+"saturdayTitle" = "Saturday";
+"saveButtonTitle" = "Ready";
+"statisticsStubImageLabelText" = "There is nothing to analyze yet";
+"statisticsTabBarItemTitle" = "Statistics";
+"statisticsTypeCompleted" = "Trackers completed";
+"statisticsTypeAverage" = "The average value";
+"statisticsTypeIdealDaysCount" = "Ideal days";
+"sundayShortening" = "Sun";
+"sundayTitle" = "Sunday";
+"svcViewTitleText" = "Schedule";
+"thursdayShortening" = "Thu";
+"thursdayTitle" = "Thursday";
+"trackerButtonCellCategoryTitle" = "Category";
+"trackerButtonCellScheduleTitle" = "Schedule";
+"trackerFiltersViewControllerTitle" = "Filters";
+"trackerNamePlaceholderTitle" = "Enter trackers name";
+"trackerNameWarningLabelText" = "The limit is 38 characters";
+"trackersCollectionMenuPinOnTitle" = "Pin";
+"trackersCollectionMenuPinOffTitle" = "Unpin";
+"trackersCollectionMenuEditTitle" = "Edit";
+"trackersCollectionMenuDeleteTitle" = "Delete";
+"trackersFilterTitleForAllTrackers" = "All trackers";
+"trackersFilterTitleForCurrentDayTrackers" = "Trackers for today";
+"trackersFilterTitleForComplitedTrackers" = "Complited trackers";
+"trackersFilterTitleForRunningTrackers" = "Not complited trackers";
+"trackersSearchBarPlaceholder" = "Search";
+"trackersStubImageLabelText" = "What are we going to track?";
+"trackersStubEmptyFilterLabelText" = "Nothing was found";
+"trackersTabBarItemTitle" = "Trackers";
+"tuesdayShortening" = "Tue";
+"tuesdayTitle" = "Tuesday";
+"viewTitleForCreateEvent" = "New event";
+"viewTitleForCreateHabit" = "New habit";
+"viewTitleForEditEvent" = "Edit event";
+"viewTitleForEditHabit" = "Edit habit";
+"viewTitleText" = "Create tracker";
+"viewTitleTextForEditCategory" = "Edit category";
+"viewTitleTextForNewCategory" = "New category";
+"wednesdayShortening" = "Wed";
+"wednesdayTitle" = "Wednesday";

@@ -12,20 +12,19 @@ final class CategoriesViewController: UIViewController {
 
     /// Настройки дизайна
     enum Constants {
-        static let categoriesStubImageName = "TrackersStub"
         static let viewTitleFont = GlobalConstants.ypMedium16
         static let viewTitleTextColor = UIColor.appBlack
-        static let viewTitleText = "Категория"
+        static let cvcViewTitleText = L10n.cvcViewTitleText
         static let viewTitleTopConstraint: CGFloat = 27
         static let categoriesTableViewTopConstraint: CGFloat = 38
         static let categoriesTableViewLeadingConstraint: CGFloat = 16
         static let categoriesTableViewSeparatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         static let categoriesTableViewCornerRadius: CGFloat = 16
         static let categoriesTableViewRowHeight: CGFloat = 75
-        static let categoriesTableViewEditActionText = "Редактировать"
-        static let categoriesTableViewDeleteActionText = "Удалить"
+        static let categoriesTableViewEditActionText = L10n.categoriesTableViewEditActionText
+        static let categoriesTableViewDeleteActionText = L10n.categoriesTableViewDeleteActionText
         static let addCategoryButtonTitleFont = GlobalConstants.ypMedium16
-        static let addCategoryButtonTitle = "Добавить категорию"
+        static let addCategoryButtonTitle = L10n.addCategoryButtonTitle
         static let addCategoryButtonTitleColor = UIColor.appWhite
         static let addCategoryButtonBackgroundColor = UIColor.appBlack
         static let addCategoryButtonCornerRadius: CGFloat = 16
@@ -34,15 +33,15 @@ final class CategoriesViewController: UIViewController {
         static let addCategoryButtonHeightConstraint: CGFloat = 60
         static let categoriesStubImageLabelFont = GlobalConstants.ypMedium12
         static let categoriesStubImageLabelTextColor = UIColor.appBlack
-        static let categoriesStubImageLabelText = "Привычки и события можно\nобъединить по смыслу"
+        static let categoriesStubImageLabelText = L10n.categoriesStubImageLabelText
         static let categoriesStubImageWidthConstraint: CGFloat = 80
         static let categoriesStubImageLabelTopConstraint: CGFloat = 8
-        static let deleteCategoryDenyAlertTitle = "Действие ограничено"
-        static let deleteCategoryDenyAlertMessage = "Для категории определены трекеры, поэтому её удаление ограничено"
-        static let confirmCategoryDeleteAlertTitle = "Подтвердите действие"
-        static let confirmCategoryDeleteAlertMessage = "Вы действительно хотите удалить категорию?"
-        static let confirmCategoryDeleteAlertYesButtonText = "Да"
-        static let confirmCategoryDeleteAlertNoButtonText = "Нет"
+        static let deleteCategoryDenyAlertTitle = L10n.deleteCategoryDenyAlertTitle
+        static let deleteCategoryDenyAlertMessage = L10n.deleteCategoryDenyAlertMessage
+        static let confirmCategoryDeleteAlertMessage = L10n.confirmCategoryDeleteAlertMessage
+        static let confirmCategoryDeleteAlertYesButtonText = L10n.confirmCategoryDeleteAlertYesButtonText
+        static let confirmCategoryDeleteAlertNoButtonText = L10n.confirmCategoryDeleteAlertNoButtonText
+        static let buttonOKTitle = L10n.buttonOKTitle
     }
 
     // MARK: - Private Properties
@@ -53,7 +52,7 @@ final class CategoriesViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = Constants.viewTitleFont
         view.textColor = Constants.viewTitleTextColor
-        view.text = Constants.viewTitleText
+        view.text = Constants.cvcViewTitleText
         return view
     }()
     private lazy var categoriesTableView: UITableView = {
@@ -85,11 +84,7 @@ final class CategoriesViewController: UIViewController {
     private lazy var categoriesStubImage: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        guard let stubImage = UIImage(named: Constants.categoriesStubImageName) else {
-            assertionFailure("Ошибка загрузки логотипа заглушки")
-            return view
-        }
-        view.image = stubImage
+        view.image = Asset.Images.trackersStub.image
         view.contentMode = .center
         return view
     }()
@@ -160,13 +155,17 @@ final class CategoriesViewController: UIViewController {
                 }
             }
         }
+        viewModel.onNeedCategoriesReload = { [weak self] _ in
+            guard let self = self else { return }
+            self.categoriesTableView.reloadData()
+        }
     }
 
     private func confirmCategoryDelete(withCategory categoryName: String) {
         let alertView = UIAlertController(
-            title: Constants.confirmCategoryDeleteAlertTitle,
+            title: nil,
             message: Constants.confirmCategoryDeleteAlertMessage,
-            preferredStyle: .alert
+            preferredStyle: .actionSheet
         )
         alertView.addAction(UIAlertAction(title: Constants.confirmCategoryDeleteAlertNoButtonText, style: .cancel))
         alertView.addAction(
@@ -246,7 +245,7 @@ final class CategoriesViewController: UIViewController {
             message: Constants.deleteCategoryDenyAlertMessage,
             preferredStyle: .alert
         )
-        alertView.addAction(UIAlertAction(title: "OK", style: .default))
+        alertView.addAction(UIAlertAction(title: Constants.buttonOKTitle, style: .default))
         alertView.view.accessibilityIdentifier = "showDeleteCategoryDenyAlertPresenter"
         present(alertView, animated: true)
     }

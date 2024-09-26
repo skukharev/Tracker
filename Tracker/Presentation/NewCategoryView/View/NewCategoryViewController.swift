@@ -13,18 +13,18 @@ final class NewCategoryViewController: UIViewController {
     enum Constants {
         static let viewTitleFont = GlobalConstants.ypMedium16
         static let viewTitleTextColor = UIColor.appBlack
-        static let viewTitleTextForNewCategory = "Новая категория"
-        static let viewTitleTextForEditCategory = "Редактирование категории"
+        static let viewTitleTextForNewCategory = L10n.viewTitleTextForNewCategory
+        static let viewTitleTextForEditCategory = L10n.viewTitleTextForEditCategory
         static let viewTitleTopConstraint: CGFloat = 27
         static let categoryNameTextColor = UIColor.appBlack
         static let categoryNameBackgroundColor = UIColor.appBackground
-        static let categoryNamePlaceholder = "Введите название категории"
+        static let categoryNamePlaceholder = L10n.categoryNamePlaceholder
         static let categoryNameCornerRadius: CGFloat = 16
         static let categoryNameViewFrame = CGRect(x: 0, y: 0, width: 16, height: 10)
         static let categoryNameTopConstraint: CGFloat = 38
         static let categoryNameLeadingConstraint: CGFloat = 16
         static let categoryNameHeightConstraint: CGFloat = 75
-        static let saveButtonTitle = "Готово"
+        static let saveButtonTitle = L10n.saveButtonTitle
         static let saveButtonTitleFont = GlobalConstants.ypMedium16
         static let saveButtonCornerRadius: CGFloat = 16
         static let saveButtonTitleColorForDisabled = UIColor.white

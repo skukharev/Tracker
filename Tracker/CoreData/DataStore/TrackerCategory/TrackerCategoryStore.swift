@@ -15,7 +15,6 @@ final class TrackerCategoryStore: NSObject {
     private let trackerCategoryNameKeyPath = #keyPath(TrackerCategoryCoreData.name)
     static let shared = TrackerCategoryStore()
 
-
     // MARK: - Public Properties
 
     weak var delegate: TrackerCategoryStoreDelegate?
@@ -156,7 +155,14 @@ final class TrackerCategoryStore: NSObject {
     // MARK: - Private Methods
 
     private func updateExistingCategory(_ trackerCategoryCoreData: TrackerCategoryCoreData, with name: String) {
-        trackerCategoryCoreData.name = name
+        if trackerCategoryCoreData.name != name {
+            trackerCategoryCoreData.name = name
+            if let trackers = trackerCategoryCoreData.trackers as? Set<TrackerCoreData> {
+                trackers.forEach {
+                    $0.categotyName = name
+                }
+            }
+        }
     }
 
     private func validateOnAllowedName(_ categoryName: String?) throws {
@@ -175,12 +181,11 @@ final class TrackerCategoryStore: NSObject {
         request.resultType = .managedObjectIDResultType
         request.fetchLimit = 1
         request.predicate = NSPredicate(format: "%K =[c] %@", #keyPath(TrackerCategoryCoreData.name), categoryName)
-        if
+        guard
             let categories = try? context.execute(request) as? NSAsynchronousFetchResult<NSFetchRequestResult>,
-            let categoryID = categories.finalResult?.first as? NSManagedObjectID,
-            let categoryRecord = try? context.existingObject(with: categoryID) as? TrackerCategoryCoreData {
-            throw TrackerCategoryError.categoryNameAlreadyExists
-        }
+            categories.finalResult?.first != nil
+        else { return }
+        throw TrackerCategoryError.categoryNameAlreadyExists
     }
 }
 

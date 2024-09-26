@@ -9,6 +9,7 @@ import Foundation
 
 protocol TrackerStoreDelegate: AnyObject {
     /// Обраотчик, вызываемый Store-классом при изменении данных в трекерах
-    /// - Parameter update: структура со списком индексов изменённых данных
-    func didUpdate(_ update: TrackerStoreUpdate)
+    func didUpdate(at indexPaths: TrackerStoreUpdate)
+    /// Обработчик, вызываемый Store-классом после обновления выборки данных о трекерах
+    func didUpdate(recordCounts: RecordCounts)
 }

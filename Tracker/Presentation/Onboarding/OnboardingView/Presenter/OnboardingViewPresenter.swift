@@ -8,6 +8,13 @@
 import UIKit
 
 final class OnboardingViewPresenter: OnboardingViewPresenterProtocol {
+    // MARK: - Types
+
+    enum Constants {
+        static let onboardingPage1Title = L10n.onboardingPage1Title
+        static let onboardingPage2Title = L10n.onboardingPage2Title
+    }
+
     // MARK: - Public Properties
 
     weak var viewController: (any OnboardingViewPresenterDelegate)?
@@ -25,14 +32,14 @@ final class OnboardingViewPresenter: OnboardingViewPresenterProtocol {
         page1ViewController.showOnboardingPage(
             withModel: OnboardingPage(
                 image: GlobalConstants.onboardingPage1Image,
-                title: "Отслеживайте только то, что хотите"
+                title: Constants.onboardingPage1Title
             )
         )
         let page2ViewController = OnboardingPageViewController()
         page2ViewController.showOnboardingPage(
             withModel: OnboardingPage(
                 image: GlobalConstants.onboardingPage2Image,
-                title: "Даже если это не литры воды и йога"
+                title: Constants.onboardingPage2Title
             )
         )
         self.init(pages: [page1ViewController, page2ViewController])

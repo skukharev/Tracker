@@ -14,6 +14,8 @@ protocol CategoriesViewModelProtocol: AnyObject {
     var delegate: NewTrackerViewPresenterProtocol? { get set }
     /// Событие, генерируемое при изменении списка категорий трекеров в базе данных
     var onCategoriesListChange: Binding<TrackerCategoryStoreUpdate>? { get set }
+    /// Событие, генерируемое делегатом при необходимости перечитать список категорий из базы данных
+    var onNeedCategoriesReload: Binding<Void>? { get set }
     /// Используется для определения количества категорий трекеров в базе данных
     /// - Returns: Количество категорий трекеров в базе данных
     func сategoiresCount() -> Int
@@ -21,6 +23,9 @@ protocol CategoriesViewModelProtocol: AnyObject {
     /// - Parameter indexPath: Индекс искомой категории
     /// - Returns: Наименование категории трекеров
     func category(at indexPath: IndexPath) -> CategoryCellModel?
+    /// Событие, вызываемое делегатом при изменении редактируемой категории
+    /// - Parameter categoryName: Новое значение отредактированной категории
+    func didCategoryChange(with categoryName: String)
     /// Событие, вызываемое вью контроллером при выборе категории трекера из списка
     /// - Parameter indexPath: Индекс выбранной категории
     func didSelectCategory(at indexPath: IndexPath)

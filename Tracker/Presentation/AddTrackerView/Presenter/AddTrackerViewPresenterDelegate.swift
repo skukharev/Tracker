@@ -10,7 +10,6 @@ import UIKit
 protocol AddTrackerViewPresenterDelegate: AnyObject {
     /// Обработчик, вызываемый при успешном создании/редактировании трекера
     /// - Parameters:
-    ///   - trackerCategory: наименование категории трекера
     ///   - tracker: модель трекера
-    func trackerDidRecorded(trackerCategory: String, tracker: Tracker)
+    func trackerDidRecorded(tracker: Tracker)
 }

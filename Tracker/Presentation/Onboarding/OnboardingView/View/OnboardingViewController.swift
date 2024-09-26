@@ -17,7 +17,7 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
         /// Параметры кнопки "Вот это технологии!"
         static let launchApplicationButtonFont = GlobalConstants.ypMedium16
         static let launchApplicationButtonTitleColor: UIColor = .white
-        static let launchApplicationButtonTitle = "Вот это технологии!"
+        static let launchApplicationButtonTitle = L10n.launchApplicationButtonTitle
         static let launchApplicationButtonCornerRadius: CGFloat = 16
         static let launchApplicationButtonBackgroundColor: UIColor = .appBlackUniversal
         static let launchApplicationButtonBottomConstraint: CGFloat = 50
@@ -27,12 +27,9 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
         static let pageControlBottomConstraint: CGFloat = 24
     }
 
-    // MARK: - Public Properties
-
-    var presenter: OnboardingViewPresenterProtocol?
-
     // MARK: - Private Properties
 
+    private var presenter: OnboardingViewPresenterProtocol?
     /// Индикатор активной страницы
     private lazy var pageControl: UIPageControl = {
         let view = UIPageControl()
@@ -69,6 +66,13 @@ final class OnboardingViewController: UIPageViewController, OnboardingViewPresen
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
         createAndLayoutViews()
+    }
+
+    // MARK: - Public Methods
+
+    public func configure(withPresenter presenter: OnboardingViewPresenterProtocol) {
+        self.presenter = presenter
+        presenter.viewController = self
     }
 
     // MARK: - Private Methods
