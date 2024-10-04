@@ -27,10 +27,9 @@ enum TrackersViewScreenAssembley {
         let trackersViewController = TrackersViewController(withPresenter: trackersViewPresenter)
         trackersViewController.tabBarItem = UITabBarItem(title: L10n.trackersTabBarItemTitle, image: Asset.Images.trackersTabBarImage.image, tag: 1)
         // Создание вью контроллера для экрана со статистикой
-        let statisticsViewController = StatisticsViewController()
-        statisticsViewController.tabBarItem = UITabBarItem(title: L10n.statisticsTabBarItemTitle, image: Asset.Images.statisticsTabBarImage.image, tag: 2)
         let statisticsViewPresenter = StatisticsViewPresenter()
-        statisticsViewController.configure(statisticsViewPresenter)
+        let statisticsViewController = StatisticsViewController(withPresenter: statisticsViewPresenter)
+        statisticsViewController.tabBarItem = UITabBarItem(title: L10n.statisticsTabBarItemTitle, image: Asset.Images.statisticsTabBarImage.image, tag: 2)
         // Создание вью контроллера для таб-бара
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [UINavigationController(rootViewController: trackersViewController), UINavigationController(rootViewController: statisticsViewController)]
